@@ -1,0 +1,208 @@
+<?xml version="1.0"?>
+<CONFIG>
+  <ProjectOptions>
+    <Version Value="9"/>
+    <General>
+      <Flags>
+        <LRSInOutputDirectory Value="False"/>
+      </Flags>
+      <MainUnit Value="0"/>
+      <ActiveWindowIndexAtStart Value="0"/>
+    </General>
+    <VersionInfo>
+      <Language Value=""/>
+      <CharSet Value=""/>
+      <StringTable ProductVersion=""/>
+    </VersionInfo>
+    <BuildModes Count="1">
+      <Item1 Name="default" Default="True"/>
+    </BuildModes>
+    <PublishOptions>
+      <Version Value="2"/>
+      <IgnoreBinaries Value="False"/>
+      <IncludeFileFilter Value="*.(pas|pp|inc|lfm|lpr|lrs|lpi|lpk|sh|xml)"/>
+      <ExcludeFileFilter Value="*.(bak|ppu|ppw|o|so);*~;backup"/>
+    </PublishOptions>
+    <RunParams>
+      <local>
+        <FormatVersion Value="1"/>
+        <HostApplicationFilename Value="E:/thalia/output/i386-win32/thalia.exe"/>
+        <CommandLineParams Value="--interface=msn --user=thalia.msn@live.de --password=diebart --debug --fastanswer"/>
+        <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
+      </local>
+    </RunParams>
+    <RequiredPackages Count="2">
+      <Item1>
+        <PackageName Value="synapse"/>
+      </Item1>
+      <Item2>
+        <PackageName Value="lnetbase"/>
+      </Item2>
+    </RequiredPackages>
+    <Units Count="16">
+      <Unit0>
+        <Filename Value="msn.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="irc"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="0"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="16" Y="12"/>
+        <UsageCount Value="42"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="../../lkomponenten/lnet/lazaruspackage/lnetbase.pas"/>
+        <UnitName Value="lnetbase"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="10"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="../../lkomponenten/lnet/lib/lnet.pp"/>
+        <UnitName Value="lNet"/>
+        <TopLine Value="870"/>
+        <CursorPos X="1" Y="895"/>
+        <UsageCount Value="13"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="../../lazarus/fpc/2.2.1/source/rtl/inc/objpash.inc"/>
+        <TopLine Value="124"/>
+        <CursorPos X="8" Y="138"/>
+        <UsageCount Value="10"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="../../lazarus/fpc/2.2.1/source/rtl/objpas/classes/classesh.inc"/>
+        <TopLine Value="1295"/>
+        <CursorPos X="11" Y="1309"/>
+        <UsageCount Value="12"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="../../lkomponenten/lnet/lib/lcommon.pp"/>
+        <UnitName Value="lCommon"/>
+        <TopLine Value="167"/>
+        <CursorPos X="3" Y="194"/>
+        <UsageCount Value="10"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="uspeaker.pas"/>
+        <UnitName Value="uSpeaker"/>
+        <EditorIndex Value="1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="393"/>
+        <CursorPos X="18" Y="570"/>
+        <UsageCount Value="14"/>
+        <Loaded Value="True"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="../../Programme/lazarus/fpc/2.2.0/source/rtl/win32/classes.pp"/>
+        <UnitName Value="Classes"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="10"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="../../lkomponenten/lnet/lib/lhttp.pp"/>
+        <UnitName Value="lhttp"/>
+        <TopLine Value="20"/>
+        <CursorPos X="3" Y="41"/>
+        <UsageCount Value="11"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="../../lkomponenten/synapse/httpsend.pas"/>
+        <UnitName Value="httpsend"/>
+        <TopLine Value="251"/>
+        <CursorPos X="3" Y="270"/>
+        <UsageCount Value="14"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="../../lkomponenten/synapse/ssl_openssl.pas"/>
+        <UnitName Value="ssl_openssl"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="10"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="../../lkomponenten/synapse/synautil.pas"/>
+        <UnitName Value="synautil"/>
+        <TopLine Value="199"/>
+        <CursorPos X="10" Y="224"/>
+        <UsageCount Value="14"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="../../lazarus/fpc/2.2.0/source/packages/base/hash/md5.pp"/>
+        <UnitName Value="md5"/>
+        <TopLine Value="109"/>
+        <CursorPos X="19" Y="131"/>
+        <UsageCount Value="13"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="../../general/src/Utils.pas"/>
+        <UnitName Value="Utils"/>
+        <TopLine Value="724"/>
+        <CursorPos X="23" Y="739"/>
+        <UsageCount Value="10"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="../../lazarus/fpc/2.2.0/source/rtl/inc/wstringh.inc"/>
+        <TopLine Value="50"/>
+        <CursorPos X="10" Y="83"/>
+        <UsageCount Value="10"/>
+      </Unit14>
+      <Unit15>
+        <Filename Value="../../Dokumente und Einstellungen/Administrator/Desktop/WinCEforms.patch"/>
+        <TopLine Value="19"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="None"/>
+      </Unit15>
+    </Units>
+    <JumpHistory Count="1" HistoryIndex="0">
+      <Position1>
+        <Filename Value="msn.lpr"/>
+        <Caret Line="388" Column="1" TopLine="355"/>
+      </Position1>
+    </JumpHistory>
+  </ProjectOptions>
+  <CompilerOptions>
+    <Version Value="10"/>
+    <SearchPaths>
+      <OtherUnitFiles Value="../../LKomponenten/synapse;../../general/src"/>
+      <UnitOutputDirectory Value="../output/$(TargetCPU)-$(TargetOS)/plugins"/>
+    </SearchPaths>
+    <Parsing>
+      <SyntaxOptions>
+        <UseAnsiStrings Value="False"/>
+      </SyntaxOptions>
+    </Parsing>
+    <CodeGeneration>
+      <Optimizations>
+        <OptimizationLevel Value="0"/>
+      </Optimizations>
+    </CodeGeneration>
+    <Linking>
+      <Options>
+        <ExecutableType Value="Library"/>
+      </Options>
+    </Linking>
+    <Other>
+      <CompilerMessages>
+        <UseMsgFile Value="True"/>
+      </CompilerMessages>
+      <CustomOptions Value="-Cg"/>
+      <CompilerPath Value="$(CompPath)"/>
+    </Other>
+  </CompilerOptions>
+  <Debugging>
+    <Exceptions Count="2">
+      <Item1>
+        <Name Value="ECodetoolError"/>
+      </Item1>
+      <Item2>
+        <Name Value="EFOpenError"/>
+      </Item2>
+    </Exceptions>
+  </Debugging>
+</CONFIG>

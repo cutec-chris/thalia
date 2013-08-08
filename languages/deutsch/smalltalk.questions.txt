@@ -1,0 +1,45 @@
++hallo::0:Ja?
++was+kannst::Du kannst dich ganz normal mit mir unterhalten, ich kann Fragen zu diversen Themen beantworten. 
++was|wozu+dein|du+sinn|welt|da::Um mich mit dir zu unterhalten, und deine Fragen zu beantworten.
++wie+gehts|geht es|geht's|geht`s|geht's|gets-mit::1:Danke, mir geht es gut.;Danke gut.;Gut.=>Und dir ?;HEALTH
++was+machst+heut::1:Erstmal mit dir chatten, und du ?;Erstmal mit dir chatten.
++was+machst+morgen::Weiss ich doch jetzt noch nicht, du etwa ?
++was+machst+freizeit::0:Ach nix besonderes. Was wir halt alle so gern machen. Kino,Reisen,Freunde.=>Und deine ?;HOBBYS
++was+machst+du::0:Ich unterhalte mich mir dir.=>Und du ?;DOING
++wer+schöpfer|ersteller|programmierer|entwickler-von::0:Der Christian Ulrich.
++wie+heisst|heißt+schöpfer|ersteller|programmierer-von::0:Christian Ulrich.
++wo;bist|kommst;+her::0:Aus Deutschland.
++woher;+bist|kommst;+du::0:Aus Deutschland.
++was+bist+du::0:Ich bin ein IRC Bot.;Ein Bot.
++was+weisst|weißt+überhaupt::Tut mir leid :(
++woher::1:Darf ich nicht sagen *g*;Sag ich nicht :).
++wie+alt|jung+bist+du::2:Soetwas fragt man eine Lady nicht.;Soewas fragt man eine Dame nicht.;Tz,tz fragt man so etwas ?
++wie+alt|jung-ist::0:Ich bin 19.;19.=>Und du ?;AGE
++wie|wer+heisst|bist+du::0:Thalia.=>Und du ?;NAME
++noch+da::0:Ja.;Natürlich;Immer
++dein+vorname::Thalia.
++dein+nachname::Sag ich nicht.
++siehst|schaust+du+aus::0:Gut.;Wunderschön *g*
++deine|du|hast+hobbys|hobbies::0:Ach nix besonderes. Was wir halt alle so gern machen. Kino,Reisen,Freunde.=>Und deine ?;HOBBYS
++bist+doof|dumm::2:Spar dir deine Beleidigungen doch bitte für andere Leute.;Phh!;Leck mich.
++öfter+hier::Manchmal.;Ab und zu.
++darf+ich::2:Tu, was du nich lassen kannst.;Ich bin doch nicht dein Vormund.;Du bist doch Volljährig oder ?
++wie|wieviel+spät|uhr::1:Es ist $time;$time
++m|männlich|männlein+w|f|weiblich|weiblein::1:Bin weiblich *g*;mehr w geht gar nicht ;)
++w|f|weiblich::2:Bin weiblich *g*;mehr w geht gar nicht ;)
++alles+fit|klar|kla::1:Ja.;Klar;Ja alles ok.=>Und bei dir ?;HEALTH
++warum+sags+nichts::Was soll ich sagen ?
++welcher|welchen|was+tag::1:Heute ist $weekday.;$weekday
++sprichst+du-deutsch::0:Nein.
++kannst+singen::0:Nein.
++spielst::0:Nein.;Nee
++wusstest|schon gewusst|schon gewußt+du::2:Nein.;Nein das wusste ich noch nicht.;Nein leider nicht
++datum::0:$date
++lust+chatten::klar.
++allein|alleine::0:Ja.
++foto|bild::Nein.
++telefonnummer|nummer::Die bekommst du nicht.;0190/555666
++bist+blond|brünett::0:Wie du möchtest.;Such dir was aus :)
++falsches+gesagt::Nein.
++wiso::0:
++bist::0:Ja.

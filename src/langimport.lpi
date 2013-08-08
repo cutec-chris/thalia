@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+<CONFIG>
+  <ProjectOptions>
+    <PathDelim Value="\"/>
+    <Version Value="6"/>
+    <General>
+      <MainUnit Value="0"/>
+      <IconPath Value="./"/>
+      <TargetFileExt Value=".exe"/>
+      <ActiveEditorIndexAtStart Value="1"/>
+    </General>
+    <VersionInfo>
+      <ProjectVersion Value=""/>
+      <Language Value=""/>
+      <CharSet Value=""/>
+    </VersionInfo>
+    <PublishOptions>
+      <Version Value="2"/>
+      <IgnoreBinaries Value="False"/>
+      <IncludeFileFilter Value="*.(pas|pp|inc|lfm|lpr|lrs|lpi|lpk|sh|xml)"/>
+      <ExcludeFileFilter Value="*.(bak|ppu|ppw|o|so);*~;backup"/>
+    </PublishOptions>
+    <RunParams>
+      <local>
+        <FormatVersion Value="1"/>
+        <CommandLineParams Value="deutsch C:\Prometheus\TCS\heracles\de-en2.txt"/>
+        <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
+      </local>
+    </RunParams>
+    <RequiredPackages Count="1">
+      <Item1>
+        <PackageName Value="LCL"/>
+      </Item1>
+    </RequiredPackages>
+    <Units Count="11">
+      <Unit0>
+        <Filename Value="langimport.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="langimport"/>
+        <CursorPos X="38" Y="188"/>
+        <TopLine Value="174"/>
+        <EditorIndex Value="0"/>
+        <UsageCount Value="26"/>
+        <Loaded Value="True"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="heracles.lpr"/>
+        <UnitName Value="heracles"/>
+        <CursorPos X="1" Y="63"/>
+        <TopLine Value="34"/>
+        <EditorIndex Value="3"/>
+        <UsageCount Value="14"/>
+        <Loaded Value="True"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="..\..\Programme\lazarus\fpc\2.2.1\source\packages\fcl-db\src\sqlite\customsqliteds.pas"/>
+        <UnitName Value="customsqliteds"/>
+        <CursorPos X="27" Y="1212"/>
+        <TopLine Value="1197"/>
+        <UsageCount Value="14"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="..\de-en.txt"/>
+        <CursorPos X="91" Y="137973"/>
+        <TopLine Value="137930"/>
+        <UsageCount Value="10"/>
+        <SyntaxHighlighter Value="None"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="..\de-en2.txt"/>
+        <CursorPos X="21" Y="12535"/>
+        <TopLine Value="12514"/>
+        <EditorIndex Value="2"/>
+        <UsageCount Value="12"/>
+        <Loaded Value="True"/>
+        <SyntaxHighlighter Value="None"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="..\..\Programme\lazarus\fpc\2.2.1\source\rtl\inc\wstringh.inc"/>
+        <CursorPos X="10" Y="37"/>
+        <TopLine Value="1"/>
+        <UsageCount Value="10"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="..\..\Programme\lazarus\fpc\2.2.1\source\rtl\inc\wstrings.inc"/>
+        <CursorPos X="5" Y="1712"/>
+        <TopLine Value="1710"/>
+        <UsageCount Value="12"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="..\..\Programme\lazarus\fpc\2.2.1\source\packages\fcl-db\src\db.pas"/>
+        <UnitName Value="db"/>
+        <CursorPos X="83" Y="1925"/>
+        <TopLine Value="1919"/>
+        <UsageCount Value="11"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="..\..\Programme\lazarus\fpc\2.2.1\source\rtl\win\wininc\redef.inc"/>
+        <CursorPos X="10" Y="992"/>
+        <TopLine Value="971"/>
+        <UsageCount Value="11"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="..\..\Programme\lazarus\ide\splash.pp"/>
+        <ComponentName Value="SplashForm"/>
+        <HasResources Value="True"/>
+        <UnitName Value="Splash"/>
+        <CursorPos X="18" Y="17"/>
+        <TopLine Value="67"/>
+        <UsageCount Value="10"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="C:\Dokumente und Einstellungen\chris\Desktop\Neuer Ordner (8)\bot\markov\testmarkov.pas"/>
+        <UnitName Value="testmarkov"/>
+        <CursorPos X="1" Y="1"/>
+        <TopLine Value="1"/>
+        <EditorIndex Value="1"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit10>
+    </Units>
+    <JumpHistory Count="0" HistoryIndex="-1"/>
+  </ProjectOptions>
+  <CompilerOptions>
+    <Version Value="5"/>
+    <PathDelim Value="\"/>
+    <SearchPaths>
+      <UnitOutputDirectory Value="..\output\$(TargetCPU)-$(TargetOS)"/>
+    </SearchPaths>
+    <CodeGeneration>
+      <Generate Value="Faster"/>
+    </CodeGeneration>
+    <Other>
+      <CompilerPath Value="$(CompPath)"/>
+    </Other>
+  </CompilerOptions>
+  <Debugging>
+    <Exceptions Count="2">
+      <Item1>
+        <Name Value="ECodetoolError"/>
+      </Item1>
+      <Item2>
+        <Name Value="EFOpenError"/>
+      </Item2>
+    </Exceptions>
+  </Debugging>
+</CONFIG>
