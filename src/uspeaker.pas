@@ -40,6 +40,7 @@ type
     FSpeaker: TSpeaker;
     FUnicodeAnswer: Boolean;
     function GetProperty(aName : string): string;
+    procedure SetAnswerTo(AValue: string);
     procedure SetFocused(const AValue: Boolean);
     procedure SetProperty(aName : string; const AValue: string);
   protected
@@ -51,7 +52,7 @@ type
     property Name : string read FName;
     property Focused : Boolean read FFocused write SetFocused;
     property Properties[aName : string] : string read GetProperty write SetProperty;
-    property AnswerTo : string read FAnswerto write FAnswerto;
+    property AnswerTo : string read FAnswerto write SetAnswerTo;
     property LastContact : TDateTime read FLastContact write FLastConact;
     function ReplaceVariables(inp : string) : string;
     property UnicodeAnswer : Boolean read FUnicodeAnswer write FUnicodeAnswer;
@@ -161,7 +162,7 @@ type
   public
     constructor Create(ToParse : string);
     property Items[Index : Integer] : TparserEntry read GetItems write SetItems;
-    function IsValid(words : TStringList) : Boolean;
+    function IsValid(words,Variables : TStringList) : Boolean;
   end;
 
 implementation
@@ -398,6 +399,7 @@ var
   Answer : string;
   Parser: TParserEntry;
   tmp: String;
+  FVariables: TStringList;
   function GetFirstSentence(var inp : string) : string;
   var
     endpos,i : Integer;
@@ -414,11 +416,26 @@ var
     inp := copy(inp,endpos+1,length(inp));
     if (inp <> '') and Isnumeric(copy(inp,0,1)) then goto restart; //example 2.0.4
     if (pos('.',inp) > 0) and (pos('.',inp) < 3) then goto restart; //example: b.z.w.
-//    if (rpos(' ',Result) > 0) and (rpos(' ',Result) < length(Result)-4) then goto restart; //example ggf.
   end;
+  procedure ReplaceVariables(var aAnswer : string);
+  var
+    i: Integer;
+    varname: String;
+    varvalue: String;
+  begin
+    for i := 0 to FVariables.Count-1 do
+      begin
+        varname := FVariables.Names[i];
+        varvalue := FVariables.ValueFromIndex[i];
+        aAnswer := StringReplace(aAnswer,'$'+varname+' ',varvalue+' ',[rfReplaceAll]);
+        aAnswer := StringReplace(aAnswer,'$'+varname+')',varvalue+')',[rfReplaceAll]);
+      end;
+  end;
+
 begin
   Result := False;
   Answer := '';
+  FVariables := TStringlist.Create;
   FSentences.SQL.Text:='select * from "SENTENCES" where "TYPE"='''+IntToStr(Integer(aTyp))+'''';
   FSentences.Open;
   while not FSentences.EOF do
@@ -428,7 +445,7 @@ begin
         Parser := TParserEntry.Create(copy(acheck,0,pos('=>',acheck)-1))
       else
         Parser := TParserEntry.Create(acheck);
-      aOK := Parser.IsValid(words);
+      aOK := Parser.IsValid(words,FVariables);
       Parser.Free;
       if aOK then
         begin
@@ -454,6 +471,7 @@ begin
           while Answer <> '' do
             begin
               tmp := GetFirstSentence(Answer);
+              ReplaceVariables(tmp);
               DoAnswer(Interlocutor,tmp,priv,logfile);
               Result := True;
             end;
@@ -462,12 +480,14 @@ begin
               Interlocutor.AnswerTo := copy(NextQuestion,pos(';',NextQuestion)+1,length(NextQuestion));
               NextQuestion := copy(NextQuestion,0,pos(';',NextQuestion)-1);
               NextQuestion := Interlocutor.ReplaceVariables(NextQuestion);
+              ReplaceVariables(NextQuestion);
               DoAnswer(Interlocutor,NextQuestion,priv,logfile);
             end;
           exit;
         end;
       FSentences.Next;
     end;
+  FVariables.Free;
 end;
 
 function TSpeaker.CheckFocus(words: TStringList): Boolean;
@@ -622,6 +642,7 @@ begin
   if not FFastAnswer then
     Dosleep(random(10)*1000);
   words := SentenceToStringList(lowercase(sentence));
+  if words.Count=0 then exit;
   aFocus := False;
   if CheckFocus(words) or priv or AutoFocus then
     begin
@@ -662,7 +683,22 @@ begin
           atyp := GetSentenceTyp(words);
           if Assigned(FDebugMessage) then
             FDebugMessage('Typ:'+stypes[Integer(atyp)]+lineending);
-          Result := Result or CheckForSentence(words,atyp,Interlocutor,priv,filename);
+          if (Interlocutor.AnswerTo<>'') and (atyp<>stQuestion) then
+            begin
+              Interlocutor.Properties[Interlocutor.AnswerTo] := StringReplace(sentence,'=','',[rfReplaceAll]);
+              FSentences.SQL.Text:='select * from "SENTENCES" where "TYPE"=''7''';
+              FSentences.Open;
+              FAnswers.SQL.Text:='select * from "ANSWERS" where "REF"='''+FSentences.FieldByName('ID').AsString+'''';//Antworten auf unbekannte Fragen
+              FAnswers.Open;
+              Randomize;
+              FAnswers.MoveBy(Random(FAnswers.RecordCount));
+              Answer := FAnswers.FieldByName('ANSWER').AsString;
+              DoAnswer(Interlocutor,Answer,priv,filename);
+              Interlocutor.AnswerTo:='';
+              Result := True;
+            end
+          else
+            Result := Result or CheckForSentence(words,atyp,Interlocutor,priv,filename);
           if (not Result) and (aFocus or priv) then //Say something when we are asked directly and have no answer
             begin
               FSentences.SQL.Text:='select * from "SENTENCES" where "TYPE"=''6''';
@@ -837,6 +873,12 @@ begin
   Result := FProperties.Values[aName];
 end;
 
+procedure TInterlocutor.SetAnswerTo(AValue: string);
+begin
+  if FAnswerto=AValue then Exit;
+  FAnswerto:=AValue;
+end;
+
 procedure TInterlocutor.SetFocused(const AValue: Boolean);
 begin
   If FFocused = AValue then exit;
@@ -919,7 +961,7 @@ begin
   if ToParse <> '' then FParse := FParse+ToParse;
 end;
 
-function TParserEntry.IsValid(words : TStringList): Boolean;
+function TParserEntry.IsValid(words,Variables : TStringList): Boolean;
 var
   acheck : string;
   aidx: LongInt;
@@ -931,47 +973,77 @@ var
   aop: String;
   firstindex: LongInt;
   i : Integer;
+  aOldIdx: Integer;
+  anword: String;
+  anop: String;
+  tmp: String;
+  aNewIndex: Integer;
 begin
   acheck := FParse;
   aOK := True;
-  while (copy(acheck,0,1) = '+') or (copy(acheck,0,1) = '-') do
+  while (copy(acheck,0,1) = '+') or (copy(acheck,0,1) = '-') or (copy(acheck,0,1) = '=') do
     begin
       aidx := pos('+',copy(acheck,2,length(acheck)));
       if ((aidx = 0) or (pos('-',copy(acheck,2,length(acheck))) < aidx)) and (pos('-',copy(acheck,2,length(acheck))) > 0) then
         aidx := pos('-',copy(acheck,2,length(acheck)));
+      if ((aidx = 0) or (pos('=',copy(acheck,2,length(acheck))) < aidx)) and (pos('=',copy(acheck,2,length(acheck))) > 0) then
+        aidx := pos('=',copy(acheck,2,length(acheck)));
       aword := copy(acheck,0,aidx);
       if aword = '' then aword := acheck;
       acheck := copy(acheck,length(aword)+1,length(acheck));
       aop := copy(aword,0,1);
       aword := copy(aword,2,length(aword))+'|';
-      partOK := False;
-      while pos('|',aword) > 0 do
+      if aop='=' then
         begin
-          partword := copy(aword,0,pos('|',aword)-1);
-          aword := copy(aword,pos('|',aword)+1,length(aword));
-          if pos(' ',partword) > 0 then
+          aidx := pos('+',copy(acheck,2,length(acheck)));
+          if ((aidx = 0) or (pos('-',copy(acheck,2,length(acheck))) < aidx)) and (pos('-',copy(acheck,2,length(acheck))) > 0) then
+            aidx := pos('-',copy(acheck,2,length(acheck)));
+          if ((aidx = 0) or (pos('=',copy(acheck,2,length(acheck))) < aidx)) and (pos('=',copy(acheck,2,length(acheck))) > 0) then
+            aidx := pos('=',copy(acheck,2,length(acheck)));
+          anword := copy(acheck,0,aidx);
+          anop := copy(anword,0,1);
+          anword := copy(anword,2,length(anword))+'|';
+          anword := copy(anword,0,pos('|',anword)-1);
+          aNewIndex := words.IndexOf(anword);
+          if aNewIndex = -1 then aNewIndex:=words.Count-1;
+          for i := aOldIdx+1 to aNewIndex do
+            tmp := tmp+words[i]+' ';
+          Variables.Values[copy(aword,0,pos('|',aword)-1)]:=copy(tmp,0,length(tmp)-1);
+        end
+      else
+        begin
+          partOK := False;
+          while pos('|',aword) > 0 do
             begin
-              partlist := TStringList.Create;
-              partlist.Delimiter:=' ';
-              partlist.DelimitedText:=partword;
-              i := 1;
-              firstindex := words.IndexOf(partlist[0]);
-              partOK := (aop='+') and (firstindex > -1);
-              if partOK then
+              partword := copy(aword,0,pos('|',aword)-1);
+              aword := copy(aword,pos('|',aword)+1,length(aword));
+              if pos(' ',partword) > 0 then
                 begin
-                  while i < partlist.Count do
+                  partlist := TStringList.Create;
+                  partlist.Delimiter:=' ';
+                  partlist.DelimitedText:=partword;
+                  i := 1;
+                  firstindex := words.IndexOf(partlist[0]);
+                  partOK := (aop='+') and (firstindex > -1);
+                  if partOK then
                     begin
-                      partOK := partOK and (words.IndexOf(partlist[i]) = firstindex+i);
-                      inc(i);
+                      while i < partlist.Count do
+                        begin
+                          partOK := partOK and (words.IndexOf(partlist[i]) = firstindex+i);
+                          inc(i);
+                        end;
                     end;
+                  partlist.free;
+                end
+              else if ((aop = '+') and (words.IndexOf(partword) <> -1)) or ((aop = '-') and (words.IndexOf(partword) = -1)) then
+                begin
+                  partOK := True;
+                  if (aop = '+') then aOldIdx := words.IndexOf(partword);
                 end;
-              partlist.free;
-            end
-          else if ((aop = '+') and (words.IndexOf(partword) <> -1)) or ((aop = '-') and (words.IndexOf(partword) = -1)) then
-            partOK := True;
-          if partOK then break;
+              if partOK then break;
+            end;
+          aOK := aOK and partOK;
         end;
-      aOK := aOK and partOK;
 //      if not aOK then break;
     end;
   Result := aOK;
