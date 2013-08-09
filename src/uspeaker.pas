@@ -5,7 +5,8 @@ unit uSpeaker;
 interface
 
 uses
-  Classes, SysUtils, db, Utils, uIntfStrConsts, FileUtil;
+  Classes, SysUtils, db, Utils, uIntfStrConsts, FileUtil,ZConnection,
+  ZDataset;
 
 type
   TWordPosition = (wpFirst,wpLast,wpNoMatter);
@@ -42,8 +43,8 @@ type
     procedure SetFocused(const AValue: Boolean);
     procedure SetProperty(aName : string; const AValue: string);
   protected
-    FlastFile : string;
-    FLastIndex : Integer;
+    FlastCategory : string;
+    FLastIndex : LargeInt;
   public
     constructor Create(ID : string;Name : string);
     property ID : string read FID;
@@ -79,7 +80,7 @@ type
     procedure Connect;virtual;abstract;
     procedure Disconnect;virtual;abstract;
     procedure Talk(user,sentence : string);virtual;abstract;
-    function Process : boolean;virtual;abstract;
+    function Process(NeedNewMessage : Boolean = False) : boolean;virtual;abstract;
     function GetID : string;virtual;abstract;
     function IsUser(user : string) : Boolean;virtual;abstract;
     property Speaker : TSpeaker read FSpeaker write FSpeaker;
@@ -94,7 +95,7 @@ type
     procedure Connect;override;
     procedure Disconnect;override;
     procedure Talk(user,sentence : string);override;
-    function Process : Boolean;override;
+    function Process(NeedNewMessage : Boolean = False) : Boolean;override;
     function GetID : string;override;
     function IsUser(user : string) : Boolean;override;
   end;
@@ -106,7 +107,10 @@ type
   private
     FAutofocus: Boolean;
     FBeQuiet: Boolean;
-//    FData : TSqlite3Dataset;
+    FData : TZConnection;
+    FWords : TZQuery;
+    FSentences : TZQuery;
+    FAnswers : TZQuery;
     FDebugMessage: TShortTalkEvent;
     FFastAnswer: Boolean;
     FIgnoreunicode: Boolean;
@@ -124,7 +128,7 @@ type
     function Unconjugate(verb : string) : string;
     function GetSentenceTyp(sentence : TStringList) : TSentenceTyp;
     function SentenceToStringList(sentence : string) : TStringList;
-    function CheckForSentence(words : TStringList;aname : string;Interlocutor : TInterlocutor;priv : boolean;logfile : string) : Boolean;
+    function CheckForSentence(words : TStringList;aTyp : TSentenceTyp;Interlocutor : TInterlocutor;priv : boolean;logfile : string) : Boolean;
     function CheckFocus(words : TStringList) : Boolean;
     function CheckUnFocus(words : TStringList) : Boolean;
     function GetInterlocutorID(name : string) : string;
@@ -140,7 +144,7 @@ type
     property BeQuiet : Boolean read FBeQuiet write FBeQuiet;
     property Autofocus : Boolean read FAutofocus write FAutofocus;
     property IgnoreUnicode : Boolean read FIgnoreunicode write FIgnoreunicode;
-    function Process : Boolean;
+    function Process(NeedNewMessage : Boolean = False) : Boolean;
     property OnSystemMessage : TShortTalkEvent read FSystemMessage write FSystemMessage;
     property OnDebugMessage : TShortTalkEvent read FDebugMessage write FDebugMessage;
     property FastAnswer : Boolean read FFastAnswer write FFastAnswer;
@@ -218,20 +222,24 @@ end;
 
 function TSpeaker.LoadLanguage(language: string): Boolean;
 begin
-  FLangDir := GetConfigDir('thalia')+'languages'+DirectorySeparator+language+DirectorySeparator;
   Result := False;
-  if not DirectoryExists(FlangDir) then
-    exit;
-  Result := True;
-{  if not Assigned(FData) then
-    FData := TSqlite3Dataset.Create(nil);
-  with FData do
+  if not Assigned(FData) then
     begin
-      FileName:=FLangDir+'dict.db';
-      TableName:='dict';
-      if not FileExists(FileName) then FreeAndNil(FData)
-      else Result := True;
-    end; }
+      FData := TZConnection.Create(nil);
+      FWords := TZQuery.Create(nil);
+      FSentences := TZQuery.Create(nil);
+      FAnswers := TZQuery.Create(nil);
+    end;
+  Result := FileExists('dict.db');
+  if not Result then exit;
+  FData.Protocol:='sqlite-3';
+  FData.Database:='dict.db';
+  FData.HostName:='localhost';
+  FData.Connect;
+  Result := FData.Connected;
+  FWords.Connection:=FData;
+  FSentences.Connection:=FData;
+  FAnswers.Connection:=FData;
 end;
 
 function TSpeaker.Unconjugate(verb: string): string;
@@ -377,10 +385,8 @@ begin
     end;
 end;
 
-function TSpeaker.CheckForSentence(words: TStringList; aname: string;Interlocutor : TInterlocutor;priv : boolean;logfile : string): Boolean;
+function TSpeaker.CheckForSentence(words: TStringList;aTyp : TSentenceTyp;Interlocutor : TInterlocutor;priv : boolean;logfile : string): Boolean;
 var
-  list: TStringList;
-  i: Integer;
   acheck,
   aword : String;
   aOK,atOK: Boolean;
@@ -392,7 +398,7 @@ var
   Answer : string;
   Parser: TParserEntry;
   tmp: String;
-  function GetFirstSentence(inp : string) : string;
+  function GetFirstSentence(var inp : string) : string;
   var
     endpos,i : Integer;
   label
@@ -413,11 +419,11 @@ var
 begin
   Result := False;
   Answer := '';
-  list := TStringlist.Create;
-  list.LoadFromFile(aname);
-  for i := 0 to list.Count-1 do
+  FSentences.SQL.Text:='select * from "SENTENCES" where "TYPE"='''+IntToStr(Integer(aTyp))+'''';
+  FSentences.Open;
+  while not FSentences.EOF do
     begin
-      acheck := copy(list[i],0,pos('::',list[i])-1);
+      acheck := FSentences.FieldByName('WORDS').AsString;
       if pos('=>',acheck) > 0 then
         Parser := TParserEntry.Create(copy(acheck,0,pos('=>',acheck)-1))
       else
@@ -426,54 +432,29 @@ begin
       Parser.Free;
       if aOK then
         begin
-          if (i = Interlocutor.FLastIndex) and (aname = Interlocutor.FlastFile) then
+          if (FSentences.FieldByName('ID').AsLargeInt = Interlocutor.FLastIndex) and (FSentences.FieldByName('CATEGORY').AsString = Interlocutor.FlastCategory) then
             begin
               if Assigned(FDebugMessage) then
                FDebugMessage('duplicate.'+lineending);
               Result := True;
-              List.Free;
               exit;
             end;
-          Interlocutor.FLastIndex := i;
-          Interlocutor.FlastFile := aname;
-      if Assigned(FDebugMessage) then
-        FDebugMessage('Found in Topic:'+ExtractFileName(aname)+lineending);
-          Answer := copy(list[i],pos('::',list[i])+2,length(list[i]));
-          if IsNumeric(copy(Answer,0,pos(':',Answer)-1)) and (copy(Answer,0,pos(':',Answer)-1) <> '') then
-            begin
-              Idx := StrToInt(copy(Answer,0,pos(':',Answer)-1));
-              Answer := copy(Answer,pos(':',Answer)+1,length(Answer));
-            end
-          else Idx := 0;
-          if IsNumeric(copy(Answer,0,pos(':',Answer)-1)) and (copy(Answer,0,pos(':',Answer)-1) <> '') then
-            begin
-              Idx := StrToInt(copy(Answer,0,pos(':',Answer)-1));
-              Answer := copy(Answer,pos(':',Answer)+1,length(Answer));
-            end;
-          aIdx := 0;
-          tmpRes := Answer;
-          while ((pos(';',Answer) > 0) and ((pos('=>',Answer) = 0) or (pos('=>',Answer) > pos(';',Answer)))) and (aIdx < Idx) do
-            begin
-              Answer := copy(Answer,pos(';',Answer)+1,length(Answer));
-              inc(aIdx);
-            end;
-          list[i] := copy(list[i],0,pos('::',list[i])+1);
-          if not ((pos(';',Answer) > 0) and ((pos('=>',Answer) = 0) or (pos('=>',Answer) > pos(';',Answer)))) then
-            list[i] := list[i]+'0:'+tmpRes
-          else
-            list[i] := list[i]+IntToStr(Idx+1)+':'+tmpRes;
+          Interlocutor.FLastIndex := FSentences.FieldByName('ID').AsLargeInt;
+          Interlocutor.FlastCategory := FSentences.FieldByName('CATEGORY').AsString;
+          FAnswers.SQL.Text:='select * from "ANSWERS" where "REF"='''+FSentences.FieldByName('ID').AsString+'''';
+          FAnswers.Open;
+          Randomize;
+          FAnswers.MoveBy(Random(FAnswers.RecordCount));
+          Answer := FAnswers.FieldByName('ANSWER').AsString;
           if pos('=>',Answer) > 0 then
             begin
               NextQuestion := copy(Answer,pos('=>',Answer)+2,length(Answer));
               Answer := copy(Answer,0,pos('=>',Answer)-1);
             end;
-          if pos(';',Answer) > 0 then
-            Answer := copy(Answer,0,pos(';',Answer)-1);
           while Answer <> '' do
             begin
               tmp := GetFirstSentence(Answer);
               DoAnswer(Interlocutor,tmp,priv,logfile);
-              Answer := copy(Answer,length(tmp)+1,length(Answer));
               Result := True;
             end;
           if NextQuestion <> '' then
@@ -483,12 +464,10 @@ begin
               NextQuestion := Interlocutor.ReplaceVariables(NextQuestion);
               DoAnswer(Interlocutor,NextQuestion,priv,logfile);
             end;
-          list.SaveToFile(aname);
-          list.Free;
           exit;
         end;
+      FSentences.Next;
     end;
-  list.Free;
 end;
 
 function TSpeaker.CheckFocus(words: TStringList): Boolean;
@@ -579,6 +558,7 @@ var
   flog : TextFile;
   filename: String;
   InterlocutorID: String;
+  Answer: String;
 const
   stypes : array [0..3] of string = ('unknown','questions','statements','commands');
 
@@ -641,14 +621,6 @@ begin
   Interlocutor.LastContact:=Now();
   if not FFastAnswer then
     Dosleep(random(10)*1000);
-  {
-  try
-    if CheckNonASCII(sentence) then
-      Interlocutor.Unicodeanswer := False;
-  except
-  end;
-  }
-
   words := SentenceToStringList(lowercase(sentence));
   aFocus := False;
   if CheckFocus(words) or priv or AutoFocus then
@@ -690,35 +662,17 @@ begin
           atyp := GetSentenceTyp(words);
           if Assigned(FDebugMessage) then
             FDebugMessage('Typ:'+stypes[Integer(atyp)]+lineending);
-          If FindFirst (FLangDir+'*.'+stypes[Integer(atyp)]+'.txt',faAnyFile,SR)=0 then
-            repeat
-              if SR.Name <> 'nothingtosay.'+stypes[Integer(atyp)]+'.txt' then
-                Result := Result or CheckForSentence(words,FLangDir+SR.Name,Interlocutor,priv,filename);
-              if Result then break;
-            until FindNext(SR)<>0;
-          FindClose(SR);
+          Result := Result or CheckForSentence(words,atyp,Interlocutor,priv,filename);
           if (not Result) and (aFocus or priv) then //Say something when we are asked directly and have no answer
             begin
-              sl := TStringList.Create;
-              if Fileexists(FLangDir+'nothingtosay.'+stypes[Integer(atyp)]+'.txt') then
-                begin
-                  if FileExists(FLangDir+'nothingtosay.'+stypes[Integer(atyp)]+'.txt') then
-                    sl.LoadFromFile(FLangDir+'nothingtosay.'+stypes[Integer(atyp)]+'.txt');
-                  if sl.Count = 0 then
-                    sl.Add('1');
-                  if sl.Count > StrToInt(sl[0])+1 then
-                    begin
-                      DoAnswer(Interlocutor,sl[StrToInt(sl[0])],priv,filename);
-                      sl[0] := IntToStr(StrToInt(sl[0])+1);
-                    end
-                  else if sl.Count > 1 then
-                    begin
-                      DoAnswer(Interlocutor,sl[1],priv,filename);
-                      sl[0] := '1';
-                    end;
-                  sl.SaveToFile(FLangDir+'nothingtosay.'+stypes[Integer(atyp)]+'.txt');
-                end;
-              sl.Free;
+              FSentences.SQL.Text:='select * from "SENTENCES" where "TYPE"=''6''';
+              FSentences.Open;
+              FAnswers.SQL.Text:='select * from "ANSWERS" where "REF"='''+FSentences.FieldByName('ID').AsString+'''';//Antworten auf unbekannte Fragen
+              FAnswers.Open;
+              Randomize;
+              FAnswers.MoveBy(Random(FAnswers.RecordCount));
+              Answer := FAnswers.FieldByName('ANSWER').AsString;
+              DoAnswer(Interlocutor,Answer,priv,filename);
             end;
         end;
     end;
@@ -780,7 +734,7 @@ begin
   if pos('$ignorelastanswer',lowercase(answer)) > 0 then
     begin
       Result := copy(Result,0,pos('$ignorelastanswer',lowercase(answer))-1)+copy(Result,pos('$ignorelastanswer',lowercase(answer))+17,length(Result));
-      Interlocutor.FlastFile:='';
+      Interlocutor.FlastCategory:='';
       Interlocutor.FLastIndex:=-1;
     end;
 end;
@@ -795,14 +749,14 @@ begin
   FFastAnswer := False;
 end;
 
-function TSpeaker.Process: Boolean;
+function TSpeaker.Process(NeedNewMessage : Boolean = False): Boolean;
 var
   i: Integer;
 begin
   Result := True;
   if not Assigned(FIntf) then
     exit;
-  Result := FIntf.Process;
+  Result := FIntf.Process(NeedNewMessage);
 {  for i := 0 to Interlocutors.Count-1 do
     if (Now()-TInterlocutor(Interlocutors.Items[i]).LastContact) > EncodeTime(0,2,0,0) then
       TInterlocutor(Interlocutors.Items[i]).Focused := False;}
@@ -830,14 +784,17 @@ begin
   writeln(sentence);
 end;
 
-function TCmdLnInterface.Process : Boolean;
+function TCmdLnInterface.Process(NeedNewMessage : Boolean = False) : Boolean;
 var
   tmp : string;
 begin
-  write('>');
-  readln(tmp);
-  if Assigned(FTalk) then
-    FTalk('',tmp,False);
+  if NeedNewMessage then
+    begin
+      write('>');
+      readln(tmp);
+      if Assigned(FTalk) then
+        FTalk('',tmp,True);
+    end;
   Result := True;
 end;
 

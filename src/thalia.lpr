@@ -6,9 +6,8 @@ uses
   {$IFDEF UNIX}{$IFDEF UseCThreads}
   cthreads,
   {$ENDIF}{$ENDIF}
-  Interfaces,
-  Classes, SysUtils, CustApp,
-  uSpeaker, uPluginInterface, uIPLocation,uIntfStrConsts, general, uwhois;
+  Interfaces, Classes, SysUtils, CustApp, uSpeaker, uPluginInterface,
+  uIPLocation, uIntfStrConsts, zdbc, uwhois, general_nogui;
 
 type
   { TThalia }
@@ -90,7 +89,7 @@ begin
   FSpeaker.Intf.Connect;
   if not HasOption('q','quiet') then
     writeln('Started OK...');
-  while FSpeaker.Process do sleep(100);
+  while FSpeaker.Process(True) do sleep(100);
   if not HasOption('q','quiet') then
     writeln('Disconnecting...');
   FSpeaker.Intf.Disconnect;

@@ -1,0 +1,108 @@
+object Form1: TForm1
+  Left = 327
+  Height = 511
+  Top = 197
+  Width = 772
+  Caption = 'Form1'
+  ClientHeight = 511
+  ClientWidth = 772
+  LCLVersion = '1.1'
+  object DBGrid1: TDBGrid
+    Left = 0
+    Height = 224
+    Top = 0
+    Width = 772
+    Align = alTop
+    Color = clWindow
+    Columns = <    
+      item
+        Title.Caption = 'WORDS'
+        Width = 300
+        FieldName = 'WORDS'
+      end    
+      item
+        Title.Caption = 'TYPE'
+        Width = 185
+        FieldName = 'TYPE'
+      end    
+      item
+        Title.Caption = 'CATEGORY'
+        Width = 187
+        FieldName = 'CATEGORY'
+      end>
+    DataSource = Datasource1
+    OptionsExtra = [dgeCheckboxColumn]
+    TabOrder = 0
+    TitleStyle = tsNative
+  end
+  object DBGrid2: TDBGrid
+    Left = 0
+    Height = 287
+    Top = 224
+    Width = 772
+    Align = alClient
+    Color = clWindow
+    Columns = <    
+      item
+        Title.Caption = 'ANSWER'
+        FieldName = 'ANSWER'
+      end>
+    DataSource = Datasource2
+    TabOrder = 1
+    TitleStyle = tsNative
+  end
+  object ZConnection1: TZConnection
+    UTF8StringsAsWideField = False
+    PreprepareSQL = False
+    Properties.Strings = (
+      'PreprepareSQL='
+    )
+    Connected = True
+    HostName = 'localhost'
+    Port = 0
+    Database = '/media/chris/Daten/Source/thalia/languages/deutsch/dict.db'
+    Protocol = 'sqlite-3'
+    left = 28
+    top = 26
+  end
+  object ZQuery1: TZQuery
+    Connection = ZConnection1
+    SortedFields = 'ID'
+    Active = True
+    SQL.Strings = (
+      'select * from SENTENCES'
+    )
+    Params = <>
+    IndexFieldNames = 'ID Asc'
+    left = 104
+    top = 26
+  end
+  object ZQuery2: TZQuery
+    Connection = ZConnection1
+    SortedFields = 'ID'
+    Active = True
+    SQL.Strings = (
+      'select * from ANSWERS'
+    )
+    Params = <>
+    Properties.Strings = (
+      'select * from ANSWERS'
+    )
+    MasterFields = 'ID'
+    MasterSource = Datasource1
+    LinkedFields = 'REF'
+    IndexFieldNames = 'ID Asc'
+    left = 176
+    top = 26
+  end
+  object Datasource1: TDatasource
+    DataSet = ZQuery1
+    left = 104
+    top = 88
+  end
+  object Datasource2: TDatasource
+    DataSet = ZQuery2
+    left = 176
+    top = 88
+  end
+end

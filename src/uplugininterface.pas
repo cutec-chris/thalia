@@ -44,7 +44,7 @@ type
     procedure Connect;override;
     procedure Disconnect;override;
     procedure Talk(user,sentence : string);override;
-    function Process : Boolean;override;
+    function Process(NeedNewMessage : Boolean = False) : Boolean;override;
     function GetID : string;override;
     function IsUser(user : string) : Boolean;override;
   end;
@@ -134,7 +134,7 @@ begin
   FTalkTo(PChar(user),PChar(sentence));
 end;
 
-function TPluginInterface.Process: Boolean;
+function TPluginInterface.Process(NeedNewMessage: Boolean): Boolean;
 begin
   Result := FProcess();
 end;
