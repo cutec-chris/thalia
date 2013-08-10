@@ -452,6 +452,7 @@ begin
   FVariables := TStringlist.Create;
   FSentences.SQL.Text:='select * from "SENTENCES" where "TYPE"='''+IntToStr(Integer(aTyp))+'''';
   FSentences.Open;
+  FSentences.First;
   while not FSentences.EOF do
     begin
       acheck := FSentences.FieldByName('WORDS').AsString;
@@ -520,6 +521,11 @@ begin
       FSentences.Next;
     end;
   FVariables.Free;
+  if not Result then
+    begin
+      Interlocutor.FLastIndex := -1;
+      Interlocutor.FlastCategory := '';
+    end;
 end;
 
 function TSpeaker.CheckFocus(words: TStringList): Boolean;

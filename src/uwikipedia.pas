@@ -5,7 +5,7 @@ unit uwikipedia;
 interface
 
 uses
-  Classes, SysUtils,httpsend,uSpeaker,Utils;
+  Classes, SysUtils,httpsend,uSpeaker,Utils,RegExpr;
 function GetArticle(language,name : string) : string;
 function SearchArticles(language,name : string;Start,Stop : Integer) : TStrings;
 implementation
@@ -40,19 +40,68 @@ var
   tmp,tmp1: String;
   avar: String;
   aOut: String;
+  bOut : string = '';
+  procedure RemoveTag(aTag : string;AllowShortenClose : Boolean = False);
+  var
+    ShortCloser: Boolean;
+    aTagOpen: Integer;
+  begin
+    while pos('[['+aTag,lowercase(aout))>0 do
+      begin
+        bOut := bOut+copy(aout,0,pos('[['+aTag,lowercase(aout))-1);
+        aOut := copy(aOut,pos('[['+aTag,lowercase(aout))+2+length(aTag),length(aOut));
+        aTagOpen := 1;
+        ShortCloser:=False;
+        while (aTagOpen>0) and (length(aOut)>0) do
+          begin
+            if copy(aOut,0,2)='[[' then
+              begin
+                inc(aTagOpen);
+                aOut := copy(aOut,2,length(aOut));
+              end;
+            if copy(aOut,0,2)=']]' then
+              begin
+                dec(aTagOpen);
+                aOut := copy(aOut,2,length(aOut));
+              end;
+            aOut := copy(aOut,2,length(aOut));
+          end;
+      end;
+    aOut := bOut+aOut;
+    bOut := '';
+  end;
 begin
   Result:=False;
-  canhandle:=(canhandle or (pos('$dowikiquerry(',sentence)>-1));
+  canhandle:=(pos('$dowikiquerry(',sentence)>0);
   tmp := copy(sentence,0,pos('$dowikiquerry(',sentence)-1);
   tmp1 :=copy(sentence,pos('$dowikiquerry(',sentence)+14,length(sentence));
   avar := copy(tmp1,0,pos(')',tmp1)-1);
   tmp1 := copy(tmp1,pos(')',tmp1)+1,length(tmp1));
+  if trim(avar) = '' then exit;
   aOut := GetArticle('de',aVar);
-  GetFirstSentence(aOut);
+  RemoveTag('bild:');
+  RemoveTag('image:');
+  RemoveTag('datei:');
+  RemoveTag('file:');
+  aOut := ReplaceRegExpr('<[^>]+?>',aOut,' ',False);
+  aOut := ReplaceRegExpr('{{(.*?)}}',aOut,'',True);
+  aOut := ReplaceRegExpr('(\[\[).*?\|(.*?)(\]\])',aOut,'$2',True);
+  aOut := ReplaceRegExpr('(\[\[)(.*?)(\]\])',aOut,'$1',True);
+  aOut := ReplaceRegExpr('======(.*?)======',aOut,'$1',True);
+  aOut := ReplaceRegExpr('=====(.*?)=====',aOut,'$1',True);
+  aOut := ReplaceRegExpr('====(.*?)====',aOut,'$1',True);
+  aOut := ReplaceRegExpr('===(.*?)===',aOut,'$1',True);
+  aOut := ReplaceRegExpr('==(.*?)==',aOut,'$1',True);
+  aOut := ReplaceRegExpr('''''''(.*?)''''''',aOut,'$1',True);
+  aOut := ReplaceRegExpr('''''(.*?)''''',aOut,'$1',True);
+  aOut := StringReplace(aOut,#13#10,'',[rfReplaceAll]);
+  aOut := StringReplace(aOut,#13,'',[rfReplaceAll]);
+  aOut := StringReplace(aOut,#10,'',[rfReplaceAll]);
+  aOut := GetFirstSentence(aOut);
   if aOut <> '' then
     begin
       Result := True;
-      sentence:=tmp+aout+tmp1;
+      sentence:=trim(tmp+aout+tmp1);
     end;
 end;
 

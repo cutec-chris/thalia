@@ -55,7 +55,7 @@
         <PackageName Value="lnetbase"/>
       </Item6>
     </RequiredPackages>
-    <Units Count="113">
+    <Units Count="115">
       <Unit0>
         <Filename Value="thalia.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -64,7 +64,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="104"/>
         <CursorPos X="27" Y="138"/>
-        <UsageCount Value="156"/>
+        <UsageCount Value="161"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit0>
@@ -72,12 +72,11 @@
         <Filename Value="uspeaker.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uSpeaker"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="775"/>
-        <CursorPos X="28" Y="802"/>
-        <UsageCount Value="85"/>
+        <TopLine Value="465"/>
+        <CursorPos X="1" Y="493"/>
+        <UsageCount Value="90"/>
         <Loaded Value="True"/>
       </Unit1>
       <Unit2>
@@ -94,7 +93,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="3" Y="11"/>
-        <UsageCount Value="24"/>
+        <UsageCount Value="26"/>
         <Loaded Value="True"/>
       </Unit3>
       <Unit4>
@@ -111,7 +110,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="119"/>
         <CursorPos X="17" Y="46"/>
-        <UsageCount Value="152"/>
+        <UsageCount Value="157"/>
       </Unit5>
       <Unit6>
         <Filename Value="..\..\Programme\lazarus\fpc\2.2.1\source\rtl\win\wininc\ascdef.inc"/>
@@ -746,21 +745,21 @@
       <Unit96>
         <Filename Value="uwhois.pas"/>
         <UnitName Value="uwhois"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="10"/>
         <CursorPos X="45" Y="47"/>
-        <UsageCount Value="61"/>
+        <UsageCount Value="63"/>
         <Loaded Value="True"/>
       </Unit96>
       <Unit97>
         <Filename Value="..\..\ircclient\source\uirc.pas"/>
         <UnitName Value="uirc"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="42" Y="204"/>
-        <UsageCount Value="35"/>
+        <UsageCount Value="37"/>
         <Loaded Value="True"/>
       </Unit97>
       <Unit98>
@@ -867,11 +866,12 @@
         <Filename Value="uwikipedia.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uwikipedia"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="28"/>
-        <CursorPos X="37" Y="45"/>
-        <UsageCount Value="25"/>
+        <TopLine Value="77"/>
+        <CursorPos X="36" Y="104"/>
+        <UsageCount Value="30"/>
         <Loaded Value="True"/>
       </Unit111>
       <Unit112>
@@ -879,132 +879,150 @@
         <UnitName Value="httpsend"/>
         <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="374"/>
+        <TopLine Value="356"/>
         <CursorPos X="3" Y="392"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="15"/>
         <Loaded Value="True"/>
       </Unit112>
+      <Unit113>
+        <Filename Value="..\..\wikihelp\src\wiki2html.lpr"/>
+        <UnitName Value="wiki2html"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="21" Y="12"/>
+        <UsageCount Value="10"/>
+      </Unit113>
+      <Unit114>
+        <Filename Value="..\..\promet\promet\source\base_wiki\wikitohtml.pas"/>
+        <UnitName Value="wikitohtml"/>
+        <EditorIndex Value="5"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="416"/>
+        <CursorPos X="34" Y="431"/>
+        <UsageCount Value="12"/>
+        <Loaded Value="True"/>
+      </Unit114>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="uwikipedia.pas"/>
-        <Caret Line="47" Column="1" TopLine="28"/>
+        <Filename Value="uspeaker.pas"/>
+        <Caret Line="490" Column="1" TopLine="462"/>
       </Position1>
       <Position2>
-        <Filename Value="uwikipedia.pas"/>
-        <Caret Line="48" Column="1" TopLine="28"/>
+        <Filename Value="uspeaker.pas"/>
+        <Caret Line="492" Column="1" TopLine="464"/>
       </Position2>
       <Position3>
-        <Filename Value="uwikipedia.pas"/>
-        <Caret Line="49" Column="1" TopLine="28"/>
+        <Filename Value="uspeaker.pas"/>
+        <Caret Line="493" Column="1" TopLine="465"/>
       </Position3>
       <Position4>
         <Filename Value="uwikipedia.pas"/>
-        <Caret Line="45" Column="1" TopLine="28"/>
+        <Caret Line="73" Column="1" TopLine="58"/>
       </Position4>
       <Position5>
         <Filename Value="uwikipedia.pas"/>
-        <Caret Line="46" Column="1" TopLine="28"/>
+        <Caret Line="39" Column="1" TopLine="21"/>
       </Position5>
       <Position6>
         <Filename Value="uwikipedia.pas"/>
-        <Caret Line="47" Column="1" TopLine="28"/>
+        <Caret Line="74" Column="1" TopLine="58"/>
       </Position6>
       <Position7>
         <Filename Value="uwikipedia.pas"/>
-        <Caret Line="48" Column="1" TopLine="28"/>
+        <Caret Line="75" Column="1" TopLine="58"/>
       </Position7>
       <Position8>
         <Filename Value="uwikipedia.pas"/>
-        <Caret Line="49" Column="1" TopLine="28"/>
+        <Caret Line="76" Column="1" TopLine="58"/>
       </Position8>
       <Position9>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="393" Column="3" TopLine="385"/>
+        <Caret Line="467" Column="1" TopLine="461"/>
       </Position9>
       <Position10>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="397" Column="19" TopLine="385"/>
+        <Caret Line="468" Column="1" TopLine="461"/>
       </Position10>
       <Position11>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="676" Column="41" TopLine="648"/>
+        <Caret Line="474" Column="1" TopLine="461"/>
       </Position11>
       <Position12>
-        <Filename Value="uwikipedia.pas"/>
-        <Caret Line="49" Column="1" TopLine="28"/>
+        <Filename Value="uspeaker.pas"/>
+        <Caret Line="475" Column="1" TopLine="461"/>
       </Position12>
       <Position13>
-        <Filename Value="uwikipedia.pas"/>
-        <Caret Line="50" Column="1" TopLine="28"/>
+        <Filename Value="uspeaker.pas"/>
+        <Caret Line="476" Column="1" TopLine="461"/>
       </Position13>
       <Position14>
-        <Filename Value="uwikipedia.pas"/>
-        <Caret Line="51" Column="1" TopLine="28"/>
+        <Filename Value="uspeaker.pas"/>
+        <Caret Line="477" Column="1" TopLine="461"/>
       </Position14>
       <Position15>
-        <Filename Value="uwikipedia.pas"/>
-        <Caret Line="49" Column="16" TopLine="28"/>
+        <Filename Value="uspeaker.pas"/>
+        <Caret Line="478" Column="1" TopLine="461"/>
       </Position15>
       <Position16>
-        <Filename Value="uwikipedia.pas"/>
-        <Caret Line="52" Column="1" TopLine="28"/>
+        <Filename Value="uspeaker.pas"/>
+        <Caret Line="479" Column="1" TopLine="461"/>
       </Position16>
       <Position17>
-        <Filename Value="uwikipedia.pas"/>
-        <Caret Line="54" Column="1" TopLine="28"/>
+        <Filename Value="uspeaker.pas"/>
+        <Caret Line="480" Column="1" TopLine="461"/>
       </Position17>
       <Position18>
-        <Filename Value="uwikipedia.pas"/>
-        <Caret Line="55" Column="1" TopLine="28"/>
+        <Filename Value="uspeaker.pas"/>
+        <Caret Line="481" Column="1" TopLine="461"/>
       </Position18>
       <Position19>
-        <Filename Value="uwikipedia.pas"/>
-        <Caret Line="57" Column="1" TopLine="28"/>
+        <Filename Value="uspeaker.pas"/>
+        <Caret Line="483" Column="1" TopLine="461"/>
       </Position19>
       <Position20>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="5" Column="78" TopLine="1"/>
+        <Caret Line="484" Column="1" TopLine="461"/>
       </Position20>
       <Position21>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="444" Column="44" TopLine="416"/>
+        <Caret Line="486" Column="1" TopLine="461"/>
       </Position21>
       <Position22>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="445" Column="44" TopLine="417"/>
+        <Caret Line="488" Column="1" TopLine="461"/>
       </Position22>
       <Position23>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="624" Column="28" TopLine="596"/>
+        <Caret Line="489" Column="1" TopLine="461"/>
       </Position23>
       <Position24>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="625" Column="28" TopLine="597"/>
+        <Caret Line="490" Column="1" TopLine="462"/>
       </Position24>
       <Position25>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="626" Column="28" TopLine="598"/>
+        <Caret Line="492" Column="1" TopLine="464"/>
       </Position25>
       <Position26>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="627" Column="28" TopLine="599"/>
+        <Caret Line="493" Column="1" TopLine="465"/>
       </Position26>
       <Position27>
-        <Filename Value="uspeaker.pas"/>
-        <Caret Line="628" Column="28" TopLine="601"/>
+        <Filename Value="uwikipedia.pas"/>
+        <Caret Line="73" Column="1" TopLine="58"/>
       </Position27>
       <Position28>
-        <Filename Value="uspeaker.pas"/>
-        <Caret Line="629" Column="28" TopLine="601"/>
+        <Filename Value="uwikipedia.pas"/>
+        <Caret Line="39" Column="1" TopLine="21"/>
       </Position28>
       <Position29>
-        <Filename Value="uspeaker.pas"/>
-        <Caret Line="630" Column="28" TopLine="602"/>
+        <Filename Value="uwikipedia.pas"/>
+        <Caret Line="74" Column="1" TopLine="58"/>
       </Position29>
       <Position30>
-        <Filename Value="uspeaker.pas"/>
-        <Caret Line="631" Column="28" TopLine="603"/>
+        <Filename Value="uwikipedia.pas"/>
+        <Caret Line="75" Column="1" TopLine="58"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>
@@ -1033,10 +1051,22 @@
     </Other>
   </CompilerOptions>
   <Debugging>
-    <Watches Count="1">
+    <BreakPoints Count="1">
       <Item1>
-        <Expression Value="acheck"/>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="uspeaker.pas"/>
+        <Line Value="467"/>
       </Item1>
+    </BreakPoints>
+    <Watches Count="2">
+      <Item1>
+        <Expression Value="bOut"/>
+      </Item1>
+      <Item2>
+        <Expression Value="aOut"/>
+      </Item2>
     </Watches>
     <Exceptions Count="2">
       <Item1>
