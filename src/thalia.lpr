@@ -6,7 +6,8 @@ uses
   {$IFDEF UNIX}{$IFDEF UseCThreads}
   cthreads,
   {$ENDIF}{$ENDIF}
-  Interfaces, Classes, SysUtils, CustApp, uSpeaker, uPluginInterface, uIntfStrConsts, zdbc, general_nogui;
+  Interfaces, Classes, SysUtils, CustApp, uSpeaker, uPluginInterface,
+  uIntfStrConsts, zdbc, laz_synapse, general_nogui, uwikipedia;
 
 type
   { TThalia }

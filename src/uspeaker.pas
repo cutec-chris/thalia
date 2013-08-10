@@ -21,6 +21,7 @@ type
   TTalkEvent = procedure(from,sentence : string;Priv : Boolean) of object;
   TGetParameterEvent = function(short : char;long : string) : string of object;
   TShortTalkEvent = procedure(sentence : string) of object;
+  THandleTalkEvent = function(var sentence : string;var canhandle : Boolean) : Boolean;
 
   TSpeaker = class;
 
@@ -165,12 +166,39 @@ type
     function IsValid(words,Variables : TStringList) : Boolean;
   end;
 
+  procedure RegisterToSpeaker(aTalk : THandleTalkEvent);
+  function GetFirstSentence(var inp : string) : string;
 implementation
-
+var
+  TalkHandlers : array of THandleTalkEvent;
 const
   conjugatedendings : array[0..10] of string = ('e','st','t','en','est','end','ten','test','te','et','');
   punctations : array [0..12] of string = (',','.','?','!','...',':',';','(',')','[',']','{','}');
   sentenceends : array [0..2] of string = ('.','?','!');
+
+procedure RegisterToSpeaker(aTalk: THandleTalkEvent);
+begin
+  Setlength(TalkHandlers,length(TalkHandlers)+1);
+  TalkHandlers[length(TalkHandlers)-1] := aTalk;
+end;
+
+function GetFirstSentence(var inp : string) : string;
+var
+  endpos,i : Integer;
+label
+  restart;
+begin
+  Result := '';
+restart:
+  endpos := length(inp)+1;
+  for i := 0 to length(sentenceends)-1 do
+    if (pos(sentenceends[i],inp) > 0) and (pos(sentenceends[i],inp) < endpos) then
+      endpos := pos(sentenceends[i],inp);
+  Result := result+copy(inp,0,endpos);
+  inp := copy(inp,endpos+1,length(inp));
+  if (inp <> '') and Isnumeric(copy(inp,0,1)) then goto restart; //example 2.0.4
+  if (pos('.',inp) > 0) and (pos('.',inp) < 3) then goto restart; //example: b.z.w.
+end;
 
 { TSpeaker }
 
@@ -364,7 +392,7 @@ var
 begin
   words := TStringList.Create;
   Result := words;
-  sentence := lowercase(sentence)+' ';
+  sentence := sentence+' ';
   while (length(trim(sentence)) > 0) and (pos(' ',sentence) > 0) do
     begin
       punctation := '';
@@ -378,7 +406,7 @@ begin
                 aword := copy(aword,0,length(aword)-(length(punctations[i])));
                 break;
               end;
-          words.Add(aword);
+          words.Add(lowercase(aword)+'='+aword);
           if punctation <> '' then
             words.Add(punctation);
         end;
@@ -400,23 +428,9 @@ var
   Parser: TParserEntry;
   tmp: String;
   FVariables: TStringList;
-  function GetFirstSentence(var inp : string) : string;
-  var
-    endpos,i : Integer;
-  label
-    restart;
-  begin
-    Result := '';
-  restart:
-    endpos := length(inp)+1;
-    for i := 0 to length(sentenceends)-1 do
-      if (pos(sentenceends[i],inp) > 0) and (pos(sentenceends[i],inp) < endpos) then
-        endpos := pos(sentenceends[i],inp);
-    Result := result+copy(inp,0,endpos);
-    inp := copy(inp,endpos+1,length(inp));
-    if (inp <> '') and Isnumeric(copy(inp,0,1)) then goto restart; //example 2.0.4
-    if (pos('.',inp) > 0) and (pos('.',inp) < 3) then goto restart; //example: b.z.w.
-  end;
+  tmp1: String;
+  i: Integer;
+  canhandle : Boolean;
   procedure ReplaceVariables(var aAnswer : string);
   var
     i: Integer;
@@ -449,11 +463,11 @@ begin
       Parser.Free;
       if aOK then
         begin
+          Result := True;
           if (FSentences.FieldByName('ID').AsLargeInt = Interlocutor.FLastIndex) and (FSentences.FieldByName('CATEGORY').AsString = Interlocutor.FlastCategory) then
             begin
               if Assigned(FDebugMessage) then
                FDebugMessage('duplicate.'+lineending);
-              Result := True;
               exit;
             end;
           Interlocutor.FLastIndex := FSentences.FieldByName('ID').AsLargeInt;
@@ -472,8 +486,16 @@ begin
             begin
               tmp := GetFirstSentence(Answer);
               ReplaceVariables(tmp);
-              DoAnswer(Interlocutor,tmp,priv,logfile);
-              Result := True;
+              for i := low(TalkHandlers) to high(TalkHandlers) do
+                begin
+                  tmp1 := tmp;
+                  if TalkHandlers[i](tmp1,canhandle) then
+                    tmp := tmp1
+                  else if canhandle then
+                    Result := False;
+                end;
+              if Result then
+                DoAnswer(Interlocutor,tmp,priv,logfile);
             end;
           if NextQuestion <> '' then
             begin
@@ -481,9 +503,19 @@ begin
               NextQuestion := copy(NextQuestion,0,pos(';',NextQuestion)-1);
               NextQuestion := Interlocutor.ReplaceVariables(NextQuestion);
               ReplaceVariables(NextQuestion);
-              DoAnswer(Interlocutor,NextQuestion,priv,logfile);
+              for i := low(TalkHandlers) to high(TalkHandlers) do
+                begin
+                  tmp1 := tmp;
+                  if TalkHandlers[i](tmp1,canhandle) then
+                    tmp := tmp1
+                  else if canhandle then
+                    Result := False;
+                end;
+              if Result then
+                DoAnswer(Interlocutor,NextQuestion,priv,logfile);
             end;
-          exit;
+          if Result then
+            exit;
         end;
       FSentences.Next;
     end;
@@ -493,37 +525,37 @@ end;
 function TSpeaker.CheckFocus(words: TStringList): Boolean;
 begin
   Result := False;
-  if (words.Count > 0) and (words[0] = '@'+lowercase(FName)) then
+  if (words.Count > 0) and (words.Names[0] = '@'+lowercase(FName)) then
     begin
       words.Delete(0);
       Result := True;
       if (words.Count > 0) then exit;
-      if words[0] = ',' then
+      if words.Names[0] = ',' then
         words.Delete(0);
       if (words.Count > 0) then exit;
-      if words[0] = ':' then
+      if words.Names[0] = ':' then
         words.Delete(0);
       exit;
     end;
-  if (words.Count > 0) and (words[0] = lowercase(FName)) then
+  if (words.Count > 0) and (words.Names[0] = lowercase(FName)) then
     begin
       words.Delete(0);
       Result := True;
       if (words.Count > 0) then exit;
-      if words[0] = ',' then
+      if words.Names[0] = ',' then
         words.Delete(0);
       if (words.Count > 0) then exit;
-      if words[0] = ':' then
+      if words.Names[0] = ':' then
         words.Delete(0);
       exit;
     end;
-  if (words.Count > 1) and (words[words.Count-1] = lowercase(FName)) then
+  if (words.Count > 1) and (words.Names[words.Count-1] = lowercase(FName)) then
     begin
       words.Delete(words.Count-1);
       Result := True;
       exit;
     end;
-  if (words.Count > 2) and (words[words.Count-2] = lowercase(FName)) then
+  if (words.Count > 2) and (words.Names[words.Count-2] = lowercase(FName)) then
     begin
       words.Delete(words.Count-2);
       Result := True;
@@ -534,22 +566,22 @@ end;
 function TSpeaker.CheckUnFocus(words: TStringList): Boolean;
 begin
   Result := False;
-  if (words.Count > 0) and (copy(words[0],0,1) = '@') and Intf.IsUser(copy(words[0],2,length(words[0]))) then
+  if (words.Count > 0) and (copy(words.Names[0],0,1) = '@') and Intf.IsUser(copy(words.Names[0],2,length(words[0]))) then
     begin
       Result := True;
       exit;
     end;
-  if (words.Count > 0) and Intf.IsUser(words[0]) then
+  if (words.Count > 0) and Intf.IsUser(words.Names[0]) then
     begin
       Result := True;
       exit;
     end;
-  if (words.Count > 1) and Intf.IsUser(words[words.Count-1]) then
+  if (words.Count > 1) and Intf.IsUser(words.Names[words.Count-1]) then
     begin
       Result := True;
       exit;
     end;
-  if (words.Count > 2) and Intf.IsUser(words[words.Count-2]) then
+  if (words.Count > 2) and Intf.IsUser(words.Names[words.Count-2]) then
     begin
       Result := True;
       exit;
@@ -641,7 +673,7 @@ begin
   Interlocutor.LastContact:=Now();
   if not FFastAnswer then
     Dosleep(random(10)*1000);
-  words := SentenceToStringList(lowercase(sentence));
+  words := SentenceToStringList(sentence);
   if words.Count=0 then exit;
   aFocus := False;
   if CheckFocus(words) or priv or AutoFocus then
@@ -671,7 +703,7 @@ begin
       aOK := True;
       if words.count = 1 then
         for i := 0 to length(sentenceends)-1 do
-          if words[0] = sentenceends[i] then
+          if words.Names[0] = sentenceends[i] then
             begin
               aOK := False;
               DoAnswer(Interlocutor,strShortQuestionAnswer,priv,filename);
@@ -1004,10 +1036,10 @@ begin
           anop := copy(anword,0,1);
           anword := copy(anword,2,length(anword))+'|';
           anword := copy(anword,0,pos('|',anword)-1);
-          aNewIndex := words.IndexOf(anword);
+          aNewIndex := words.IndexOfName(anword);
           if aNewIndex = -1 then aNewIndex:=words.Count-1;
           for i := aOldIdx+1 to aNewIndex do
-            tmp := tmp+words[i]+' ';
+            tmp := tmp+words.ValueFromIndex[i]+' ';
           Variables.Values[copy(aword,0,pos('|',aword)-1)]:=copy(tmp,0,length(tmp)-1);
         end
       else
@@ -1023,22 +1055,22 @@ begin
                   partlist.Delimiter:=' ';
                   partlist.DelimitedText:=partword;
                   i := 1;
-                  firstindex := words.IndexOf(partlist[0]);
+                  firstindex := words.IndexOfName(partlist[0]);
                   partOK := (aop='+') and (firstindex > -1);
                   if partOK then
                     begin
                       while i < partlist.Count do
                         begin
-                          partOK := partOK and (words.IndexOf(partlist[i]) = firstindex+i);
+                          partOK := partOK and (words.IndexOfName(partlist[i]) = firstindex+i);
                           inc(i);
                         end;
                     end;
                   partlist.free;
                 end
-              else if ((aop = '+') and (words.IndexOf(partword) <> -1)) or ((aop = '-') and (words.IndexOf(partword) = -1)) then
+              else if ((aop = '+') and (words.IndexOfName(partword) <> -1)) or ((aop = '-') and (words.IndexOfName(partword) = -1)) then
                 begin
                   partOK := True;
-                  if (aop = '+') then aOldIdx := words.IndexOf(partword);
+                  if (aop = '+') then aOldIdx := words.IndexOfName(partword);
                 end;
               if partOK then break;
             end;
