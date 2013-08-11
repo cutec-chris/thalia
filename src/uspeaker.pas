@@ -17,13 +17,13 @@ type
     wordtype : TWordType;
     position : TWordPosition;
   end;
-  
+
+  TSpeaker = class;
+
   TTalkEvent = procedure(from,sentence : string;Priv : Boolean) of object;
   TGetParameterEvent = function(short : char;long : string) : string of object;
   TShortTalkEvent = procedure(sentence : string) of object;
-  THandleTalkEvent = function(var sentence : string;var canhandle : Boolean) : Boolean;
-
-  TSpeaker = class;
+  THandleTalkEvent = function(Speaker : TSpeaker;language : string;var sentence : string;var canhandle : Boolean) : Boolean;
 
   { TInterlocutor }
 
@@ -47,6 +47,8 @@ type
   protected
     FlastCategory : string;
     FLastIndex : LargeInt;
+    function StemmGerman(word : string) : string;
+    function Stemm(word : string) : string;
   public
     constructor Create(ID : string;Name : string);
     property ID : string read FID;
@@ -127,10 +129,10 @@ type
     procedure SetName(const AValue: string);
     function LoadLanguage(language : string) : Boolean;
   protected
-    function Unconjugate(verb : string) : string;
     function GetSentenceTyp(sentence : TStringList) : TSentenceTyp;
-    function SentenceToStringList(sentence : string) : TStringList;
-    function CheckForSentence(words : TStringList;aTyp : TSentenceTyp;Interlocutor : TInterlocutor;priv : boolean;logfile : string) : Boolean;
+    function WordsToSentence(sentence : TStringList) : string;
+    function SentenceToStringList(sentence : string;Interlocutor : TInterlocutor = nil) : TStringList;
+    function CheckForSentence(words : TStringList;aTyp : TSentenceTyp;Interlocutor : TInterlocutor;priv,stemm : boolean;logfile : string) : Boolean;
     function CheckFocus(words : TStringList) : Boolean;
     function CheckUnFocus(words : TStringList) : Boolean;
     function GetInterlocutorID(name : string) : string;
@@ -142,6 +144,7 @@ type
     property Intf : TSpeakerInterface read FIntf write SetIntf;
     function Analyze(from,sentence : string;priv : Boolean) : Boolean;
     function Processfunctions(Interlocutor : TInterlocutor;answer : string) : string;
+    function RemoveStopWords(inp : string) : string;
     constructor Create(aName,Language : string);
     property BeQuiet : Boolean read FBeQuiet write FBeQuiet;
     property Autofocus : Boolean read FAutofocus write FAutofocus;
@@ -158,10 +161,11 @@ type
   TParserEntry = class(TList)
   private
     FParse : string;
+    FInterlocutor: TInterlocutor;
     function GetItems(Index : Integer): TparserEntry;
     procedure SetItems(Index : Integer; const AValue: TparserEntry);
   public
-    constructor Create(ToParse : string);
+    constructor Create(ToParse : string;Interlocutor : TInterlocutor);
     property Items[Index : Integer] : TparserEntry read GetItems write SetItems;
     function IsValid(words,Variables : TStringList) : Boolean;
   end;
@@ -172,7 +176,6 @@ implementation
 var
   TalkHandlers : array of THandleTalkEvent;
 const
-  conjugatedendings : array[0..10] of string = ('e','st','t','en','est','end','ten','test','te','et','');
   punctations : array [0..12] of string = (',','.','?','!','...',':',';','(',')','[',']','{','}');
   sentenceends : array [0..2] of string = ('.','?','!');
 
@@ -185,27 +188,66 @@ end;
 function GetFirstSentence(var inp : string) : string;
 var
   endpos,i : Integer;
+  bracket : Integer = 0;
+  c: Integer;
 label
   restart;
 begin
   Result := '';
 restart:
-  endpos := length(inp)+1;
-  for i := 0 to length(sentenceends)-1 do
-    if (pos(sentenceends[i],inp) > 0) and (pos(sentenceends[i],inp) < endpos) then
-      endpos := pos(sentenceends[i],inp);
+  bracket:=0;
+  endpos := -1;
+
+  for c := 1 to length(inp)-1 do
+    begin
+      if copy(inp,c,1)='(' then inc(bracket);
+      if copy(inp,c,1)=')' then dec(bracket);
+      for i := 0 to length(sentenceends)-1 do
+        begin
+          if (copy(inp,c,1)=sentenceends[i]) and (bracket=0) then
+            begin
+              endpos := c;
+              break;
+            end;
+        end;
+      if endpos>-1 then break;
+    end;
+  if endpos=-1 then
+    endpos := length(inp);
   Result := result+copy(inp,0,endpos);
   inp := copy(inp,endpos+1,length(inp));
   if (inp <> '') and Isnumeric(copy(inp,0,1)) then goto restart; //example 2.0.4
   if (pos('.',inp) > 0) and (pos('.',inp) < 3) then goto restart; //example: b.z.w.
 end;
 
-{ TSpeaker }
+function RemoveStopWords(var inp: string): Boolean;
+begin
+
+end;
 
 procedure TSpeaker.SetName(const AValue: string);
 begin
   if FName=AValue then exit;
   FName:=AValue;
+end;
+
+function TInterlocutor.StemmGerman(word: string): string;
+const
+  stemmendings : array[0..10] of string = ('test','est','end','ten','st','te','en','et','e','t','');
+var
+  i: Integer;
+begin
+  Result := word;
+  for i := low(stemmendings) to high(stemmendings) do
+    if copy(Result,length(Result)-length(stemmendings[i]),length(stemmendings[i])) = stemmendings[i] then
+      begin
+        Result := copy(Result,0,length(Result)-length(stemmendings[i])-1);
+        break;
+      end;
+  Result := StringReplace(Result,'a','a',[rfReplaceAll]);
+  Result := StringReplace(Result,'ö','o',[rfReplaceAll]);
+  Result := StringReplace(Result,'ü','u',[rfReplaceAll]);
+  Result := StringReplace(Result,'ß','ss',[rfReplaceAll]);
 end;
 
 procedure TSpeaker.FIntfTalk(from, sentence: string;Priv : Boolean);
@@ -259,38 +301,16 @@ begin
       FSentences := TZQuery.Create(nil);
       FAnswers := TZQuery.Create(nil);
     end;
-  Result := FileExists('dict.db');
+  Result := FileExists(AppendPathDelim(ExtractFileDir(ParamStr(0)))+'dict.db');
   if not Result then exit;
   FData.Protocol:='sqlite-3';
-  FData.Database:='dict.db';
+  FData.Database:=AppendPathDelim(ExtractFileDir(ParamStr(0)))+'dict.db';
   FData.HostName:='localhost';
   FData.Connect;
   Result := FData.Connected;
   FWords.Connection:=FData;
   FSentences.Connection:=FData;
   FAnswers.Connection:=FData;
-end;
-
-function TSpeaker.Unconjugate(verb: string): string;
-var
-  i: Integer;
-  averb: String;
-begin
-  Result := '';
-  for i := 0 to length(conjugatedendings)-1 do
-    if copy(verb,length(verb)-length(conjugatedendings[i])+1,length(conjugatedendings[i])) = conjugatedendings[i] then
-      begin
-{        averb := copy(verb,0,length(verb)-(length(conjugatedendings[i])));
-        FData.Close;
-        FData.SQL := 'select * from dict where WORD = "'+averb+'en" or WORD = "'+averb+'eln" or WORD = "'+averb+'ern"';
-        FData.Open;
-        if FData.RecordCount > 0 then
-          begin
-            Result := FData.FieldByName('WORD').AsString;
-            exit;
-          end;}
-        result := verb;
-      end;
 end;
 
 function TSpeaker.GetSentenceTyp(sentence: TStringList): TSentenceTyp;
@@ -327,21 +347,10 @@ const
     function ConditionsOK(idx : Integer) : Boolean;
     begin
       Result := False;
-      if words[i].wordtype = wtVerb then
+      if copy(sentence.Names[idx],0,length(words[i].word)) = words[i].word then
         begin
-          if (Unconjugate(sentence[idx]) <> '') and (copy(sentence[idx],0,length(words[i].word)) = words[i].word) then
-            begin
-              Result := True;
-              exit;
-            end;
-        end
-      else
-        begin
-          if copy(sentence[idx],0,length(words[i].word)) = words[i].word then
-            begin
-              Result := True;
-              exit;
-            end;
+          Result := True;
+          exit;
         end;
     end;
   begin
@@ -383,7 +392,16 @@ begin
     Result := stStatement;
 end;
 
-function TSpeaker.SentenceToStringList(sentence: string): TStringList;
+function TSpeaker.WordsToSentence(sentence: TStringList): string;
+var
+  i: Integer;
+begin
+  Result:='';
+  for i := 0 to sentence.Count-1 do
+    Result := Result+sentence.Names[i]+' ';
+end;
+
+function TSpeaker.SentenceToStringList(sentence: string;Interlocutor : TInterlocutor = nil): TStringList;
 var
   words : TStringList;
   aword: String;
@@ -406,7 +424,10 @@ begin
                 aword := copy(aword,0,length(aword)-(length(punctations[i])));
                 break;
               end;
-          words.Add(lowercase(aword)+'='+aword);
+          if Assigned(Interlocutor) then
+            words.Add(Interlocutor.Stemm(lowercase(aword))+'='+aword)
+          else
+            words.Add(lowercase(aword)+'='+aword);
           if punctation <> '' then
             words.Add(punctation);
         end;
@@ -414,7 +435,7 @@ begin
     end;
 end;
 
-function TSpeaker.CheckForSentence(words: TStringList;aTyp : TSentenceTyp;Interlocutor : TInterlocutor;priv : boolean;logfile : string): Boolean;
+function TSpeaker.CheckForSentence(words: TStringList;aTyp : TSentenceTyp;Interlocutor : TInterlocutor;priv,stemm : boolean;logfile : string): Boolean;
 var
   acheck,
   aword : String;
@@ -431,6 +452,7 @@ var
   tmp1: String;
   i: Integer;
   canhandle : Boolean;
+  pInterlocutor: TInterlocutor;
   procedure ReplaceVariables(var aAnswer : string);
   var
     i: Integer;
@@ -456,10 +478,14 @@ begin
   while not FSentences.EOF do
     begin
       acheck := FSentences.FieldByName('WORDS').AsString;
+      if Stemm then
+        pInterlocutor := Interlocutor
+      else pInterlocutor:=nil;
       if pos('=>',acheck) > 0 then
-        Parser := TParserEntry.Create(copy(acheck,0,pos('=>',acheck)-1))
+        Parser := TParserEntry.Create(copy(acheck,0,pos('=>',acheck)-1),pInterlocutor)
       else
-        Parser := TParserEntry.Create(acheck);
+        Parser := TParserEntry.Create(acheck,pInterlocutor);
+
       aOK := Parser.IsValid(words,FVariables);
       Parser.Free;
       if aOK then
@@ -490,7 +516,7 @@ begin
               for i := low(TalkHandlers) to high(TalkHandlers) do
                 begin
                   tmp1 := tmp;
-                  if TalkHandlers[i](tmp1,canhandle) then
+                  if TalkHandlers[i](Self,Interlocutor.Properties['LANGUAGE'],tmp1,canhandle) then
                     tmp := tmp1
                   else if canhandle then
                     Result := False;
@@ -507,7 +533,7 @@ begin
               for i := low(TalkHandlers) to high(TalkHandlers) do
                 begin
                   tmp1 := tmp;
-                  if TalkHandlers[i](tmp1,canhandle) then
+                  if TalkHandlers[i](Self,Interlocutor.Properties['LANGUAGE'],tmp1,canhandle) then
                     tmp := tmp1
                   else if canhandle then
                     Result := False;
@@ -547,7 +573,8 @@ begin
     begin
       words.Delete(0);
       Result := True;
-      if (words.Count > 0) then exit;
+      if trim(words.Names[0]) = '' then
+        words.Delete(0);
       if words.Names[0] = ',' then
         words.Delete(0);
       if (words.Count > 0) then exit;
@@ -602,7 +629,7 @@ begin
     Result := name+'@'+FIntf.GetID;
 end;
 
-function TSpeaker.Analyze(from,sentence: string;priv : boolean): Boolean;
+function TSpeaker.Analyze(from, sentence: string; priv: Boolean): Boolean;
 var
   atyp: TSentenceTyp;
   words: TStringList;
@@ -718,6 +745,7 @@ begin
             end;
       if aOK then
         begin
+          FDebugMessage('Sentence:'+WordsToSentence(words));
           atyp := GetSentenceTyp(words);
           if Assigned(FDebugMessage) then
             FDebugMessage('Typ:'+stypes[Integer(atyp)]+lineending);
@@ -736,8 +764,8 @@ begin
               Result := True;
             end
           else
-            Result := Result or CheckForSentence(words,atyp,Interlocutor,priv,filename);
-          if (not Result) and (aFocus or priv) then //Say something when we are asked directly and have no answer
+            Result := Result or CheckForSentence(words,atyp,Interlocutor,priv,false,filename);
+          if (not Result) and (aFocus or priv) and (atyp=stQuestion) then //Say something when we are asked directly and have no answer
             begin
               FSentences.SQL.Text:='select * from "SENTENCES" where "TYPE"=''6''';
               FSentences.Open;
@@ -813,9 +841,29 @@ begin
     end;
 end;
 
+function TSpeaker.RemoveStopWords(inp: string): string;
+var
+  sl: TStringList;
+  i: Integer;
+begin
+  Result := '';
+  FWords.SQL.Text:='select * from "DICT" where "TYPE"='''+'1'+'''';
+  FWords.Open;
+  sl := SentenceToStringList(inp);
+  while not FWords.EOF do
+    begin
+      if sl.IndexOfName(lowercase(FWords.FieldByName('WORD').AsString))>-1 then
+        sl.Delete(sl.IndexOfName(lowercase(FWords.FieldByName('WORD').AsString)));
+      FWords.Next;
+    end;
+  for i := 0 to sl.Count-1 do
+    Result := result+sl.ValueFromIndex[i]+' ';
+  Result := trim(Result);
+end;
+
 constructor TSpeaker.Create(aName,Language: string);
 begin
-  if not LoadLanguage(Language) then raise Exception.Create(strLanguagedontexists+' '+GetConfigDir('thalia')+'languages'+DirectorySeparator+language+DirectorySeparator);
+  if not LoadLanguage(Language) then raise Exception.Create('failed loading dict');
   FName := aName;
   FInterlocutors := TInterlocutors.Create;
   Logpath := GetConfigDir('thalia')+'log';
@@ -928,6 +976,13 @@ begin
   FProperties.Values[aName] := AValue;
 end;
 
+function TInterlocutor.Stemm(word: string): string;
+begin
+  if Properties['LANGUAGE']='de' then
+    Result := StemmGerman(word)
+  else Result := word;
+end;
+
 constructor TInterlocutor.Create(ID: string; Name: string);
 begin
   FID := ID;
@@ -935,6 +990,7 @@ begin
   Focused := False;
   FProperties := TStringList.Create;
   Properties['TITLE'] := 'ihnen';
+  Properties['LANGUAGE'] := 'de';
   Fname := Name;
   FUnicodeAnswer := True;
   FLastAnswerFound := True;
@@ -967,13 +1023,14 @@ begin
 
 end;
 
-constructor TParserEntry.Create(ToParse: string);
+constructor TParserEntry.Create(ToParse: string;Interlocutor : TInterlocutor);
 var
   DelimiterIndex : Integer = 0;
   ChildParse: String;
 begin
   inherited Create;
   ChildParse := '';
+  FInterlocutor := Interlocutor;
   FParse := '';
   while pos('(',ToParse) > 0 do
     begin
@@ -1016,6 +1073,13 @@ var
   anop: String;
   tmp: String;
   aNewIndex: Integer;
+  function ShortWord(aWord : string) : string;
+  begin
+    if Assigned(FInterlocutor) then
+      Result := FInterlocutor.Stemm(aWord)
+    else Result := aWord;
+  end;
+
 begin
   acheck := FParse;
   aOK := True;
@@ -1061,22 +1125,22 @@ begin
                   partlist.Delimiter:=' ';
                   partlist.DelimitedText:=partword;
                   i := 1;
-                  firstindex := words.IndexOfName(partlist[0]);
+                  firstindex := words.IndexOfName(ShortWord(partlist[0]));
                   partOK := (aop='+') and (firstindex > -1);
                   if partOK then
                     begin
                       while i < partlist.Count do
                         begin
-                          partOK := partOK and (words.IndexOfName(partlist[i]) = firstindex+i);
+                          partOK := partOK and (words.IndexOfName(ShortWord(partlist[i])) = firstindex+i);
                           inc(i);
                         end;
                     end;
                   partlist.free;
                 end
-              else if ((aop = '+') and (words.IndexOfName(partword) <> -1)) or ((aop = '-') and (words.IndexOfName(partword) = -1)) then
+              else if ((aop = '+') and (words.IndexOfName(ShortWord(partword)) <> -1)) or ((aop = '-') and (words.IndexOfName(ShortWord(partword)) = -1)) then
                 begin
                   partOK := True;
-                  if (aop = '+') then aOldIdx := words.IndexOfName(partword);
+                  if (aop = '+') then aOldIdx := words.IndexOfName(ShortWord(partword));
                 end;
               if partOK then break;
             end;

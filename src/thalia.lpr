@@ -7,7 +7,7 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, Classes, SysUtils, CustApp, uSpeaker, uPluginInterface,
-  uIntfStrConsts, zdbc, laz_synapse, general_nogui, uwikipedia;
+  uIntfStrConsts, zdbc, laz_synapse, general_nogui, uwikipedia, umath;
 
 type
   { TThalia }

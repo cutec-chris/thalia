@@ -19,7 +19,7 @@
         <UnitName Value="ulanguagemain"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
+        <TopLine Value="8"/>
         <CursorPos X="36" Y="7"/>
         <UsageCount Value="39"/>
         <Loaded Value="True"/>
@@ -35,7 +35,7 @@
         <Filename Value="uiplocation.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uIPLocation"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="21" Y="8"/>
@@ -53,10 +53,10 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="uSpeaker"/>
         <IsVisibleTab Value="True"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="26" Y="8"/>
+        <CursorPos X="33" Y="19"/>
         <UsageCount Value="38"/>
         <Loaded Value="True"/>
       </Unit5>
@@ -77,12 +77,10 @@
       </Unit7>
       <Unit8>
         <Filename Value="../languages/deutsch/smalltalk.questions.txt"/>
-        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
         <UsageCount Value="20"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="None"/>
       </Unit8>
       <Unit9>
@@ -97,7 +95,7 @@
     <General>
       <ActiveWindowIndexAtStart Value="0"/>
     </General>
-    <JumpHistory Count="4" HistoryIndex="3">
+    <JumpHistory Count="5" HistoryIndex="4">
       <Position1>
         <Filename Value="ulanguagemain.pas"/>
         <Caret Line="1" Column="1" TopLine="1"/>
@@ -114,6 +112,10 @@
         <Filename Value="uspeaker.pas"/>
         <Caret Line="1" Column="1" TopLine="1"/>
       </Position4>
+      <Position5>
+        <Filename Value="ulanguagemain.pas"/>
+        <Caret Line="7" Column="36" TopLine="1"/>
+      </Position5>
     </JumpHistory>
   </ProjectSession>
   <EditorMacros Count="0"/>
