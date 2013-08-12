@@ -106,6 +106,16 @@ var
     aOut := bOut+aOut;
     bOut := '';
   end;
+  function UpperFirst(aWord : string) : string;
+  begin
+    Result := '';
+    while pos(' ',aWord)>0 do
+      begin
+        Result := UpperFirst(copy(aWord,0,pos(' ',aWord)-1))+' ';
+        aWord := copy(aWord,pos(' ',aWord)+1,length(aWord));
+      end;
+    Result := Result+UpperCase(copy(aWord,0,1))+lowercase(copy(aWord,2,length(aWord)));
+  end;
   label retry;
 begin
   Result:=False;
@@ -131,6 +141,11 @@ retry:
   if (trim(aOut)='') and (Speaker.RemoveStopWords(aVar)<>aVar) then
     begin
       aVar := Speaker.RemoveStopWords(aVar);
+      goto retry;
+    end;
+  if (trim(aOut)='') and (UpperFirst(aVar)<>aVar) then
+    begin
+      aVar := UpperFirst(aVar);
       goto retry;
     end;
 

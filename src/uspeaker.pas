@@ -1,3 +1,6 @@
+{ TODO : Sätze nicht an Datums beenden }
+{ TODO : Säte nicht an Zahlen beenden (1. I. XI.) }
+{ TODO : Infos über Chat teilnehmer }
 unit uSpeaker;
 
 {$mode objfpc}{$H+}
@@ -134,6 +137,7 @@ type
     function SentenceToStringList(sentence : string;Interlocutor : TInterlocutor = nil) : TStringList;
     function CheckForSentence(words : TStringList;aTyp : TSentenceTyp;Interlocutor : TInterlocutor;priv,stemm : boolean;logfile : string) : Boolean;
     function CheckFocus(words : TStringList) : Boolean;
+    function CheckTempFocus(words : TStringList) : Boolean;
     function CheckUnFocus(words : TStringList) : Boolean;
     function GetInterlocutorID(name : string) : string;
     procedure DoAnswer(Interlocutor : TInterlocutor;answer : string;priv : boolean;logfile : string);
@@ -197,7 +201,6 @@ begin
 restart:
   bracket:=0;
   endpos := -1;
-
   for c := 1 to length(inp)-1 do
     begin
       if copy(inp,c,1)='(' then inc(bracket);
@@ -217,7 +220,7 @@ restart:
   Result := result+copy(inp,0,endpos);
   inp := copy(inp,endpos+1,length(inp));
   if (inp <> '') and Isnumeric(copy(inp,0,1)) then goto restart; //example 2.0.4
-  if (pos('.',inp) > 0) and (pos('.',inp) < 3) then goto restart; //example: b.z.w.
+  if (pos('.',inp) > 0) and (pos('.',inp) < 5) then goto restart; //example: b.z.w.
 end;
 
 function RemoveStopWords(var inp: string): Boolean;
@@ -347,7 +350,9 @@ const
     function ConditionsOK(idx : Integer) : Boolean;
     begin
       Result := False;
-      if copy(sentence.Names[idx],0,length(words[i].word)) = words[i].word then
+      if (copy(sentence.Names[idx],0,length(words[i].word)) = words[i].word)
+      or (copy(sentence[idx],0,length(words[i].word)) = words[i].word)
+      then
         begin
           Result := True;
           exit;
@@ -573,12 +578,9 @@ begin
     begin
       words.Delete(0);
       Result := True;
-      if trim(words.Names[0]) = '' then
+      if (words.Count>0) and (words.Names[0] = ',') then
         words.Delete(0);
-      if words.Names[0] = ',' then
-        words.Delete(0);
-      if (words.Count > 0) then exit;
-      if words.Names[0] = ':' then
+      if (words.Count>0) and (words.Names[0] = ':') then
         words.Delete(0);
       exit;
     end;
@@ -594,6 +596,15 @@ begin
       Result := True;
       exit;
     end;
+end;
+
+function TSpeaker.CheckTempFocus(words: TStringList): Boolean;
+begin
+  Result :=
+     (words.IndexOfName('jemand')>-1)
+  or (words.IndexOfName('somebody')>-1)
+  or (words.IndexOfName('hilfe')>-1)
+  ;
 end;
 
 function TSpeaker.CheckUnFocus(words: TStringList): Boolean;
@@ -722,7 +733,7 @@ begin
       if Assigned(FDebugMessage) then
         FDebugMessage('Interlocutor unfocused.'+lineending);
     end;
-  if Interlocutor.Focused or priv then
+  if Interlocutor.Focused or priv or CheckTempFocus(words) then
     begin
       if priv then
         if Assigned(FDebugMessage) then
@@ -736,7 +747,7 @@ begin
       aOK := True;
       if words.count = 1 then
         for i := 0 to length(sentenceends)-1 do
-          if words.Names[0] = sentenceends[i] then
+          if words[0] = sentenceends[i] then
             begin
               aOK := False;
               DoAnswer(Interlocutor,strShortQuestionAnswer,priv,filename);
@@ -1107,8 +1118,8 @@ begin
           anword := copy(anword,2,length(anword))+'|';
           anword := copy(anword,0,pos('|',anword)-1);
           aNewIndex := words.IndexOfName(anword);
-          if aNewIndex = -1 then aNewIndex:=words.Count-1;
-          for i := aOldIdx+1 to aNewIndex do
+          if aNewIndex < 0 then aNewIndex:=words.Count;
+          for i := aOldIdx+1 to aNewIndex-1 do
             tmp := tmp+words.ValueFromIndex[i]+' ';
           Variables.Values[copy(aword,0,pos('|',aword)-1)]:=copy(tmp,0,length(tmp)-1);
         end

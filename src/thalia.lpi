@@ -55,16 +55,16 @@
         <PackageName Value="lnetbase"/>
       </Item6>
     </RequiredPackages>
-    <Units Count="44">
+    <Units Count="45">
       <Unit0>
         <Filename Value="thalia.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="thalia"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="70"/>
+        <TopLine Value="1"/>
         <CursorPos X="27" Y="138"/>
-        <UsageCount Value="185"/>
+        <UsageCount Value="192"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit0>
@@ -72,13 +72,11 @@
         <Filename Value="uspeaker.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uSpeaker"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="283"/>
-        <CursorPos X="64" Y="307"/>
-        <FoldState Value=" T3w42HT"/>
-        <UsageCount Value="114"/>
+        <TopLine Value="546"/>
+        <CursorPos X="51" Y="569"/>
+        <UsageCount Value="121"/>
         <Loaded Value="True"/>
       </Unit1>
       <Unit2>
@@ -86,16 +84,16 @@
         <UnitName Value="Utils"/>
         <TopLine Value="684"/>
         <CursorPos X="14" Y="684"/>
-        <UsageCount Value="12"/>
+        <UsageCount Value="11"/>
       </Unit2>
       <Unit3>
         <Filename Value="uintfstrconsts.pas"/>
         <UnitName Value="uIntfStrConsts"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="3" Y="11"/>
-        <UsageCount Value="37"/>
+        <CursorPos X="25" Y="11"/>
+        <UsageCount Value="41"/>
         <Loaded Value="True"/>
       </Unit3>
       <Unit4>
@@ -103,7 +101,7 @@
         <UnitName Value="CustApp"/>
         <TopLine Value="34"/>
         <CursorPos X="28" Y="56"/>
-        <UsageCount Value="1"/>
+        <UsageCount Value="10"/>
       </Unit4>
       <Unit5>
         <Filename Value="uplugininterface.pas"/>
@@ -112,46 +110,46 @@
         <WindowIndex Value="0"/>
         <TopLine Value="119"/>
         <CursorPos X="17" Y="46"/>
-        <UsageCount Value="181"/>
+        <UsageCount Value="188"/>
       </Unit5>
       <Unit6>
         <Filename Value="irc.lpr"/>
         <UnitName Value="irc"/>
         <TopLine Value="195"/>
         <CursorPos X="1" Y="211"/>
-        <UsageCount Value="18"/>
+        <UsageCount Value="17"/>
       </Unit6>
       <Unit7>
         <Filename Value="..\output\i386-win32\languages\deutsch\smalltalk.commands"/>
         <TopLine Value="1"/>
         <CursorPos X="45" Y="1"/>
-        <UsageCount Value="5"/>
+        <UsageCount Value="4"/>
         <DefaultSyntaxHighlighter Value="None"/>
       </Unit7>
       <Unit8>
         <Filename Value="..\output\i386-win32\languages\deutsch\lazarus-faq.questions.txt"/>
         <TopLine Value="1"/>
         <CursorPos X="53" Y="5"/>
-        <UsageCount Value="5"/>
+        <UsageCount Value="4"/>
         <DefaultSyntaxHighlighter Value="None"/>
       </Unit8>
       <Unit9>
         <Filename Value="..\..\Programme\lazarus\fpc\2.2.0\source\rtl\objpas\classes\classesh.inc"/>
         <TopLine Value="438"/>
         <CursorPos X="15" Y="459"/>
-        <UsageCount Value="3"/>
+        <UsageCount Value="2"/>
       </Unit9>
       <Unit10>
         <Filename Value="..\..\Programme\lazarus\fpc\2.2.0\source\rtl\objpas\classes\stringl.inc"/>
         <TopLine Value="286"/>
         <CursorPos X="3" Y="295"/>
-        <UsageCount Value="3"/>
+        <UsageCount Value="2"/>
       </Unit10>
       <Unit11>
         <Filename Value="..\output\i386-win32\languages\deutsch\smalltalk.questions.txt"/>
         <TopLine Value="1"/>
         <CursorPos X="8" Y="18"/>
-        <UsageCount Value="1"/>
+        <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="None"/>
       </Unit11>
       <Unit12>
@@ -160,79 +158,79 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="3" Y="11"/>
-        <UsageCount Value="101"/>
+        <UsageCount Value="100"/>
       </Unit12>
       <Unit13>
         <Filename Value="..\..\lkomponenten\acs\Src\classes\acs_cdrom.pas"/>
         <UnitName Value="acs_cdrom"/>
         <TopLine Value="72"/>
         <CursorPos X="70" Y="96"/>
-        <UsageCount Value="1"/>
+        <UsageCount Value="10"/>
       </Unit13>
       <Unit14>
         <Filename Value="..\..\lazarus\fpc\2.2.0\source\rtl\inc\systemh.inc"/>
         <TopLine Value="208"/>
         <CursorPos X="3" Y="233"/>
-        <UsageCount Value="1"/>
+        <UsageCount Value="10"/>
       </Unit14>
       <Unit15>
         <Filename Value="..\..\lazarus\fpc\2.2.0\source\rtl\inc\wstringh.inc"/>
         <TopLine Value="50"/>
         <CursorPos X="34" Y="84"/>
-        <UsageCount Value="1"/>
+        <UsageCount Value="10"/>
       </Unit15>
       <Unit16>
         <Filename Value="..\..\lkomponenten\virtualtreeview\source\virtualtrees.pas"/>
         <UnitName Value="VirtualTrees"/>
         <TopLine Value="62"/>
         <CursorPos X="5" Y="73"/>
-        <UsageCount Value="3"/>
+        <UsageCount Value="2"/>
       </Unit16>
       <Unit17>
         <Filename Value="..\..\lazarus\fpc\2.2.2\source\rtl\inc\rtti.inc"/>
         <TopLine Value="207"/>
         <CursorPos X="1" Y="223"/>
-        <UsageCount Value="1"/>
+        <UsageCount Value="10"/>
       </Unit17>
       <Unit18>
         <Filename Value="..\..\usr\lib\lazarus\lcl\lclproc.pas"/>
         <UnitName Value="LCLProc"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="3"/>
+        <UsageCount Value="2"/>
       </Unit18>
       <Unit19>
         <Filename Value="C:\Programme\lazarus\ide\sourceeditor.pp"/>
         <UnitName Value="SourceEditor"/>
         <TopLine Value="159"/>
         <CursorPos X="43" Y="171"/>
-        <UsageCount Value="3"/>
+        <UsageCount Value="2"/>
       </Unit19>
       <Unit20>
         <Filename Value="D:\home\chris\lazarus\lcl\interfaces\nogui\noguiint.pp"/>
         <UnitName Value="NoGUIInt"/>
         <TopLine Value="1"/>
         <CursorPos X="66" Y="11"/>
-        <UsageCount Value="3"/>
+        <UsageCount Value="2"/>
       </Unit20>
       <Unit21>
         <Filename Value="uwhois.pas"/>
         <UnitName Value="uwhois"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="19"/>
         <CursorPos X="52" Y="32"/>
-        <UsageCount Value="74"/>
+        <UsageCount Value="78"/>
         <Loaded Value="True"/>
       </Unit21>
       <Unit22>
         <Filename Value="..\..\ircclient\source\uirc.pas"/>
         <UnitName Value="uirc"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="42" Y="204"/>
-        <UsageCount Value="48"/>
+        <TopLine Value="11"/>
+        <CursorPos X="15" Y="34"/>
+        <UsageCount Value="52"/>
         <Loaded Value="True"/>
       </Unit22>
       <Unit23>
@@ -240,21 +238,21 @@
         <UnitName Value="WhoisClass"/>
         <TopLine Value="168"/>
         <CursorPos X="42" Y="179"/>
-        <UsageCount Value="3"/>
+        <UsageCount Value="2"/>
       </Unit23>
       <Unit24>
         <Filename Value="C:\Programme\lazarus\lcl\interfaces\nogui\interfaces.pp"/>
         <UnitName Value="Interfaces"/>
         <TopLine Value="1"/>
         <CursorPos X="74" Y="11"/>
-        <UsageCount Value="3"/>
+        <UsageCount Value="2"/>
       </Unit24>
       <Unit25>
         <Filename Value="..\..\lkomponenten\lnet\lazaruspackage\lclnet.pas"/>
         <UnitName Value="LCLNet"/>
         <TopLine Value="33"/>
         <CursorPos X="15" Y="45"/>
-        <UsageCount Value="3"/>
+        <UsageCount Value="2"/>
       </Unit25>
       <Unit26>
         <Filename Value="D:\home\chris\lazarus\lcl\interfaces\nogui\interfaces.pp"/>
@@ -262,21 +260,21 @@
         <WindowIndex Value="0"/>
         <TopLine Value="10"/>
         <CursorPos X="3" Y="32"/>
-        <UsageCount Value="3"/>
+        <UsageCount Value="2"/>
       </Unit26>
       <Unit27>
         <Filename Value="D:\usr\share\fpcsrc\2.4.0\rtl\inc\ustringh.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="91"/>
         <CursorPos X="10" Y="102"/>
-        <UsageCount Value="4"/>
+        <UsageCount Value="3"/>
       </Unit27>
       <Unit28>
         <Filename Value="D:\usr\share\fpcsrc\2.4.0\rtl\inc\ustrings.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="2295"/>
         <CursorPos X="5" Y="2300"/>
-        <UsageCount Value="4"/>
+        <UsageCount Value="3"/>
       </Unit28>
       <Unit29>
         <Filename Value="D:\home\chris\lazarus\lcl\fileutil.pas"/>
@@ -284,7 +282,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="193"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="4"/>
+        <UsageCount Value="3"/>
       </Unit29>
       <Unit30>
         <Filename Value="D:\home\chris\lazarus\lcl\interfaces\gtk2\gtk2def.pp"/>
@@ -292,14 +290,14 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="38" Y="42"/>
-        <UsageCount Value="4"/>
+        <UsageCount Value="3"/>
       </Unit30>
       <Unit31>
         <Filename Value="..\languages\deutsch\smalltalk.questions.txt"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="10" Y="1"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="12"/>
         <DefaultSyntaxHighlighter Value="None"/>
       </Unit31>
       <Unit32>
@@ -308,7 +306,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="610"/>
         <CursorPos X="3" Y="612"/>
-        <UsageCount Value="4"/>
+        <UsageCount Value="3"/>
       </Unit32>
       <Unit33>
         <Filename Value="..\..\promet\promet\source\components\zeos\src\dbc\ZDbcIntfs.pas"/>
@@ -316,7 +314,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1042"/>
         <CursorPos X="1" Y="1060"/>
-        <UsageCount Value="5"/>
+        <UsageCount Value="4"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit33>
       <Unit34>
@@ -324,7 +322,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="7" Y="1"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="6"/>
         <DefaultSyntaxHighlighter Value="None"/>
       </Unit34>
       <Unit35>
@@ -332,29 +330,26 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="9" Y="5"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
         <DefaultSyntaxHighlighter Value="None"/>
       </Unit35>
       <Unit36>
         <Filename Value="uwikipedia.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uwikipedia"/>
-        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="133"/>
-        <CursorPos X="40" Y="131"/>
-        <UsageCount Value="54"/>
-        <Loaded Value="True"/>
+        <TopLine Value="21"/>
+        <CursorPos X="75" Y="115"/>
+        <FoldState Value=" T6c04 T3i02S1l"/>
+        <UsageCount Value="61"/>
       </Unit36>
       <Unit37>
         <Filename Value="..\..\promet\promet\source\components\synapse\httpsend.pas"/>
         <UnitName Value="httpsend"/>
-        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="319"/>
+        <TopLine Value="385"/>
         <CursorPos X="28" Y="321"/>
-        <UsageCount Value="26"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="29"/>
       </Unit37>
       <Unit38>
         <Filename Value="..\..\wikihelp\src\wiki2html.lpr"/>
@@ -362,16 +357,16 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="21" Y="12"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="7"/>
       </Unit38>
       <Unit39>
         <Filename Value="..\..\promet\promet\source\base_wiki\wikitohtml.pas"/>
         <UnitName Value="wikitohtml"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="206"/>
+        <TopLine Value="377"/>
         <CursorPos X="23" Y="410"/>
-        <UsageCount Value="23"/>
+        <UsageCount Value="27"/>
         <Loaded Value="True"/>
       </Unit39>
       <Unit40>
@@ -380,7 +375,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="250"/>
         <CursorPos X="1" Y="267"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="8"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit40>
       <Unit41>
@@ -389,151 +384,159 @@
         <WindowIndex Value="0"/>
         <TopLine Value="310"/>
         <CursorPos X="19" Y="330"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="7"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit41>
       <Unit42>
         <Filename Value="umath.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="umath"/>
-        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="68" Y="8"/>
-        <UsageCount Value="27"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="34"/>
       </Unit42>
       <Unit43>
         <Filename Value="MathParser.pas"/>
         <UnitName Value="MathParser"/>
-        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="705"/>
+        <TopLine Value="738"/>
         <CursorPos X="42" Y="771"/>
-        <UsageCount Value="13"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="16"/>
       </Unit43>
+      <Unit44>
+        <Filename Value="uusers.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uUsers"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="21"/>
+        <Loaded Value="True"/>
+      </Unit44>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="357" Column="1" TopLine="339"/>
+        <Caret Line="736" Column="1" TopLine="708"/>
       </Position1>
       <Position2>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="359" Column="1" TopLine="339"/>
+        <Caret Line="737" Column="1" TopLine="709"/>
       </Position2>
       <Position3>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="361" Column="1" TopLine="339"/>
+        <Caret Line="738" Column="1" TopLine="710"/>
       </Position3>
       <Position4>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="357" Column="1" TopLine="339"/>
+        <Caret Line="739" Column="1" TopLine="711"/>
       </Position4>
       <Position5>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="359" Column="1" TopLine="339"/>
+        <Caret Line="741" Column="1" TopLine="713"/>
       </Position5>
       <Position6>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="361" Column="1" TopLine="339"/>
+        <Caret Line="742" Column="1" TopLine="714"/>
       </Position6>
       <Position7>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="357" Column="1" TopLine="339"/>
+        <Caret Line="745" Column="1" TopLine="717"/>
       </Position7>
       <Position8>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="359" Column="1" TopLine="339"/>
+        <Caret Line="746" Column="1" TopLine="718"/>
       </Position8>
       <Position9>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="361" Column="1" TopLine="339"/>
+        <Caret Line="748" Column="1" TopLine="720"/>
       </Position9>
       <Position10>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="357" Column="1" TopLine="339"/>
+        <Caret Line="749" Column="29" TopLine="734"/>
       </Position10>
       <Position11>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="359" Column="1" TopLine="339"/>
+        <Caret Line="763" Column="24" TopLine="739"/>
       </Position11>
       <Position12>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="361" Column="1" TopLine="339"/>
+        <Caret Line="354" Column="24" TopLine="333"/>
       </Position12>
       <Position13>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="357" Column="1" TopLine="339"/>
+        <Caret Line="726" Column="1" TopLine="709"/>
       </Position13>
       <Position14>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="359" Column="1" TopLine="339"/>
+        <Caret Line="727" Column="1" TopLine="709"/>
       </Position14>
       <Position15>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="361" Column="1" TopLine="339"/>
+        <Caret Line="728" Column="1" TopLine="709"/>
       </Position15>
       <Position16>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="357" Column="1" TopLine="339"/>
+        <Caret Line="730" Column="1" TopLine="709"/>
       </Position16>
       <Position17>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="381" Column="1" TopLine="365"/>
+        <Caret Line="731" Column="1" TopLine="709"/>
       </Position17>
       <Position18>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="386" Column="1" TopLine="364"/>
+        <Caret Line="732" Column="1" TopLine="709"/>
       </Position18>
       <Position19>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="387" Column="1" TopLine="364"/>
+        <Caret Line="733" Column="1" TopLine="709"/>
       </Position19>
       <Position20>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="133" Column="63" TopLine="127"/>
+        <Caret Line="735" Column="1" TopLine="709"/>
       </Position20>
       <Position21>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="397" Column="13" TopLine="394"/>
+        <Caret Line="741" Column="1" TopLine="713"/>
       </Position21>
       <Position22>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="385" Column="53" TopLine="377"/>
+        <Caret Line="743" Column="1" TopLine="715"/>
       </Position22>
       <Position23>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="400" Column="1" TopLine="376"/>
+        <Caret Line="744" Column="1" TopLine="716"/>
       </Position23>
       <Position24>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="401" Column="1" TopLine="376"/>
+        <Caret Line="745" Column="1" TopLine="717"/>
       </Position24>
       <Position25>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="576" Column="1" TopLine="556"/>
+        <Caret Line="746" Column="1" TopLine="718"/>
       </Position25>
       <Position26>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="577" Column="1" TopLine="556"/>
+        <Caret Line="748" Column="1" TopLine="720"/>
       </Position26>
       <Position27>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="578" Column="1" TopLine="556"/>
+        <Caret Line="749" Column="1" TopLine="721"/>
       </Position27>
       <Position28>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="580" Column="1" TopLine="556"/>
+        <Caret Line="752" Column="1" TopLine="724"/>
       </Position28>
       <Position29>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="597" Column="1" TopLine="581"/>
+        <Caret Line="753" Column="1" TopLine="725"/>
       </Position29>
       <Position30>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="154" Column="17" TopLine="132"/>
+        <Caret Line="728" Column="14" TopLine="721"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>
@@ -561,15 +564,6 @@
     </Other>
   </CompilerOptions>
   <Debugging>
-    <BreakPoints Count="1">
-      <Item1>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="uspeaker.pas"/>
-        <Line Value="981"/>
-      </Item1>
-    </BreakPoints>
     <Watches Count="3">
       <Item1>
         <Expression Value="bOut"/>

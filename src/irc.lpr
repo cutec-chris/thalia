@@ -104,6 +104,25 @@ begin
   Result := IRCServer.Users.IndexOf(lowercase(User)) > -1;
 end;
 
+function Whois(User : PChar) : PChar;stdcall;
+begin
+  Result := PChar(IRCServer.Whois(User));
+end;
+
+function GetUser(Index : Integer) : PChar;stdcall;
+begin
+  Result := nil;
+  if Index < IRCServer.Users.Count then
+    Result := PChar(IRCServer.Users[Index]);
+end;
+
+function GetUserIP(Index : Integer) : PChar;stdcall;
+begin
+  Result := nil;
+  if Index < IRCServer.Users.Count then
+    Result := PChar(IRCServer.Users[Index]);
+end;
+
 procedure SetCallbacks(CB : TTalkCallback;GP : TGetParamCallback);stdcall;
 begin
   Talk := CB;
@@ -124,6 +143,8 @@ exports
   DisConnect,
   Process,
   IsUser,
+  GetUser,
+  Whois,
   GetID;
 
 begin
