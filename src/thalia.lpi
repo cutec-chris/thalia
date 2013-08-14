@@ -31,7 +31,7 @@
     <RunParams>
       <local>
         <FormatVersion Value="1"/>
-        <CommandLineParams Value="--fastanswer --debug"/>
+        <CommandLineParams Value="--interface=irc --server=irc.freenode.net --channel=#german-lazarus-forum --password=PfTdmIBdW --debug --fastanswer"/>
         <LaunchingApplication PathPlusParams="\usr\bin\gnome-terminal -t 'Lazarus Run Output' -e '$(LazarusDir)\tools\runwait.sh $(TargetCmdLine)'"/>
       </local>
     </RunParams>
@@ -62,8 +62,8 @@
         <UnitName Value="thalia"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="27" Y="138"/>
+        <TopLine Value="105"/>
+        <CursorPos X="30" Y="109"/>
         <UsageCount Value="192"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>

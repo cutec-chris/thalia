@@ -53,8 +53,6 @@ begin
 end;
 
 procedure TalkTo(user,sentence : PChar);stdcall;
-var
-  i : integer;
 begin
 //  for i := 0 to length(sentence) do
 //    IRCServer.DoSleep(100);
