@@ -27,6 +27,7 @@ object Form1: TForm1
       Columns = <      
         item
           Title.Caption = 'ANSWER'
+          Width = 500
           FieldName = 'ANSWER'
         end>
       DataSource = Datasource2

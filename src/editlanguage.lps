@@ -17,9 +17,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="ulanguagemain"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="8"/>
+        <TopLine Value="7"/>
         <CursorPos X="36" Y="7"/>
         <UsageCount Value="39"/>
         <Loaded Value="True"/>
@@ -52,7 +53,6 @@
         <Filename Value="uspeaker.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uSpeaker"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>

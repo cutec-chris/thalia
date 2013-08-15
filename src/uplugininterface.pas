@@ -23,6 +23,7 @@ type
   TSetCallbacksFunction = procedure(CB : TTalkCallback;GP : TGetParamCallback);stdcall;
   TGetIDFunction = function : PChar;stdcall;
   TIsUserFunction = function(User : PChar) : Boolean;stdcall;
+  TWhoisFunction = function(User : PChar) : PChar;stdcall;
   { TPluginInterface }
 
   TPluginInterface = class(TSpeakerInterface)
@@ -38,6 +39,7 @@ type
     FProcess : TProcessFunction;
     FGetID : TGetIDFunction;
     FIsUser : TIsUserFunction;
+    FWhois : TWhoisFunction;
   public
     constructor Create(intf : string);
     destructor Destroy;override;
@@ -84,6 +86,7 @@ begin
   FProcess := TProcessFunction(GetProcAddress(FLib,'Process'));
   FGetID := TGetIDFunction(GetProcAddress(FLib,'GetID'));
   FIsUser := TIsUserFunction(GetProcAddress(FLib,'IsUser'));
+  FWhois := TWhoisFunction(GetProcAddress(FLib,'Whois'));
   {$ELSE}
   FLib := dlopen(PChar(LibPath),RTLD_LAZY);
   if not Assigned(FLib) then raise Exception.Create(strPluginInvalid);
@@ -93,6 +96,7 @@ begin
   FProcess := TProcessFunction(dlsym(FLib,'Process'));
   FGetID := TGetIDFunction(dlsym(FLib,'GetID'));
   FIsUser := TIsUserFunction(dlsym(FLib,'IsUser'));
+  FWhois := TWhoisFunction(dlsym(FLib,'Whois'));
   {$ENDIF}
 end;
 

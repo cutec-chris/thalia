@@ -120,6 +120,13 @@ var
 begin
   Result:=False;
   canhandle:=(pos('$dowikiquerry(',sentence)>0);
+  if pos('$getdescription(de)',sentence)>0 then
+    begin
+      sentence:='Oder alles was in der Wikipedia steht.';
+      result := true;
+      canhandle:=true;
+      exit;
+    end;
   if not canhandle then exit;
   tmp := copy(sentence,0,pos('$dowikiquerry(',sentence)-1);
   tmp1 :=copy(sentence,pos('$dowikiquerry(',sentence)+14,length(sentence));
@@ -169,6 +176,9 @@ retry:
   aOut := StringReplace(aOut,#13,'',[rfReplaceAll]);
   aOut := StringReplace(aOut,#10,'',[rfReplaceAll]);
   aOut := GetFirstSentence(aOut);
+  aOut := StringReplace(aOut,'&nbsp;',' ',[rfReplaceAll]);
+  if pos('a:lang',aOut)>0 then
+    aOut := '';
   if aOut <> '' then
     begin
       Result := True;

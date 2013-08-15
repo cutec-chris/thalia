@@ -1,6 +1,10 @@
 { TODO : Sätze nicht an Datums beenden }
 { TODO : Säte nicht an Zahlen beenden (1. I. XI.) }
 { TODO : Infos über Chat teilnehmer }
+{ TODO : Suchmashcieneneinbindung über browser plugin }
+{ TODO : Nachrichten über rss feeds einbinden (thalis, was gibts bei heise.de neues?) }
+{ TODO : twitter einbindung }
+{ TODO : leo.org einbindung }
 unit uSpeaker;
 
 {$mode objfpc}{$H+}
@@ -147,7 +151,7 @@ type
     property Interlocutors : TInterlocutors read FInterlocutors;
     property Intf : TSpeakerInterface read FIntf write SetIntf;
     function Analyze(from,sentence : string;priv : Boolean) : Boolean;
-    function Processfunctions(Interlocutor : TInterlocutor;answer : string) : string;
+    function Processfunctions(Interlocutor : TInterlocutor;answer : string;priv : Boolean;logfile : string) : string;
     function RemoveStopWords(inp : string) : string;
     constructor Create(aName,Language : string);
     property BeQuiet : Boolean read FBeQuiet write FBeQuiet;
@@ -219,7 +223,11 @@ restart:
     endpos := length(inp);
   Result := result+copy(inp,0,endpos);
   inp := copy(inp,endpos+1,length(inp));
-  if (inp <> '') and Isnumeric(copy(inp,0,1)) then goto restart; //example 2.0.4
+  if (inp <> '') and Isnumeric(copy(Result,length(Result)-2,1)) then goto restart; //example 2.0.4
+  if (inp <> '') and (lowercase(copy(Result,length(Result)-2,1))='i') then goto restart; //example 2.0.4
+  if (inp <> '') and (lowercase(copy(Result,length(Result)-2,1))='x') then goto restart; //example 2.0.4
+  if (inp <> '') and (lowercase(copy(Result,length(Result)-2,1))='v') then goto restart; //example 2.0.4
+  if (inp <> '') and (lowercase(copy(Result,length(Result)-2,1))='m') then goto restart; //example 2.0.4
   if (pos('.',inp) > 0) and (pos('.',inp) < 5) then goto restart; //example: b.z.w.
 end;
 
@@ -495,6 +503,8 @@ begin
       Parser.Free;
       if aOK then
         begin
+          if Assigned(FDebugMessage) then
+            FDebugMessage('Sentence found');
           Result := True;
           if (FSentences.FieldByName('ID').AsLargeInt = Interlocutor.FLastIndex) and (FSentences.FieldByName('CATEGORY').AsString = Interlocutor.FlastCategory) then
             begin
@@ -509,6 +519,8 @@ begin
           Randomize;
           FAnswers.MoveBy(Random(FAnswers.RecordCount));
           Answer := FAnswers.FieldByName('ANSWER').AsString;
+          if Assigned(FDebugMessage) then
+            FDebugMessage('Answer:'+Answer);
           if pos('=>',Answer) > 0 then
             begin
               NextQuestion := copy(Answer,pos('=>',Answer)+2,length(Answer));
@@ -516,7 +528,7 @@ begin
             end;
           while Answer <> '' do
             begin
-              tmp := GetFirstSentence(Answer);
+              tmp := Processfunctions(Interlocutor,GetFirstSentence(Answer),priv,logfile);
               ReplaceVariables(tmp);
               for i := low(TalkHandlers) to high(TalkHandlers) do
                 begin
@@ -526,7 +538,7 @@ begin
                   else if canhandle then
                     Result := False;
                 end;
-              if Result then
+              if Result and (tmp<>'') then
                 DoAnswer(Interlocutor,tmp,priv,logfile);
             end;
           if NextQuestion <> '' then
@@ -535,15 +547,16 @@ begin
               NextQuestion := copy(NextQuestion,0,pos(';',NextQuestion)-1);
               NextQuestion := Interlocutor.ReplaceVariables(NextQuestion);
               ReplaceVariables(NextQuestion);
+              NextQuestion := Processfunctions(Interlocutor,NextQuestion,priv,logfile);
               for i := low(TalkHandlers) to high(TalkHandlers) do
                 begin
-                  tmp1 := tmp;
+                  tmp1 := NextQuestion;
                   if TalkHandlers[i](Self,Interlocutor.Properties['LANGUAGE'],tmp1,canhandle) then
-                    tmp := tmp1
+                    NextQuestion := tmp1
                   else if canhandle then
                     Result := False;
                 end;
-              if Result then
+              if Result and (NextQuestion<>'') then
                 DoAnswer(Interlocutor,NextQuestion,priv,logfile);
             end;
           if Result then
@@ -554,6 +567,8 @@ begin
   FVariables.Free;
   if not Result then
     begin
+      if Assigned(FDebugMessage) then
+        FDebugMessage('no Sentence found');
       Interlocutor.FLastIndex := -1;
       Interlocutor.FlastCategory := '';
     end;
@@ -762,6 +777,8 @@ begin
             FDebugMessage('Typ:'+stypes[Integer(atyp)]+lineending);
           if (Interlocutor.AnswerTo<>'') and (atyp<>stQuestion) then
             begin
+              if Assigned(FDebugMessage) then
+                FDebugMessage('No Answer, using Typ 7');
               Interlocutor.Properties[Interlocutor.AnswerTo] := StringReplace(sentence,'=','',[rfReplaceAll]);
               FSentences.SQL.Text:='select * from "SENTENCES" where "TYPE"=''7''';
               FSentences.Open;
@@ -778,6 +795,8 @@ begin
             Result := Result or CheckForSentence(words,atyp,Interlocutor,priv,false,filename);
           if (not Result) and (aFocus or priv) and (atyp=stQuestion) then //Say something when we are asked directly and have no answer
             begin
+              if Assigned(FDebugMessage) then
+                FDebugMessage('No Answer, using Typ 6');
               FSentences.SQL.Text:='select * from "SENTENCES" where "TYPE"=''6''';
               FSentences.Open;
               FAnswers.SQL.Text:='select * from "ANSWERS" where "REF"='''+FSentences.FieldByName('ID').AsString+'''';//Antworten auf unbekannte Fragen
@@ -802,7 +821,7 @@ var
   FLog : TextFile;
   tmpanswer: AnsiString;
 begin
-  tmpanswer := Processfunctions(Interlocutor,answer);
+  tmpanswer := answer;
   if Assigned(FSystemMessage) then
     FSystemMessage('<<'+tmpanswer+lineending);
   Assignfile(flog,logfile);
@@ -829,8 +848,11 @@ begin
     Process;
 end;
 
-function TSpeaker.Processfunctions(Interlocutor: TInterlocutor; answer: string
+function TSpeaker.Processfunctions(Interlocutor: TInterlocutor; answer: string;priv : Boolean;logfile : string
   ): string;
+var
+  i: Integer;
+  canhandle: Boolean;
 begin
   Result := answer;
   if pos('$time',lowercase(answer)) > 0 then
@@ -849,6 +871,19 @@ begin
       Result := copy(Result,0,pos('$ignorelastanswer',lowercase(answer))-1)+copy(Result,pos('$ignorelastanswer',lowercase(answer))+17,length(Result));
       Interlocutor.FlastCategory:='';
       Interlocutor.FLastIndex:=-1;
+    end;
+  if (pos('$getdescription(de)',LowerCase(answer))>0) then
+    begin
+      Answer := 'Du kannst mich z.b. nach der Uhrzeit, dem Datum, Witzen o.ä Fragen.';
+      DoAnswer(Interlocutor,Answer,priv,logfile);
+      for i := low(TalkHandlers) to high(TalkHandlers) do
+        begin
+          answer := '$getdescription(de)';
+          canhandle := False;
+          if TalkHandlers[i](Self,Interlocutor.Properties['LANGUAGE'],answer,canhandle) then
+            DoAnswer(Interlocutor,answer,priv,logfile);
+        end;
+      Result := '';
     end;
 end;
 

@@ -21,6 +21,13 @@ var
 begin
   Result:=False;
   canhandle:=(pos('$parse(',sentence)>0);
+  if pos('$getdescription(de)',sentence)>0 then
+    begin
+      sentence:='Oder Mathematische berechnungen.';
+      result := true;
+      canhandle:=true;
+      exit;
+    end;
   if not canhandle then exit;
   tmp := copy(sentence,0,pos('$parse(',sentence)-1);
   tmp1 :=copy(sentence,pos('$parse(',sentence)+7,length(sentence));
