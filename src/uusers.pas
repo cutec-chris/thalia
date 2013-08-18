@@ -14,6 +14,7 @@ var
   tmp: String;
   tmp1: String;
   avar: String;
+  sl: TStringList;
 begin
   Result:=False;
   canhandle:=(pos('$userinfo(',sentence)>0);
@@ -30,7 +31,15 @@ begin
   avar := copy(tmp1,0,pos(')',tmp1)-1);
   tmp1 := copy(tmp1,pos(')',tmp1)+1,length(tmp1));
   if trim(avar) = '' then exit;
-  sentence := Speaker.Intf.Whois(avar);
+  sl := TStringList.Create;
+  sl.Text := Speaker.Intf.Whois(avar);
+  Result := True;
+  if sl.Count>1 then
+    sentence:=sl[1]
+  else if (sl.Count>0) then
+    sentence:=sl[0]
+  else Result := False;
+  sl.Free;
 end;
 
 initialization

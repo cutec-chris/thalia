@@ -1162,6 +1162,9 @@ begin
           anword := copy(anword,0,pos('|',anword)-1);
           aNewIndex := words.IndexOfName(anword);
           if aNewIndex < 0 then aNewIndex:=words.Count;
+          for i := 0 to length(sentenceends)-1 do
+            if words[aNewIndex-1] = sentenceends[i] then
+              dec(aNewIndex);
           for i := aOldIdx+1 to aNewIndex-1 do
             tmp := tmp+words.ValueFromIndex[i]+' ';
           Variables.Values[copy(aword,0,pos('|',aword)-1)]:=copy(tmp,0,length(tmp)-1);
