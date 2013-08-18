@@ -62,9 +62,9 @@
         <UnitName Value="thalia"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="74" Y="7"/>
-        <UsageCount Value="195"/>
+        <TopLine Value="61"/>
+        <CursorPos X="66" Y="83"/>
+        <UsageCount Value="196"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit0>
@@ -75,9 +75,9 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="553"/>
-        <CursorPos X="27" Y="571"/>
-        <UsageCount Value="124"/>
+        <TopLine Value="584"/>
+        <CursorPos X="15" Y="596"/>
+        <UsageCount Value="125"/>
         <Loaded Value="True"/>
       </Unit1>
       <Unit2>
@@ -94,7 +94,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="33" Y="3"/>
-        <UsageCount Value="42"/>
+        <UsageCount Value="43"/>
         <Loaded Value="True"/>
       </Unit3>
       <Unit4>
@@ -109,9 +109,9 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="uPluginInterface"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="9"/>
-        <CursorPos X="45" Y="99"/>
-        <UsageCount Value="191"/>
+        <TopLine Value="26"/>
+        <CursorPos X="1" Y="53"/>
+        <UsageCount Value="192"/>
       </Unit5>
       <Unit6>
         <Filename Value="irc.lpr"/>
@@ -219,9 +219,9 @@
         <UnitName Value="uwhois"/>
         <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
+        <TopLine Value="34"/>
         <CursorPos X="52" Y="32"/>
-        <UsageCount Value="79"/>
+        <UsageCount Value="80"/>
         <Loaded Value="True"/>
       </Unit21>
       <Unit22>
@@ -229,9 +229,9 @@
         <UnitName Value="uirc"/>
         <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="36"/>
+        <TopLine Value="17"/>
         <CursorPos X="56" Y="17"/>
-        <UsageCount Value="53"/>
+        <UsageCount Value="54"/>
         <Loaded Value="True"/>
       </Unit22>
       <Unit23>
@@ -340,10 +340,9 @@
         <UnitName Value="uwikipedia"/>
         <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="159"/>
-        <CursorPos X="59" Y="179"/>
-        <FoldState Value=" T6c04 T3i02S1l"/>
-        <UsageCount Value="64"/>
+        <TopLine Value="158"/>
+        <CursorPos X="1" Y="191"/>
+        <UsageCount Value="65"/>
         <Loaded Value="True"/>
       </Unit36>
       <Unit37>
@@ -369,7 +368,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="377"/>
         <CursorPos X="23" Y="410"/>
-        <UsageCount Value="28"/>
+        <UsageCount Value="29"/>
         <Loaded Value="True"/>
       </Unit39>
       <Unit40>
@@ -398,7 +397,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="10"/>
         <CursorPos X="19" Y="23"/>
-        <UsageCount Value="37"/>
+        <UsageCount Value="38"/>
         <Loaded Value="True"/>
       </Unit42>
       <Unit43>
@@ -416,131 +415,131 @@
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="29" Y="15"/>
-        <UsageCount Value="24"/>
+        <CursorPos X="62" Y="7"/>
+        <UsageCount Value="25"/>
         <Loaded Value="True"/>
       </Unit44>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="220" Column="1" TopLine="196"/>
+        <Caret Line="531" Column="1" TopLine="503"/>
       </Position1>
       <Position2>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="208" Column="1" TopLine="196"/>
+        <Caret Line="532" Column="1" TopLine="504"/>
       </Position2>
       <Position3>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="210" Column="1" TopLine="196"/>
+        <Caret Line="537" Column="1" TopLine="509"/>
       </Position3>
       <Position4>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="211" Column="1" TopLine="196"/>
+        <Caret Line="539" Column="1" TopLine="511"/>
       </Position4>
       <Position5>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="212" Column="1" TopLine="196"/>
+        <Caret Line="540" Column="1" TopLine="512"/>
       </Position5>
       <Position6>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="214" Column="1" TopLine="196"/>
+        <Caret Line="541" Column="1" TopLine="513"/>
       </Position6>
       <Position7>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="212" Column="1" TopLine="196"/>
+        <Caret Line="543" Column="1" TopLine="515"/>
       </Position7>
       <Position8>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="214" Column="1" TopLine="196"/>
+        <Caret Line="544" Column="1" TopLine="516"/>
       </Position8>
       <Position9>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="212" Column="1" TopLine="196"/>
+        <Caret Line="546" Column="1" TopLine="518"/>
       </Position9>
       <Position10>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="214" Column="1" TopLine="196"/>
+        <Caret Line="541" Column="1" TopLine="518"/>
       </Position10>
       <Position11>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="212" Column="1" TopLine="196"/>
+        <Caret Line="543" Column="1" TopLine="518"/>
       </Position11>
       <Position12>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="220" Column="1" TopLine="196"/>
+        <Caret Line="544" Column="1" TopLine="518"/>
       </Position12>
       <Position13>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="208" Column="1" TopLine="196"/>
+        <Caret Line="546" Column="1" TopLine="518"/>
       </Position13>
       <Position14>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="210" Column="1" TopLine="196"/>
+        <Caret Line="541" Column="1" TopLine="518"/>
       </Position14>
       <Position15>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="211" Column="1" TopLine="196"/>
+        <Caret Line="549" Column="1" TopLine="521"/>
       </Position15>
       <Position16>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="212" Column="1" TopLine="196"/>
+        <Caret Line="550" Column="1" TopLine="522"/>
       </Position16>
       <Position17>
-        <Filename Value="uspeaker.pas"/>
-        <Caret Line="214" Column="1" TopLine="196"/>
+        <Filename Value="uusers.pas"/>
+        <Caret Line="29" Column="53" TopLine="3"/>
       </Position17>
       <Position18>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="212" Column="1" TopLine="196"/>
+        <Caret Line="599" Column="57" TopLine="571"/>
       </Position18>
       <Position19>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="214" Column="1" TopLine="196"/>
+        <Caret Line="588" Column="1" TopLine="571"/>
       </Position19>
       <Position20>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="212" Column="1" TopLine="196"/>
+        <Caret Line="600" Column="1" TopLine="572"/>
       </Position20>
       <Position21>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="214" Column="1" TopLine="196"/>
+        <Caret Line="602" Column="1" TopLine="574"/>
       </Position21>
       <Position22>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="212" Column="1" TopLine="196"/>
+        <Caret Line="603" Column="1" TopLine="575"/>
       </Position22>
       <Position23>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="220" Column="1" TopLine="196"/>
+        <Caret Line="604" Column="1" TopLine="576"/>
       </Position23>
       <Position24>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="208" Column="1" TopLine="196"/>
+        <Caret Line="611" Column="1" TopLine="577"/>
       </Position24>
       <Position25>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="210" Column="1" TopLine="196"/>
+        <Caret Line="610" Column="20" TopLine="581"/>
       </Position25>
       <Position26>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="222" Column="1" TopLine="196"/>
+        <Caret Line="588" Column="1" TopLine="581"/>
       </Position26>
       <Position27>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="224" Column="1" TopLine="196"/>
+        <Caret Line="600" Column="1" TopLine="581"/>
       </Position27>
       <Position28>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="225" Column="1" TopLine="204"/>
+        <Caret Line="602" Column="1" TopLine="581"/>
       </Position28>
       <Position29>
         <Filename Value="uspeaker.pas"/>
-        <Caret Line="789" Column="42" TopLine="774"/>
+        <Caret Line="603" Column="1" TopLine="581"/>
       </Position29>
       <Position30>
-        <Filename Value="..\..\ircclient\source\uirc.pas"/>
-        <Caret Line="223" Column="5" TopLine="219"/>
+        <Filename Value="uspeaker.pas"/>
+        <Caret Line="604" Column="1" TopLine="581"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>

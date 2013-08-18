@@ -94,6 +94,7 @@ type
     function Process(NeedNewMessage : Boolean = False) : boolean;virtual;abstract;
     function GetID : string;virtual;abstract;
     function IsUser(user : string) : Boolean;virtual;abstract;
+    function Whois(user : string) : string;virtual;
     property Speaker : TSpeaker read FSpeaker write FSpeaker;
     property OnTalk : TTalkEvent read FTalk write FTalk;
     property OnGetParameter : TGetParameterEvent read FGetParameter write FGetParameter;
@@ -234,6 +235,13 @@ end;
 function RemoveStopWords(var inp: string): Boolean;
 begin
 
+end;
+
+{ TSpeakerInterface }
+
+function TSpeakerInterface.Whois(user: string): string;
+begin
+  Result := '';
 end;
 
 procedure TSpeaker.SetName(const AValue: string);
@@ -582,10 +590,10 @@ begin
       words.Delete(0);
       Result := True;
       if (words.Count > 0) then exit;
-      if words.Names[0] = ',' then
+      if words[0] = ',' then
         words.Delete(0);
       if (words.Count > 0) then exit;
-      if words.Names[0] = ':' then
+      if words[0] = ':' then
         words.Delete(0);
       exit;
     end;
@@ -593,9 +601,9 @@ begin
     begin
       words.Delete(0);
       Result := True;
-      if (words.Count>0) and (words.Names[0] = ',') then
+      if (words.Count>0) and (words[0] = ',') then
         words.Delete(0);
-      if (words.Count>0) and (words.Names[0] = ':') then
+      if (words.Count>0) and (words[0] = ':') then
         words.Delete(0);
       exit;
     end;

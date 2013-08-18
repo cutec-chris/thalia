@@ -49,6 +49,7 @@ type
     function Process(NeedNewMessage : Boolean = False) : Boolean;override;
     function GetID : string;override;
     function IsUser(user : string) : Boolean;override;
+    function Whois(user : string) : string;override;
   end;
 
 implementation
@@ -151,6 +152,13 @@ end;
 function TPluginInterface.IsUser(user: string): Boolean;
 begin
   Result:=FIsUser(PChar(user));
+end;
+
+function TPluginInterface.Whois(user: string): string;
+begin
+  Result := '';
+  if Assigned(FWhois) then
+    Result := FWhois(PChar(User));
 end;
 
 end.
