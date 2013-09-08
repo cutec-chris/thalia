@@ -27,8 +27,8 @@
     <RunParams>
       <local>
         <FormatVersion Value="1"/>
-        <HostApplicationFilename Value="\media\Daten\Source\thalia\output\i386-linux\thalia"/>
-        <CommandLineParams Value="--interface=irc --server=irc.freenode.org --channel=usbavrlab --debug"/>
+        <HostApplicationFilename Value="\media\Daten\Source\thalia\output\x86_64-linux\thalia"/>
+        <CommandLineParams Value="--interface=irc --server=irc.fu-berlin.de --channel=#flirt.de --displayname=Sabse --debug"/>
         <LaunchingApplication PathPlusParams="\usr\X11R6\bin\xterm -T 'Lazarus Run Output' -e $(LazarusDir)\tools\runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
@@ -37,7 +37,7 @@
         <PackageName Value="lnetbase"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="14">
+    <Units Count="16">
       <Unit0>
         <Filename Value="irc.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -45,8 +45,8 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="88"/>
-        <CursorPos X="10" Y="105"/>
+        <TopLine Value="39"/>
+        <CursorPos X="1" Y="53"/>
         <UsageCount Value="32"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -132,8 +132,8 @@
         <UnitName Value="uirc"/>
         <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="226"/>
-        <CursorPos X="14" Y="228"/>
+        <TopLine Value="73"/>
+        <CursorPos X="22" Y="96"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit12>
@@ -144,127 +144,143 @@
         <CursorPos X="53" Y="123"/>
         <UsageCount Value="10"/>
       </Unit13>
+      <Unit14>
+        <Filename Value="..\..\promet\promet\source\components\lnet\lib\lnet.pp"/>
+        <UnitName Value="lNet"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1467"/>
+        <CursorPos X="16" Y="1471"/>
+        <UsageCount Value="10"/>
+      </Unit14>
+      <Unit15>
+        <Filename Value="..\..\promet\promet\source\components\lnet\lib\levents.pp"/>
+        <UnitName Value="lEvents"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="438"/>
+        <CursorPos X="3" Y="441"/>
+        <UsageCount Value="10"/>
+      </Unit15>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="irc.lpr"/>
-        <Caret Line="110" Column="31" TopLine="98"/>
+        <Caret Line="104" Column="25" TopLine="89"/>
       </Position1>
       <Position2>
         <Filename Value="..\..\ircclient\source\uirc.pas"/>
-        <Caret Line="74" Column="16" TopLine="67"/>
+        <Caret Line="109" Column="45" TopLine="104"/>
       </Position2>
       <Position3>
         <Filename Value="..\..\ircclient\source\uirc.pas"/>
-        <Caret Line="56" Column="78" TopLine="36"/>
+        <Caret Line="236" Column="22" TopLine="208"/>
       </Position3>
       <Position4>
-        <Filename Value="irc.lpr"/>
-        <Caret Line="20" Column="42" TopLine="7"/>
+        <Filename Value="..\..\ircclient\source\uirc.pas"/>
+        <Caret Line="237" Column="22" TopLine="209"/>
       </Position4>
       <Position5>
-        <Filename Value="irc.lpr"/>
-        <Caret Line="81" Column="40" TopLine="62"/>
+        <Filename Value="..\..\ircclient\source\uirc.pas"/>
+        <Caret Line="238" Column="25" TopLine="210"/>
       </Position5>
       <Position6>
         <Filename Value="irc.lpr"/>
-        <Caret Line="87" Column="8" TopLine="73"/>
+        <Caret Line="115" Column="25" TopLine="92"/>
       </Position6>
       <Position7>
-        <Filename Value="irc.lpr"/>
-        <Caret Line="28" Column="1" TopLine="11"/>
+        <Filename Value="..\..\ircclient\source\uirc.pas"/>
+        <Caret Line="47" Column="45" TopLine="29"/>
       </Position7>
       <Position8>
         <Filename Value="irc.lpr"/>
-        <Caret Line="133" Column="1" TopLine="111"/>
+        <Caret Line="115" Column="25" TopLine="92"/>
       </Position8>
       <Position9>
         <Filename Value="irc.lpr"/>
-        <Caret Line="93" Column="9" TopLine="77"/>
+        <Caret Line="88" Column="18" TopLine="61"/>
       </Position9>
       <Position10>
-        <Filename Value="irc.lpr"/>
-        <Caret Line="28" Column="20" TopLine="1"/>
+        <Filename Value="..\..\ircclient\source\uirc.pas"/>
+        <Caret Line="52" Column="59" TopLine="36"/>
       </Position10>
       <Position11>
         <Filename Value="irc.lpr"/>
-        <Caret Line="127" Column="6" TopLine="97"/>
+        <Caret Line="84" Column="16" TopLine="61"/>
       </Position11>
       <Position12>
-        <Filename Value="irc.lpr"/>
-        <Caret Line="8" Column="7" TopLine="2"/>
+        <Filename Value="..\..\ircclient\source\uirc.pas"/>
+        <Caret Line="32" Column="15" TopLine="14"/>
       </Position12>
       <Position13>
-        <Filename Value="irc.lpr"/>
-        <Caret Line="104" Column="25" TopLine="89"/>
+        <Filename Value="..\..\ircclient\source\uirc.pas"/>
+        <Caret Line="85" Column="12" TopLine="64"/>
       </Position13>
       <Position14>
         <Filename Value="..\..\ircclient\source\uirc.pas"/>
-        <Caret Line="109" Column="45" TopLine="104"/>
+        <Caret Line="44" Column="42" TopLine="23"/>
       </Position14>
       <Position15>
         <Filename Value="..\..\ircclient\source\uirc.pas"/>
-        <Caret Line="236" Column="22" TopLine="208"/>
+        <Caret Line="97" Column="3" TopLine="79"/>
       </Position15>
       <Position16>
         <Filename Value="..\..\ircclient\source\uirc.pas"/>
-        <Caret Line="237" Column="22" TopLine="209"/>
+        <Caret Line="87" Column="1" TopLine="61"/>
       </Position16>
       <Position17>
-        <Filename Value="..\..\ircclient\source\uirc.pas"/>
-        <Caret Line="238" Column="25" TopLine="210"/>
+        <Filename Value="irc.lpr"/>
+        <Caret Line="84" Column="16" TopLine="61"/>
       </Position17>
       <Position18>
         <Filename Value="irc.lpr"/>
-        <Caret Line="115" Column="25" TopLine="92"/>
+        <Caret Line="145" Column="5" TopLine="116"/>
       </Position18>
       <Position19>
-        <Filename Value="..\..\ircclient\source\uirc.pas"/>
-        <Caret Line="47" Column="45" TopLine="29"/>
+        <Filename Value="irc.lpr"/>
+        <Caret Line="107" Column="32" TopLine="95"/>
       </Position19>
       <Position20>
-        <Filename Value="irc.lpr"/>
-        <Caret Line="115" Column="25" TopLine="92"/>
+        <Filename Value="..\..\ircclient\source\uirc.pas"/>
+        <Caret Line="119" Column="34" TopLine="100"/>
       </Position20>
       <Position21>
-        <Filename Value="irc.lpr"/>
-        <Caret Line="88" Column="18" TopLine="61"/>
+        <Filename Value="..\..\ircclient\source\uirc.pas"/>
+        <Caret Line="92" Column="10" TopLine="76"/>
       </Position21>
       <Position22>
         <Filename Value="..\..\ircclient\source\uirc.pas"/>
-        <Caret Line="52" Column="59" TopLine="36"/>
+        <Caret Line="235" Column="32" TopLine="219"/>
       </Position22>
       <Position23>
-        <Filename Value="irc.lpr"/>
-        <Caret Line="84" Column="16" TopLine="61"/>
+        <Filename Value="..\..\ircclient\source\uirc.pas"/>
+        <Caret Line="117" Column="11" TopLine="100"/>
       </Position23>
       <Position24>
         <Filename Value="..\..\ircclient\source\uirc.pas"/>
-        <Caret Line="32" Column="15" TopLine="14"/>
+        <Caret Line="259" Column="9" TopLine="240"/>
       </Position24>
       <Position25>
         <Filename Value="..\..\ircclient\source\uirc.pas"/>
-        <Caret Line="85" Column="12" TopLine="64"/>
+        <Caret Line="246" Column="13" TopLine="233"/>
       </Position25>
       <Position26>
         <Filename Value="..\..\ircclient\source\uirc.pas"/>
-        <Caret Line="44" Column="42" TopLine="23"/>
+        <Caret Line="248" Column="1" TopLine="229"/>
       </Position26>
       <Position27>
         <Filename Value="..\..\ircclient\source\uirc.pas"/>
-        <Caret Line="97" Column="3" TopLine="79"/>
+        <Caret Line="247" Column="24" TopLine="230"/>
       </Position27>
       <Position28>
         <Filename Value="..\..\ircclient\source\uirc.pas"/>
-        <Caret Line="87" Column="1" TopLine="61"/>
+        <Caret Line="290" Column="27" TopLine="281"/>
       </Position28>
       <Position29>
-        <Filename Value="irc.lpr"/>
-        <Caret Line="84" Column="16" TopLine="61"/>
+        <Filename Value="..\..\ircclient\source\uirc.pas"/>
+        <Caret Line="262" Column="52" TopLine="232"/>
       </Position29>
       <Position30>
         <Filename Value="irc.lpr"/>
-        <Caret Line="145" Column="5" TopLine="116"/>
+        <Caret Line="84" Column="20" TopLine="60"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>

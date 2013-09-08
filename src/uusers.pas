@@ -5,7 +5,9 @@ unit uUsers;
 interface
 
 uses
-  Classes, SysUtils, uSpeaker,uwhois;
+  Classes, SysUtils, uSpeaker,uwhois, dnssend;
+
+function getUserIP(Speaker : TSpeaker;aUser : string) : string;
 
 implementation
 
@@ -31,14 +33,19 @@ begin
   avar := copy(tmp1,0,pos(')',tmp1)-1);
   tmp1 := copy(tmp1,pos(')',tmp1)+1,length(tmp1));
   if trim(avar) = '' then exit;
+  sentence:=getUserIP(Speaker,avar);
+  Result := sentence<>'';
+end;
+
+function getUserIP(Speaker : TSpeaker;aUser: string): string;
+var
+  sl: TStringList;
+begin
   sl := TStringList.Create;
-  sl.Text := Speaker.Intf.Whois(avar);
-  Result := True;
-  if sl.Count>1 then
-    sentence:=sl[1]
-  else if (sl.Count>0) then
-    sentence:=sl[0]
-  else Result := False;
+  sl.Text := Speaker.Intf.Whois(aUser);
+  if (sl.Count>0) then
+    Result:=sl[0]
+  else Result := '';
   sl.Free;
 end;
 

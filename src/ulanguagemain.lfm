@@ -44,18 +44,23 @@ object Form1: TForm1
       Columns = <      
         item
           Title.Caption = 'WORDS'
-          Width = 300
+          Width = 350
           FieldName = 'WORDS'
         end      
         item
           Title.Caption = 'TYPE'
-          Width = 185
+          Width = 20
           FieldName = 'TYPE'
         end      
         item
           Title.Caption = 'CATEGORY'
-          Width = 187
+          Width = 60
           FieldName = 'CATEGORY'
+        end      
+        item
+          Title.Caption = 'PRIORITY'
+          Width = 50
+          FieldName = 'PRIORITY'
         end>
       DataSource = Datasource1
       OptionsExtra = [dgeCheckboxColumn]
@@ -95,20 +100,20 @@ object Form1: TForm1
     Connected = True
     HostName = 'localhost'
     Port = 0
-    Database = '/media/chris/Daten/Source/thalia/languages/deutsch/dict.db'
+    Database = '/media/Daten/Source/thalia/languages/deutsch/dict.db'
     Protocol = 'sqlite-3'
     left = 28
     top = 26
   end
   object ZQuery1: TZQuery
     Connection = ZConnection1
-    SortedFields = 'ID'
+    SortedFields = 'PRIORITY,ID'
     Active = True
     SQL.Strings = (
-      'select * from SENTENCES'
+      'select * from SENTENCES order by PRIORITY'
     )
     Params = <>
-    IndexFieldNames = 'ID Asc'
+    IndexFieldNames = 'PRIORITY Asc,ID Asc'
     left = 104
     top = 26
   end

@@ -35,15 +35,19 @@ begin
   tmp1 := copy(tmp1,rpos(')',tmp1)+1,length(tmp1));
   if trim(avar) = '' then exit;
   Parser := TMathParser.Create;
-  aTree := Parser.ParseTerm(aVar);
-  if Parser.ParseError=mpeNone then
-    begin
-      aOut := Parser.FormatTerm(aTree)+' = ';
-      aRes := Parser.CalcTree(aTree);
-      if Parser.ParseError=mpeNone then
-        aOut := aOut+FloatToStr(aRes)
-      else aOut := '';
-    end;
+  try
+    aTree := Parser.ParseTerm(aVar);
+    if Parser.ParseError=mpeNone then
+      begin
+        aOut := Parser.FormatTerm(aTree)+' = ';
+        aRes := Parser.CalcTree(aTree);
+        if Parser.ParseError=mpeNone then
+          aOut := aOut+FloatToStr(aRes)
+        else aOut := '';
+      end;
+  except
+    aOut := '';
+  end;
   if aOut <> '' then
     begin
       Result := True;

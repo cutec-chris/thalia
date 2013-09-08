@@ -493,7 +493,7 @@ begin
   Result := False;
   Answer := '';
   FVariables := TStringlist.Create;
-  FSentences.SQL.Text:='select * from "SENTENCES" where "TYPE"='''+IntToStr(Integer(aTyp))+'''';
+  FSentences.SQL.Text:='select * from "SENTENCES" where "TYPE"='''+IntToStr(Integer(aTyp))+''' order by PRIORITY Asc,ID Asc';
   FSentences.Open;
   FSentences.First;
   while not FSentences.EOF do
