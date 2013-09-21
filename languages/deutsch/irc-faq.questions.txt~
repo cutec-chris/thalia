@@ -1,4 +1,0 @@
-+ändere|ändern+nick::0:0:Du kannst deinen nick mit dem Befehl /NICK *neuername* �ndern.
-+was+ist|bedeuet+@::0:Das @ vor einem Nicknamen bedeutet das jemand besondere rechte hat. Sojemanden nenn man Channel Operator.
-+wie+nick|nicknamen+registrieren::Deinen aktuellen Nicknamen kannst du mit /NICKSERV REGISTER *deinpasswort* registrieren.
-+warum+registrieren::Auf manchen Servern kann man ohne das man seinen Nicknamen registriert keine Privaten narichten schreiben. Ausserdem kann einem so keiner den Nicknamen wegnehmen.

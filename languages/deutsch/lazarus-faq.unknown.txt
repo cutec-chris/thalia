@@ -1,4 +1,0 @@
-+lazarus+nicht+kompilieren::0:1. Prüfe, ob der Compiler die richtige Version hat.2. Prüfe, ob die (fpc) Bibliotheken (libraries) dieselbe Version haben.3. Prüfe, ob Sie die fpc.cfg haben und nicht die alte ppc386.cfg.4. Prüfe auch die betriebssystemabhängigen FAQs.
-+find|finden|gefunden+unit+interfaces::Das bedeutet das die LCL Schnittstelle nicht für das entsprechende Ziel übersetzt ist. Du kannst sie unter Werkzeuge->Lazarus erstellen einrichten übersetzen (compilieren).
-+[../../units/i386-linux/gtk2]+Error+1::Dieser Fehler tritt auf, wenn du keine Schreibrechte auf das Lazarus Verzeichnis hast. ändere doch die Zugriffsrechte auf dein Lazarus Verzeichnis oder starte Lazarus als Superuser.
-+unit+contnrs::0:Deine fpc.cfg fehlt oder ist nicht richtig angepasst, mehr Informationen findest du in der fpc.cfg man page (befehl man fpc.cfg).
