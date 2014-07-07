@@ -625,6 +625,8 @@ function TSpeaker.CheckTempFocus(words: TStringList): Boolean;
 begin
   Result :=
      (words.IndexOfName('jemand')>-1)
+  or (words.IndexOfName('irgendjemand')>-1)
+  or (words.IndexOfName('helfen')>-1)
   or (words.IndexOfName('somebody')>-1)
   or (words.IndexOfName('hilfe')>-1)
   ;

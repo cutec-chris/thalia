@@ -69,10 +69,11 @@
         <Filename Value="uspeaker.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uSpeaker"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="49" Y="25"/>
+        <TopLine Value="613"/>
+        <CursorPos X="32" Y="629"/>
         <UsageCount Value="133"/>
         <Loaded Value="True"/>
       </Unit1>
@@ -86,7 +87,6 @@
       <Unit3>
         <Filename Value="uintfstrconsts.pas"/>
         <UnitName Value="uIntfStrConsts"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
@@ -107,7 +107,7 @@
         <UnitName Value="uPluginInterface"/>
         <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="14"/>
+        <TopLine Value="5"/>
         <CursorPos X="42" Y="141"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
@@ -407,7 +407,7 @@
         <UnitName Value="uUsers"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="10"/>
+        <TopLine Value="1"/>
         <CursorPos X="24" Y="24"/>
         <UsageCount Value="33"/>
         <Loaded Value="True"/>
