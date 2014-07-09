@@ -512,7 +512,7 @@ begin
       if aOK then
         begin
           if Assigned(FDebugMessage) then
-            FDebugMessage('Sentence found');
+            FDebugMessage('Sentence found'+lineending);
           Result := True;
           if (FSentences.FieldByName('ID').AsLargeInt = Interlocutor.FLastIndex) and (FSentences.FieldByName('CATEGORY').AsString = Interlocutor.FlastCategory) then
             begin
@@ -526,9 +526,18 @@ begin
           FAnswers.Open;
           Randomize;
           FAnswers.MoveBy(Random(FAnswers.RecordCount));
-          Answer := FAnswers.FieldByName('ANSWER').AsString;
-          if Assigned(FDebugMessage) then
-            FDebugMessage('Answer:'+Answer);
+          if FAnswers.RecordCount>0 then
+            begin
+              Answer := FAnswers.FieldByName('ANSWER').AsString;
+              if Assigned(FDebugMessage) then
+                FDebugMessage('Answer:'+Answer+lineending);
+            end
+          else
+            begin
+              Result := False;
+              if Assigned(FDebugMessage) then
+                FDebugMessage('no Answer found'+lineending);
+            end;
           if pos('=>',Answer) > 0 then
             begin
               NextQuestion := copy(Answer,pos('=>',Answer)+2,length(Answer));
@@ -576,7 +585,7 @@ begin
   if not Result then
     begin
       if Assigned(FDebugMessage) then
-        FDebugMessage('no Sentence found');
+        FDebugMessage('no Sentence found'+lineending);
       Interlocutor.FLastIndex := -1;
       Interlocutor.FlastCategory := '';
     end;
@@ -1124,7 +1133,7 @@ var
   aop: String;
   firstindex: LongInt;
   i : Integer;
-  aOldIdx: Integer;
+  aOldIdx: Integer = -1;
   anword: String;
   anop: String;
   tmp: String;
