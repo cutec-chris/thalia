@@ -48,7 +48,6 @@
       <Unit0>
         <Filename Value="editlanguage.lpr"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="editlanguage"/>
       </Unit0>
       <Unit1>
         <Filename Value="ulanguagemain.pas"/>
@@ -61,7 +60,6 @@
       <Unit2>
         <Filename Value="uintfstrconsts.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="uintfstrconsts"/>
       </Unit2>
       <Unit3>
         <Filename Value="uiplocation.pas"/>
@@ -71,7 +69,6 @@
       <Unit4>
         <Filename Value="uplugininterface.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="uplugininterface"/>
       </Unit4>
       <Unit5>
         <Filename Value="uspeaker.pas"/>
@@ -81,7 +78,6 @@
       <Unit6>
         <Filename Value="uwhois.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="uwhois"/>
       </Unit6>
     </Units>
   </ProjectOptions>
@@ -101,12 +97,6 @@
         </Win32>
       </Options>
     </Linking>
-    <Other>
-      <CompilerMessages>
-        <MsgFileName Value=""/>
-      </CompilerMessages>
-      <CompilerPath Value="$(CompPath)"/>
-    </Other>
   </CompilerOptions>
   <Debugging>
     <Exceptions Count="4">

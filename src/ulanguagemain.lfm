@@ -2,26 +2,26 @@ object Form1: TForm1
   Left = 327
   Height = 511
   Top = 197
-  Width = 772
+  Width = 831
   Caption = 'Form1'
   ClientHeight = 511
-  ClientWidth = 772
-  LCLVersion = '1.1'
+  ClientWidth = 831
+  LCLVersion = '1.3'
   object Panel1: TPanel
     Left = 0
     Height = 511
     Top = 0
-    Width = 544
+    Width = 560
     Align = alLeft
     Caption = 'Panel1'
     ClientHeight = 511
-    ClientWidth = 544
+    ClientWidth = 560
     TabOrder = 0
     object DBGrid2: TDBGrid
       Left = 1
       Height = 285
       Top = 225
-      Width = 542
+      Width = 558
       Align = alClient
       Color = clWindow
       Columns = <      
@@ -38,10 +38,15 @@ object Form1: TForm1
       Left = 1
       Height = 224
       Top = 1
-      Width = 542
+      Width = 558
       Align = alTop
       Color = clWindow
       Columns = <      
+        item
+          Title.Caption = 'ID'
+          Width = 40
+          FieldName = 'ID'
+        end      
         item
           Title.Caption = 'WORDS'
           Width = 350
@@ -69,20 +74,20 @@ object Form1: TForm1
     end
   end
   object Panel2: TPanel
-    Left = 544
+    Left = 560
     Height = 511
     Top = 0
-    Width = 228
+    Width = 271
     Align = alClient
     Caption = 'Panel2'
     ClientHeight = 511
-    ClientWidth = 228
+    ClientWidth = 271
     TabOrder = 1
     object DBGrid3: TDBGrid
       Left = 1
       Height = 509
       Top = 1
-      Width = 226
+      Width = 269
       Align = alClient
       Color = clWindow
       Columns = <>
@@ -107,13 +112,13 @@ object Form1: TForm1
   end
   object ZQuery1: TZQuery
     Connection = ZConnection1
-    SortedFields = 'PRIORITY,ID'
+    SortedFields = 'CATEGORY,PRIORITY,ID'
     Active = True
     SQL.Strings = (
       'select * from SENTENCES order by PRIORITY'
     )
     Params = <>
-    IndexFieldNames = 'PRIORITY Asc,ID Asc'
+    IndexFieldNames = 'CATEGORY Asc,PRIORITY Asc,ID Asc'
     left = 104
     top = 26
   end

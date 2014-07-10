@@ -1,3 +1,22 @@
+{*******************************************************************************
+  Copyright (C) Christian Ulrich info@cu-tec.de
+
+  This source is free software; you can redistribute it and/or modify it under
+  the terms of the GNU General Public License as published by the Free
+  Software Foundation; either version 2 of the License, or commercial alternative
+  contact us for more information
+
+  This code is distributed in the hope that it will be useful, but WITHOUT ANY
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+  FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+  details.
+
+  A copy of the GNU General Public License is available on the World Wide Web
+  at <http://www.gnu.org/copyleft/gpl.html>. You can also obtain it by writing
+  to the Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
+  MA 02111-1307, USA.
+*******************************************************************************}
+
 { TODO : Sätze nicht an Datums beenden }
 { TODO : Säte nicht an Zahlen beenden (1. I. XI.) }
 { TODO : Infos über Chat teilnehmer }
@@ -797,7 +816,7 @@ begin
           if (Interlocutor.AnswerTo<>'') and (atyp<>stQuestion) then
             begin
               if Assigned(FDebugMessage) then
-                FDebugMessage('No Answer, using Typ 7');
+                FDebugMessage('No Answer, using Typ 7'+lineending);
               Interlocutor.Properties[Interlocutor.AnswerTo] := StringReplace(sentence,'=','',[rfReplaceAll]);
               FSentences.SQL.Text:='select * from "SENTENCES" where "TYPE"=''7''';
               FSentences.Open;
@@ -815,7 +834,7 @@ begin
           if (not Result) and (aFocus or priv) and (atyp=stQuestion) then //Say something when we are asked directly and have no answer
             begin
               if Assigned(FDebugMessage) then
-                FDebugMessage('No Answer, using Typ 6');
+                FDebugMessage('No Answer, using Typ 6'+lineending);
               FSentences.SQL.Text:='select * from "SENTENCES" where "TYPE"=''6''';
               FSentences.Open;
               FAnswers.SQL.Text:='select * from "ANSWERS" where "REF"='''+FSentences.FieldByName('ID').AsString+'''';//Antworten auf unbekannte Fragen
@@ -980,7 +999,7 @@ begin
       write('>');
       readln(tmp);
       if Assigned(FTalk) then
-        FTalk('',tmp,True);
+        FTalk(SystemUserName,tmp,True);
     end;
   Result := True;
 end;
