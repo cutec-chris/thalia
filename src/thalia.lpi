@@ -75,7 +75,6 @@
       <Unit4>
         <Filename Value="umath.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="umath"/>
       </Unit4>
       <Unit5>
         <Filename Value="uusers.pas"/>
@@ -85,7 +84,6 @@
       <Unit6>
         <Filename Value="utwitter.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="utwitter"/>
       </Unit6>
       <Unit7>
         <Filename Value="ureminder.pas"/>

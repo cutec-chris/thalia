@@ -41,7 +41,7 @@ begin
   canhandle:=(pos('$parse(',sentence)>0);
   if pos('$getdescription(de)',sentence)>0 then
     begin
-      sentence:='Oder Mathematische berechnungen.';
+      sentence:='Mathematische berechnungen durchführen.';
       result := true;
       canhandle:=true;
       exit;
