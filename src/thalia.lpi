@@ -35,61 +35,19 @@
         <LaunchingApplication PathPlusParams="\usr\bin\gnome-terminal -t 'Lazarus Run Output' -e '$(LazarusDir)\tools\runwait.sh $(TargetCmdLine)'"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="5">
+    <RequiredPackages Count="2">
       <Item1>
-        <PackageName Value="zcomponent_nogui"/>
+        <PackageName Value="thalia_interface"/>
       </Item1>
       <Item2>
-        <PackageName Value="laz_synapse"/>
-      </Item2>
-      <Item3>
-        <PackageName Value="general_nogui"/>
-      </Item3>
-      <Item4>
         <PackageName Value="FCL"/>
-      </Item4>
-      <Item5>
-        <PackageName Value="lnetbase"/>
-      </Item5>
+      </Item2>
     </RequiredPackages>
-    <Units Count="8">
+    <Units Count="1">
       <Unit0>
         <Filename Value="thalia.lpr"/>
         <IsPartOfProject Value="True"/>
       </Unit0>
-      <Unit1>
-        <Filename Value="uspeaker.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="uSpeaker"/>
-      </Unit1>
-      <Unit2>
-        <Filename Value="uplugininterface.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="uPluginInterface"/>
-      </Unit2>
-      <Unit3>
-        <Filename Value="uwikipedia.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="uwikipedia"/>
-      </Unit3>
-      <Unit4>
-        <Filename Value="umath.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit4>
-      <Unit5>
-        <Filename Value="uusers.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="uUsers"/>
-      </Unit5>
-      <Unit6>
-        <Filename Value="utwitter.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit6>
-      <Unit7>
-        <Filename Value="ureminder.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="ureminder"/>
-      </Unit7>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

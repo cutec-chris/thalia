@@ -24,9 +24,8 @@ uses
   {$IFDEF UNIX}{$IFDEF UseCThreads}
   cthreads,
   {$ENDIF}{$ENDIF}
-  Classes, SysUtils, CustApp, uSpeaker, uPluginInterface,
-  uIntfStrConsts, laz_synapse, zcomponent_nogui, general_nogui, uwikipedia,
-  umath, uUsers, utwitter, ureminder;
+  Classes, SysUtils, CustApp,uSpeaker,uPluginInterface,
+  uIntfStrConsts;
 
 type
   { TThalia }
