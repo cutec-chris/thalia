@@ -164,12 +164,7 @@ begin
   { add your program here }
 
   if not HasOption('i','interface') then
-    begin
-      if HasOption('m','mandant') then
-        FSpeaker.Intf := TPluginInterface.Create('promet')
-      else
-        FSpeaker.Intf := TCmdLnInterface.Create;
-    end
+    FSpeaker.Intf := TCmdLnInterface.Create
   else
     FSpeaker.Intf := TPluginInterface.Create(GetOptionValue('i','interface'));
   if not Assigned(FSpeaker.Intf) then Terminate;

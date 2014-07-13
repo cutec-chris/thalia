@@ -74,7 +74,21 @@ begin
   Parser.Free;
 end;
 
+resourcestring
+  strMath1                          = '+was+macht|ist|ergibt|gibt=term';
+  strMath2                          = '+weiss|weiß+jemand|einer+was=term+macht|ergibt|gibt|ist';
+
+procedure AddSentences;
+begin
+  AddSentence(strMath1,'math',1);
+  AddAnswer('$parse($term)$ignorelastanswer');
+  AddSentence(strMath2,'math',0);
+  AddAnswer('$parse($term)$ignorelastanswer');
+  AddSentence('=term','math',0);
+  AddAnswer('$parse($term)$ignorelastanswer');
+end;
+
 initialization
-  RegisterToSpeaker(@HandleTalk);
+  RegisterToSpeaker(@HandleTalk,@AddSentences);
 end.
 

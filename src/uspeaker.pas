@@ -49,6 +49,7 @@ type
   TGetParameterEvent = function(short : char;long : string) : string of object;
   TShortTalkEvent = procedure(sentence : string) of object;
   THandleTalkEvent = function(Speaker : TSpeaker;language : string;var sentence : string;var canhandle : Boolean) : Boolean;
+  TRegisterSentenceEvent = procedure;
 
   { TInterlocutor }
 
@@ -203,11 +204,15 @@ type
     function IsValid(words,Variables : TStringList) : Boolean;
   end;
 
-  procedure RegisterToSpeaker(aTalk : THandleTalkEvent);
+  procedure RegisterToSpeaker(aTalk : THandleTalkEvent;aAddSenences : TRegisterSentenceEvent = nil);
+  procedure AddSentence(aSentence,aCategory : string;aType : Integer; aPriority: integer=1);
+  procedure AddAnswer(aAnswer : string);
   function GetFirstSentence(var inp : string) : string;
 implementation
 var
+  Speaker : TSpeaker;
   TalkHandlers : array of THandleTalkEvent;
+  SentenceHandlers : array of TRegisterSentenceEvent;
 resourcestring
   strLanguagedontexists                 = 'The Language dont exists';
   strShortQuestionAnswer                = 'Ja ?';
@@ -216,10 +221,50 @@ const
   punctations : array [0..12] of string = (',','.','?','!','...',':',';','(',')','[',']','{','}');
   sentenceends : array [0..2] of string = ('.','?','!');
 
-procedure RegisterToSpeaker(aTalk: THandleTalkEvent);
+procedure RegisterToSpeaker(aTalk: THandleTalkEvent; aAddSenences: TRegisterSentenceEvent = nil
+  );
 begin
   Setlength(TalkHandlers,length(TalkHandlers)+1);
   TalkHandlers[length(TalkHandlers)-1] := aTalk;
+  if Assigned(aAddSenences) then
+    begin
+      Setlength(SentenceHandlers,length(SentenceHandlers)+1);
+      SentenceHandlers[length(SentenceHandlers)-1] := aAddSenences;
+    end;
+end;
+
+procedure AddSentence(aSentence, aCategory: string;aType : Integer; aPriority: integer=1);
+var
+  FSentence: TDataSet;
+begin
+  if not Assigned(Speaker) then exit;
+  if not Assigned(Speaker.Data) then exit;
+  FSentence:=Speaker.Data.GetScentences('');
+  if not FSentence.Locate('WORDS',aSentence,[loCaseInsensitive]) then
+    begin
+      FSentence.Insert;
+      FSentence.FieldByName('ID').AsLargeInt:=FSentence.RecordCount+1;
+      FSentence.FieldByName('WORDS').AsString:=aSentence;
+      FSentence.FieldByName('CATEGORY').AsString:=aCategory;
+      FSentence.FieldByName('TYPE').AsInteger:=aType;
+      FSentence.FieldByName('PRIORITY').AsInteger:=aPriority;
+      FSentence.Post;
+    end;
+end;
+
+procedure AddAnswer(aAnswer: string);
+var
+  FAnswer: TDataSet;
+begin
+  if not Assigned(Speaker) then exit;
+  if not Assigned(Speaker.Data) then exit;
+  FAnswer:=Speaker.Data.GetAnswers('');
+  if not FAnswer.Locate('ANSWER',aAnswer,[loCaseInsensitive]) then
+    begin
+      FAnswer.Insert;
+      FAnswer.FieldByName('ANSWER').AsString:=aAnswer;
+      FAnswer.Post;
+    end;
 end;
 
 function GetFirstSentence(var inp : string) : string;
@@ -942,6 +987,8 @@ begin
 end;
 
 constructor TSpeaker.Create(aName,Language: string;aData : TSpeakerData);
+var
+  i: Integer;
 begin
   Data := aData;
   if not LoadLanguage(Language) then raise Exception.Create('failed loading dict');
@@ -950,6 +997,9 @@ begin
   Logpath := GetConfigDir('thalia')+'log';
   ForceDirectories(Logpath);
   FFastAnswer := False;
+  Speaker := Self;
+  for i := low(SentenceHandlers) to high(SentenceHandlers) do
+    SentenceHandlers[i];
 end;
 
 function TSpeaker.Process(NeedNewMessage : Boolean = False): Boolean;
