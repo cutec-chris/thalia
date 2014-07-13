@@ -25,7 +25,7 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Classes, SysUtils, CustApp,uSpeaker,uPluginInterface,
-  uIntfStrConsts,ZConnection,ZDataset,db,FileUtil;
+  uIntfStrConsts,ZConnection,ZDataset, zcomponent_nogui,db,FileUtil;
 
 type
   { TThalia }
@@ -147,6 +147,9 @@ begin
   for FrameNumber := 0 to FrameCount-1 do
     WriteLn(BackTraceStrFunc(Frames[FrameNumber]));
 end;
+
+resourcestring
+  strpressanykey                        = 'Press any key to continue...';
 
 procedure TThalia.DoRun;
 var

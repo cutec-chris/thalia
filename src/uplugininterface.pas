@@ -23,7 +23,7 @@ unit uPluginInterface;
 interface
 
 uses
-  Classes, SysUtils,uSpeaker,uIntfStrConsts
+  Classes, SysUtils,uSpeaker
   {$IFDEF WINDOWS}
   ,Windows
   {$ENDIF}
@@ -71,7 +71,9 @@ type
   end;
 
 implementation
-
+resourcestring
+  strPluinnotFound                      = 'The Inerface dont exists.';
+  strPluginInvalid                      = 'The Interface coudnt be loaded';
 var
   FGetParameter : TGetParameterEvent;
   FTalk : TTalkEvent;

@@ -31,7 +31,7 @@ unit uSpeaker;
 interface
 
 uses
-  Classes, SysUtils, db, Utils, uIntfStrConsts, FileUtil;
+  Classes, SysUtils, db, Utils, FileUtil;
 
 type
   TWordPosition = (wpFirst,wpLast,wpNoMatter);
@@ -208,6 +208,10 @@ type
 implementation
 var
   TalkHandlers : array of THandleTalkEvent;
+resourcestring
+  strLanguagedontexists                 = 'The Language dont exists';
+  strShortQuestionAnswer                = 'Ja ?';
+
 const
   punctations : array [0..12] of string = (',','.','?','!','...',':',';','(',')','[',']','{','}');
   sentenceends : array [0..2] of string = ('.','?','!');
