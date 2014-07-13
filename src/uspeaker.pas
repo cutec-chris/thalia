@@ -205,7 +205,7 @@ type
   end;
 
   procedure RegisterToSpeaker(aTalk : THandleTalkEvent;aAddSenences : TRegisterSentenceEvent = nil);
-  procedure AddSentence(aSentence,aCategory : string;aType : Integer; aPriority: integer=1);
+  function AddSentence(aSentence,aCategory : string;aType : Integer; aPriority: integer=1) : Boolean;
   procedure AddAnswer(aAnswer : string);
   function GetFirstSentence(var inp : string) : string;
 implementation
@@ -233,10 +233,12 @@ begin
     end;
 end;
 
-procedure AddSentence(aSentence, aCategory: string;aType : Integer; aPriority: integer=1);
+function AddSentence(aSentence, aCategory: string; aType: Integer;
+  aPriority: integer): Boolean;
 var
   FSentence: TDataSet;
 begin
+  Result := False;
   if not Assigned(Speaker) then exit;
   if not Assigned(Speaker.Data) then exit;
   FSentence:=Speaker.Data.GetScentences('');
@@ -249,12 +251,14 @@ begin
       FSentence.FieldByName('TYPE').AsInteger:=aType;
       FSentence.FieldByName('PRIORITY').AsInteger:=aPriority;
       FSentence.Post;
+      Result := True;
     end;
 end;
 
 procedure AddAnswer(aAnswer: string);
 var
   FAnswer: TDataSet;
+  FSent: TDataSet;
 begin
   if not Assigned(Speaker) then exit;
   if not Assigned(Speaker.Data) then exit;
@@ -262,6 +266,11 @@ begin
   if not FAnswer.Locate('ANSWER',aAnswer,[loCaseInsensitive]) then
     begin
       FAnswer.Insert;
+      IF FAnswer.FieldDefs.IndexOf('REF')>-1 then
+        begin
+          FSent := Speaker.Data.GetScentences('');
+          FAnswer.FieldByName('REF').AsLargeInt:=FSent.FieldByName('ID').AsLargeInt;
+        end;
       FAnswer.FieldByName('ANSWER').AsString:=aAnswer;
       FAnswer.Post;
     end;

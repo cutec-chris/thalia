@@ -205,7 +205,21 @@ retry:
     end;
 end;
 
+resourcestring
+  strWiki1                          = '+was|wo|wer+ist|war|sind=wikiquerry';
+  strWiki2                          = '+weiss|weiß+jemand|einer+wer|was|wie|womit=wikiquerry+ist|sind|war';
+
+procedure AddSentences;
+begin
+  if AddSentence(strWiki1,'wiki',1) then
+    AddAnswer('$dowikiquerry($wikiquerry)$ignorelastanswer');
+  if AddSentence(strWiki2,'wiki',0) then
+    AddAnswer('$dowikiquerry($wikiquerry)$ignorelastanswer');
+  if AddSentence(strWiki2,'wiki',1) then
+    AddAnswer('$dowikiquerry($wikiquerry)$ignorelastanswer');
+end;
+
 initialization
-  RegisterToSpeaker(@HandleTalk);
+  RegisterToSpeaker(@HandleTalk,@AddSentences);
 end.
 

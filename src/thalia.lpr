@@ -25,7 +25,7 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Classes, SysUtils, CustApp,uSpeaker,uPluginInterface,
-  uIntfStrConsts,ZConnection,ZDataset, zcomponent_nogui,db,FileUtil;
+  ZConnection,ZDataset, zcomponent_nogui,db,FileUtil;
 
 type
   { TThalia }
@@ -92,7 +92,16 @@ end;
 
 function TSQLData.GetAnswers(aFilter: string): TDataSet;
 begin
-  FAnswers.SQL.Text:='select * from "ANSWERS" where '+aFilter;
+  if aFilter='' then
+    begin
+      if not FAnswers.Active then
+        begin
+          FAnswers.SQL.Text:='select * from "ANSWERS"';
+          FAnswers.Open;
+        end;
+    end
+  else
+    FAnswers.SQL.Text:='select * from "ANSWERS" where '+aFilter;
   FAnswers.Open;
   Result := FAnswers;
 end;
