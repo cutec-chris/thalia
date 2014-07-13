@@ -31,8 +31,7 @@ unit uSpeaker;
 interface
 
 uses
-  Classes, SysUtils, db, Utils, uIntfStrConsts, FileUtil,ZConnection,
-  ZDataset;
+  Classes, SysUtils, db, Utils, uIntfStrConsts, FileUtil;
 
 type
   TWordPosition = (wpFirst,wpLast,wpNoMatter);
@@ -130,6 +129,13 @@ type
     function GetID : string;override;
     function IsUser(user : string) : Boolean;override;
   end;
+
+  TSpeakerData = class
+  public
+    function GetWords(aFilter : string) : TDataSet;virtual;abstract;
+    function GetScentences(aFilter : string) : TDataSet;virtual;abstract;
+    function GetAnswers(aFilter : string) : TDataSet;virtual;abstract;
+  end;
   
   { TSpeaker }
 
@@ -138,10 +144,7 @@ type
   private
     FAutofocus: Boolean;
     FBeQuiet: Boolean;
-    FData : TZConnection;
-    FWords : TZQuery;
-    FSentences : TZQuery;
-    FAnswers : TZQuery;
+    FData: TSpeakerData;
     FDebugMessage: TShortTalkEvent;
     FFastAnswer: Boolean;
     FIgnoreunicode: Boolean;
@@ -152,6 +155,7 @@ type
     FAnswerTo : string;
     FSystemMessage: TShortTalkEvent;
     Logpath : string;
+    procedure SetData(AValue: TSpeakerData);
     procedure SetIntf(const AValue: TSpeakerInterface);
     procedure SetName(const AValue: string);
     function LoadLanguage(language : string) : Boolean;
@@ -170,10 +174,11 @@ type
     property Name : string read FName write SetName;
     property Interlocutors : TInterlocutors read FInterlocutors;
     property Intf : TSpeakerInterface read FIntf write SetIntf;
+    property Data : TSpeakerData read FData write SetData;
     function Analyze(from,sentence : string;priv : Boolean) : Boolean;
     function Processfunctions(Interlocutor : TInterlocutor;answer : string;priv : Boolean;logfile : string) : string;
     function RemoveStopWords(inp : string) : string;
-    constructor Create(aName,Language : string);
+    constructor Create(aName, Language: string; aData: TSpeakerData);
     property BeQuiet : Boolean read FBeQuiet write FBeQuiet;
     property Autofocus : Boolean read FAutofocus write FAutofocus;
     property IgnoreUnicode : Boolean read FIgnoreunicode write FIgnoreunicode;
@@ -329,26 +334,15 @@ begin
   FIntf.Speaker := Self;
 end;
 
+procedure TSpeaker.SetData(AValue: TSpeakerData);
+begin
+  if FData=AValue then Exit;
+  FData:=AValue;
+end;
+
 function TSpeaker.LoadLanguage(language: string): Boolean;
 begin
-  Result := False;
-  if not Assigned(FData) then
-    begin
-      FData := TZConnection.Create(nil);
-      FWords := TZQuery.Create(nil);
-      FSentences := TZQuery.Create(nil);
-      FAnswers := TZQuery.Create(nil);
-    end;
-  Result := FileExists(AppendPathDelim(ExtractFileDir(ParamStr(0)))+'dict.db');
-  if not Result then exit;
-  FData.Protocol:='sqlite-3';
-  FData.Database:=AppendPathDelim(ExtractFileDir(ParamStr(0)))+'dict.db';
-  FData.HostName:='localhost';
-  FData.Connect;
-  Result := FData.Connected;
-  FWords.Connection:=FData;
-  FSentences.Connection:=FData;
-  FAnswers.Connection:=FData;
+  Result := True;
 end;
 
 function TSpeaker.GetSentenceTyp(sentence: TStringList): TSentenceTyp;
@@ -493,6 +487,8 @@ var
   i: Integer;
   canhandle : Boolean;
   pInterlocutor: TInterlocutor;
+  FSentences: TDataSet;
+  FAnswers: TDataSet;
   procedure ReplaceVariables(var aAnswer : string);
   var
     i: Integer;
@@ -512,8 +508,7 @@ begin
   Result := False;
   Answer := '';
   FVariables := TStringlist.Create;
-  FSentences.SQL.Text:='select * from "SENTENCES" where "TYPE"='''+IntToStr(Integer(aTyp))+''' order by PRIORITY Asc,ID Asc';
-  FSentences.Open;
+  FSentences := Data.GetScentences('"TYPE"='''+IntToStr(Integer(aTyp))+'''');
   FSentences.First;
   while not FSentences.EOF do
     begin
@@ -541,8 +536,7 @@ begin
             end;
           Interlocutor.FLastIndex := FSentences.FieldByName('ID').AsLargeInt;
           Interlocutor.FlastCategory := FSentences.FieldByName('CATEGORY').AsString;
-          FAnswers.SQL.Text:='select * from "ANSWERS" where "REF"='''+FSentences.FieldByName('ID').AsString+'''';
-          FAnswers.Open;
+          FAnswers := Data.GetAnswers('"REF"='''+FSentences.FieldByName('ID').AsString+'''');
           Randomize;
           FAnswers.MoveBy(Random(FAnswers.RecordCount));
           if FAnswers.RecordCount>0 then
@@ -708,6 +702,8 @@ var
   filename: String;
   InterlocutorID: String;
   Answer: String;
+  FSentences: TDataSet;
+  FAnswers: TDataSet;
 const
   stypes : array [0..3] of string = ('unknown','questions','statements','commands');
 
@@ -818,10 +814,8 @@ begin
               if Assigned(FDebugMessage) then
                 FDebugMessage('No Answer, using Typ 7'+lineending);
               Interlocutor.Properties[Interlocutor.AnswerTo] := StringReplace(sentence,'=','',[rfReplaceAll]);
-              FSentences.SQL.Text:='select * from "SENTENCES" where "TYPE"=''7''';
-              FSentences.Open;
-              FAnswers.SQL.Text:='select * from "ANSWERS" where "REF"='''+FSentences.FieldByName('ID').AsString+'''';//Antworten auf unbekannte Fragen
-              FAnswers.Open;
+              FSentences := Data.GetScentences('"TYPE"=''7''');
+              FAnswers := Data.GetAnswers('"REF"='''+FSentences.FieldByName('ID').AsString+'''');
               Randomize;
               FAnswers.MoveBy(Random(FAnswers.RecordCount));
               Answer := FAnswers.FieldByName('ANSWER').AsString;
@@ -835,10 +829,8 @@ begin
             begin
               if Assigned(FDebugMessage) then
                 FDebugMessage('No Answer, using Typ 6'+lineending);
-              FSentences.SQL.Text:='select * from "SENTENCES" where "TYPE"=''6''';
-              FSentences.Open;
-              FAnswers.SQL.Text:='select * from "ANSWERS" where "REF"='''+FSentences.FieldByName('ID').AsString+'''';//Antworten auf unbekannte Fragen
-              FAnswers.Open;
+              FSentences := Data.GetScentences('"TYPE"=''6''');
+              FAnswers := Data.GetAnswers('"REF"='''+FSentences.FieldByName('ID').AsString+'''');
               Randomize;
               FAnswers.MoveBy(Random(FAnswers.RecordCount));
               Answer := FAnswers.FieldByName('ANSWER').AsString;
@@ -929,10 +921,10 @@ function TSpeaker.RemoveStopWords(inp: string): string;
 var
   sl: TStringList;
   i: Integer;
+  FWords: TDataSet;
 begin
   Result := '';
-  FWords.SQL.Text:='select * from "DICT" where "TYPE"='''+'1'+'''';
-  FWords.Open;
+  FWords := Data.GetWords('"TYPE"='''+'1'+'''');
   sl := SentenceToStringList(inp);
   while not FWords.EOF do
     begin
@@ -945,8 +937,9 @@ begin
   Result := trim(Result);
 end;
 
-constructor TSpeaker.Create(aName,Language: string);
+constructor TSpeaker.Create(aName,Language: string;aData : TSpeakerData);
 begin
+  Data := aData;
   if not LoadLanguage(Language) then raise Exception.Create('failed loading dict');
   FName := aName;
   FInterlocutors := TInterlocutors.Create;
@@ -971,6 +964,7 @@ end;
 destructor TSpeaker.Destroy;
 begin
   inherited Destroy;
+  FData.Free;
   FInterlocutors.Free;
 end;
 

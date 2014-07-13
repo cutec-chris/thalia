@@ -25,7 +25,7 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Classes, SysUtils, CustApp,uSpeaker,uPluginInterface,
-  uIntfStrConsts;
+  uIntfStrConsts,ZConnection,ZDataset,db,FileUtil;
 
 type
   { TThalia }
@@ -44,6 +44,72 @@ type
     destructor Destroy; override;
     procedure WriteHelp; virtual;
   end;
+
+  { TSQLData }
+
+  TSQLData = class(TSpeakerData)
+  private
+    FData : TZConnection;
+    FWords : TZQuery;
+    FSentences : TZQuery;
+    FAnswers : TZQuery;
+  public
+    constructor Create;
+    destructor Destroy; override;
+    function GetAnswers(aFilter: string): TDataSet; override;
+    function GetScentences(aFilter: string): TDataSet; override;
+    function GetWords(aFilter: string): TDataSet; override;
+  end;
+
+{ TSQLData }
+
+constructor TSQLData.Create;
+begin
+  if not Assigned(FData) then
+    begin
+      FData := TZConnection.Create(nil);
+      FWords := TZQuery.Create(nil);
+      FSentences := TZQuery.Create(nil);
+      FAnswers := TZQuery.Create(nil);
+    end;
+  FData.Protocol:='sqlite-3';
+  FData.Database:=AppendPathDelim(ExtractFileDir(ParamStr(0)))+'dict.db';
+  FData.HostName:='localhost';
+  FData.Connect;
+  FWords.Connection:=FData;
+  FSentences.Connection:=FData;
+  FAnswers.Connection:=FData;
+end;
+
+destructor TSQLData.Destroy;
+begin
+  FAnswers.Free;
+  FSentences.Free;
+  FWords.Free;
+  FData.Free;
+  inherited Destroy;
+end;
+
+function TSQLData.GetAnswers(aFilter: string): TDataSet;
+begin
+  FAnswers.SQL.Text:='select * from "ANSWERS" where '+aFilter;
+  FAnswers.Open;
+  Result := FAnswers;
+end;
+
+function TSQLData.GetScentences(aFilter: string): TDataSet;
+begin
+  FSentences.SQL.Text:='select * from "SENTENCES" where '+aFilter+' order by PRIORITY Asc,ID Asc';
+  FSentences.Open;
+  Result := FSentences;
+end;
+
+function TSQLData.GetWords(aFilter: string): TDataSet;
+begin
+  FWords.SQL.Text:='select * from "DICT" where '+aFilter;
+  FWords.Open;
+  Result := FWords;
+end;
 
 { TThalia }
 
@@ -130,7 +196,7 @@ begin
   displayname := GetOptionValue('u','displayname');
   if displayname = '' then
     displayname := 'Thalia';
-  FSpeaker := TSpeaker.Create(displayname,'deutsch');
+  FSpeaker := TSpeaker.Create(displayname,'deutsch',TSQLData.Create);
   FSpeaker.FastAnswer := HasOption('a','fastanswer');
   FSpeaker.BeQuiet := HasOption('q','quiet');
   FSpeaker.Autofocus := HasOption('f','autofocus');

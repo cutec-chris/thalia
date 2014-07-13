@@ -7,8 +7,8 @@ unit thalia_interface;
 interface
 
 uses
-  uSpeaker, umath, ureminder, uwhois, uIntfStrConsts, uwikipedia, utwitter, 
-  uPluginInterface, uUsers, LazarusPackageIntf;
+  uSpeaker, uPluginInterface, umath, ureminder, uIntfStrConsts, uwikipedia, 
+  LazarusPackageIntf;
 
 implementation
 
