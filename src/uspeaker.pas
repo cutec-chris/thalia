@@ -205,6 +205,7 @@ type
   end;
 
   procedure RegisterToSpeaker(aTalk : THandleTalkEvent;aAddSenences : TRegisterSentenceEvent = nil);
+  procedure RegisterChron(aAddChron : TRegisterSentenceEvent);
   function AddSentence(aSentence,aCategory : string;aType : Integer; aPriority: integer=1) : Boolean;
   procedure AddAnswer(aAnswer : string);
   function GetFirstSentence(var inp : string) : string;
@@ -213,6 +214,7 @@ var
   Speaker : TSpeaker;
   TalkHandlers : array of THandleTalkEvent;
   SentenceHandlers : array of TRegisterSentenceEvent;
+  ChronHandlers : array of TRegisterSentenceEvent;
 resourcestring
   strLanguagedontexists                 = 'The Language dont exists';
   strShortQuestionAnswer                = 'Ja ?';
@@ -231,6 +233,12 @@ begin
       Setlength(SentenceHandlers,length(SentenceHandlers)+1);
       SentenceHandlers[length(SentenceHandlers)-1] := aAddSenences;
     end;
+end;
+
+procedure RegisterChron(aAddChron: TRegisterSentenceEvent);
+begin
+  Setlength(ChronHandlers,length(ChronHandlers)+1);
+  ChronHandlers[length(ChronHandlers)-1] := aAddChron;
 end;
 
 function AddSentence(aSentence, aCategory: string; aType: Integer;
@@ -1019,6 +1027,8 @@ begin
   if not Assigned(FIntf) then
     exit;
   Result := FIntf.Process(NeedNewMessage);
+  for i := low(ChronHandlers) to high(ChronHandlers) do
+    ChronHandlers[i];
 {  for i := 0 to Interlocutors.Count-1 do
     if (Now()-TInterlocutor(Interlocutors.Items[i]).LastContact) > EncodeTime(0,2,0,0) then
       TInterlocutor(Interlocutors.Items[i]).Focused := False;}
