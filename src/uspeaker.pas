@@ -131,11 +131,15 @@ type
     function IsUser(user : string) : Boolean;override;
   end;
 
+  { TSpeakerData }
+
   TSpeakerData = class
   public
     function GetWords(aFilter : string) : TDataSet;virtual;abstract;
     function GetScentences(aFilter : string) : TDataSet;virtual;abstract;
     function GetAnswers(aFilter : string) : TDataSet;virtual;abstract;
+    function SetVariable(aInterlocutor : string;aVarname : string;aValue : string) : Boolean;virtual;
+    function GetVariable(aInterlocutor : string;aVarname : string) : string;virtual;
   end;
   
   { TSpeaker }
@@ -325,6 +329,20 @@ end;
 function RemoveStopWords(var inp: string): Boolean;
 begin
 
+end;
+
+{ TSpeakerData }
+
+function TSpeakerData.SetVariable(aInterlocutor: string; aVarname: string;
+  aValue: string): Boolean;
+begin
+  Result := False;
+end;
+
+function TSpeakerData.GetVariable(aInterlocutor: string; aVarname: string
+  ): string;
+begin
+  Result := '';
 end;
 
 { TSpeakerInterface }
