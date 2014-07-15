@@ -8,7 +8,7 @@
         <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)-$(LCLWidgetType)"/>
       </SearchPaths>
     </CompilerOptions>
-    <Files Count="4">
+    <Files Count="6">
       <Item1>
         <Filename Value="uspeaker.pas"/>
         <UnitName Value="uSpeaker"/>
@@ -25,6 +25,14 @@
         <Filename Value="uwikipedia.pas"/>
         <UnitName Value="uwikipedia"/>
       </Item4>
+      <Item5>
+        <Filename Value="ureminder.pas"/>
+        <UnitName Value="ureminder"/>
+      </Item5>
+      <Item6>
+        <Filename Value="uspokentimes.pas"/>
+        <UnitName Value="uspokentimes"/>
+      </Item6>
     </Files>
     <Type Value="RunAndDesignTime"/>
     <RequiredPkgs Count="3">

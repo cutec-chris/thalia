@@ -50,6 +50,7 @@ type
   TShortTalkEvent = procedure(sentence : string) of object;
   THandleTalkEvent = function(Speaker : TSpeaker;language : string;var sentence : string;var canhandle : Boolean) : Boolean;
   TRegisterSentenceEvent = procedure;
+  TSpeakerEvent = procedure(Speaker : TSpeaker);
 
   { TInterlocutor }
 
@@ -209,7 +210,7 @@ type
   end;
 
   procedure RegisterToSpeaker(aTalk : THandleTalkEvent;aAddSenences : TRegisterSentenceEvent = nil);
-  procedure RegisterChron(aAddChron : TRegisterSentenceEvent);
+  procedure RegisterChron(aAddChron : TSpeakerEvent);
   function AddSentence(aSentence,aCategory : string;aType : Integer; aPriority: integer=1) : Boolean;
   procedure AddAnswer(aAnswer : string);
   function GetFirstSentence(var inp : string) : string;
@@ -218,7 +219,7 @@ var
   Speaker : TSpeaker;
   TalkHandlers : array of THandleTalkEvent;
   SentenceHandlers : array of TRegisterSentenceEvent;
-  ChronHandlers : array of TRegisterSentenceEvent;
+  ChronHandlers : array of TSpeakerEvent;
 resourcestring
   strLanguagedontexists                 = 'The Language dont exists';
   strShortQuestionAnswer                = 'Ja ?';
@@ -239,7 +240,7 @@ begin
     end;
 end;
 
-procedure RegisterChron(aAddChron: TRegisterSentenceEvent);
+procedure RegisterChron(aAddChron: TSpeakerEvent);
 begin
   Setlength(ChronHandlers,length(ChronHandlers)+1);
   ChronHandlers[length(ChronHandlers)-1] := aAddChron;
@@ -1046,7 +1047,7 @@ begin
     exit;
   Result := FIntf.Process(NeedNewMessage);
   for i := low(ChronHandlers) to high(ChronHandlers) do
-    ChronHandlers[i];
+    ChronHandlers[i](Self);
 {  for i := 0 to Interlocutors.Count-1 do
     if (Now()-TInterlocutor(Interlocutors.Items[i]).LastContact) > EncodeTime(0,2,0,0) then
       TInterlocutor(Interlocutors.Items[i]).Focused := False;}
@@ -1125,7 +1126,11 @@ end;
 
 function TInterlocutor.GetProperty(aName : string): string;
 begin
-  Result := FProperties.Values[aName];
+  Result := '';
+  if Assigned(Speaker) and Assigned(Speaker.Data) then
+    Result := Speaker.Data.GetVariable(Name,aName);
+  if Result='' then
+    Result := FProperties.Values[aName];
 end;
 
 procedure TInterlocutor.SetAnswerTo(AValue: string);
@@ -1143,6 +1148,8 @@ end;
 procedure TInterlocutor.SetProperty(aName : string; const AValue: string);
 begin
   FProperties.Values[aName] := AValue;
+  if Assigned(Speaker) and Assigned(Speaker.Data) then
+    Speaker.Data.SetVariable(Name,aName,AValue);
 end;
 
 function TInterlocutor.Stemm(word: string): string;

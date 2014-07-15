@@ -7,7 +7,8 @@ unit thalia_interface;
 interface
 
 uses
-  uSpeaker, uPluginInterface, umath, uwikipedia, LazarusPackageIntf;
+  uSpeaker, uPluginInterface, umath, uwikipedia, ureminder, uspokentimes, 
+  LazarusPackageIntf;
 
 implementation
 

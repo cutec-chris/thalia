@@ -22,65 +22,40 @@ unit ureminder;
 {$mode objfpc}{$H+}
 
 {
-    Wann ist mein nächster Termin?
-    Was steht Dienstag in meinem Kalender?
-    Wo ist meine nächste Besprechung?
-    Wann ist die Besprechung mit Franzi?
-    Erstelle einen Termin für morgen um 14 Uhr.
-    Plane eine Besprechung heute um 11 Uhr im Tagungsraum.
-    Verschiebe meinen heutigen Termin von 9 Uhr auf 11 Uhr.
-    Füge Marcell zu meinem Termin heute um 11 Uhr hinzu.
+x Stelle den Timer auf 5 Minuten.
+x Zeige mir den Timer.
+x Halte den Timer an.
+x Stelle den Timer wieder an.
+x Setze den Timer zurück.
 
-    Stelle den Timer auf 5 Minuten.
-    Zeige mir den Timer.
-    Halte den Timer an.
-    Stelle den Timer wieder an.
-    Setze den Timer zurück.
+Erinnere mich: Daheim anrufen.
+Erinnere mich morgen früh um 8: Schwimmsachen mitnehmen
+Erinnere mich daran „Blumen gießen“, wenn ich nach Hause ankomme.
 
-    Erinnere mich: Daheim anrufen.
-    Erinnere mich morgen früh um 8: Schwimmsachen mitnehmen
-    Erinnere mich daran „Blumen gießen“, wenn ich nach Hause ankomme.
+Notiere: Nik schlagen.
 
+Suche meine Notiz Urlaub 2013.
 
-    Notiere: Nik schlagen.
-    Suche meine Notiz Urlaub 2013.
-    Zeige mir meine Notizen von gestern.
-
-    Wie wir das Wetter am Samstag?
-    Wird es in Lübeck diese Woche regnen?
-    Was wird die Höchsttemperatur morgen in Köln?
-    Ist es heute windig?
-
-    Sende eine Mail an Peer wegen Urlaub.
-    Schreibe eine Mail an Nik mit dem Inhalt: Kommst Du heute wieder zu spät?
-    Zeige neue Mails von Nik.
-    Zeige Mails von gestern zum Urlaub
-
-    Wo ist Aileen?
-    Wo ist mein Chef?
-    Wer ist in der Nähe?
-    Ist meine Oma zu Hause?
-    Benachrichtige mich, wenn Oma zuhause ankommt.
-    Benachrichtige Oma, wenn ich das Büro verlasse.
-
-    Suche im Internet nach Akku-Tipps für iPhone.
-    Suche auf Wikipedia nach Aluminium.
-    Bing-Suche nach Berliner Musikgruppen.
-    Rufe www.giga.de auf.
+Zeige mir meine Notizen von gestern.
 }
 
 
 interface
 
 uses
-  Classes, SysUtils, uSpeaker;
+  Classes, SysUtils, uSpeaker,uspokentimes;
 
 implementation
 
 function HandleTalk(Speaker : TSpeaker;language : string;var sentence : string;var canhandle : Boolean) : Boolean;
 begin
   Result:=False;
-  canhandle:=(pos('$remind(',sentence)>0);
+  canhandle:=(pos('$timer(',sentence)>0)
+          or (pos('$showtimer(',sentence)>0)
+          or (pos('$starttimer(',sentence)>0)
+          or (pos('$stoptimer(',sentence)>0)
+          or (pos('$resettimer(',sentence)>0)
+          ;
   if pos('$getdescription(de)',sentence)>0 then
     begin
       sentence:='Ich kann Sie auch an Sachen erinnern.';
@@ -90,10 +65,36 @@ begin
     end;
   if not canhandle then exit;
 
+end;
+
+procedure Chron(Speaker : TSpeaker);
+begin
 
 end;
 
+resourcestring
+  strTimer1             = '+timer+auf=time';
+  strTimer2             = '+zeig|zeige+timer';
+  strTimer3             = '+stoppe|halte+timer';
+  strTimer4             = '+starte|stelle+timer';
+  strTimer5             = '+setze+timer+zurück';
+
+procedure AddSentences;
+begin
+  if AddSentence(strTimer1,'reminder',1) then
+    AddAnswer('$timer($parsetime($time))$ignorelastanswer');
+  if AddSentence(strTimer2,'reminder',1) then
+    AddAnswer('$showtimer$ignorelastanswer');
+  if AddSentence(strTimer3,'reminder',1) then
+    AddAnswer('$stoptimer$ignorelastanswer');
+  if AddSentence(strTimer4,'reminder',1) then
+    AddAnswer('$starttimer$ignorelastanswer');
+  if AddSentence(strTimer5,'reminder',1) then
+    AddAnswer('$resettimer$ignorelastanswer');
+end;
+
 initialization
-  RegisterToSpeaker(@HandleTalk);
+  RegisterToSpeaker(@HandleTalk,@AddSentences);
+  RegisterChron(@Chron);
 end.
 
