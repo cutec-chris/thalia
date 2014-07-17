@@ -35,7 +35,7 @@ uses
 
 type
   TWordPosition = (wpFirst,wpLast,wpNoMatter);
-  TSentenceTyp = (stUnknown,stQuestion,stStatement,stCommand);
+  TSentenceTyp = (stUnknown=0,stQuestion=1,stStatement=2,stCommand=3);
   TWordType = (wtNoMatter,wtVerb);
   TWordTyp = packed record
     word : string;
@@ -211,7 +211,7 @@ type
 
   procedure RegisterToSpeaker(aTalk : THandleTalkEvent;aAddSenences : TRegisterSentenceEvent = nil);
   procedure RegisterChron(aAddChron : TSpeakerEvent);
-  function AddSentence(aSentence,aCategory : string;aType : Integer; aPriority: integer=1) : Boolean;
+  function AddSentence(aSentence,aCategory : string;aType : Integer; aPriority: integer=100) : Boolean;
   procedure AddAnswer(aAnswer : string);
   function GetFirstSentence(var inp : string) : string;
 implementation
@@ -611,7 +611,7 @@ begin
       if aOK then
         begin
           if Assigned(FDebugMessage) then
-            FDebugMessage('Sentence found'+lineending);
+            FDebugMessage('Sentence found ('+FSentences.FieldByName('WORDS').AsString+')'+lineending);
           Result := True;
           if (FSentences.FieldByName('ID').AsLargeInt = Interlocutor.FLastIndex) and (FSentences.FieldByName('CATEGORY').AsString = Interlocutor.FlastCategory) then
             begin

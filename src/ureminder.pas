@@ -32,6 +32,8 @@ Erinnere mich: Daheim anrufen.
 Erinnere mich morgen früh um 8: Schwimmsachen mitnehmen
 Erinnere mich daran „Blumen gießen“, wenn ich nach Hause ankomme.
 
+Erinnere mich wenn ich zuhause eintreffe ans abwaschen
+
 Notiere: Nik schlagen.
 
 Suche meine Notiz Urlaub 2013.
@@ -47,7 +49,15 @@ uses
 
 implementation
 
+var
+  Timer : TDateTime;
+
 function HandleTalk(Speaker : TSpeaker;language : string;var sentence : string;var canhandle : Boolean) : Boolean;
+var
+  tmp: String;
+  tmp1: String;
+  afunc: String;
+  avar: String;
 begin
   Result:=False;
   canhandle:=(pos('$timer(',sentence)>0)
@@ -58,13 +68,44 @@ begin
           ;
   if pos('$getdescription(de)',sentence)>0 then
     begin
-      sentence:='Ich kann Sie auch an Sachen erinnern.';
+      sentence:='Ich kann Sie auch an Sachen erinnern und einen Timer setzen.';
       result := true;
       canhandle:=true;
       exit;
     end;
   if not canhandle then exit;
+  tmp := sentence;
+  sentence:='';
+  while pos('$',tmp)>0 do
+    begin
+      tmp := copy(tmp,0,pos('$',tmp)-1);
+      sentence:=sentence+tmp;
+      tmp1 :=copy(tmp,pos('$',tmp)+1,length(tmp));
+      afunc := copy(tmp1,0,pos('(',tmp1)-1);
+      tmp1 :=copy(tmp,pos('(',tmp)+1,length(tmp));
+      avar := copy(tmp1,0,pos(')',tmp1)-1);
+      tmp1 := copy(tmp1,pos(')',tmp1)+1,length(tmp1));
+      //next function in func, parameters in avar
+      case afunc of
+      'showtimer':
+        begin
 
+        end;
+      'starttimer':
+        begin
+
+        end;
+      'stoptimer':
+        begin
+
+        end;
+      'resettimer':
+        begin
+
+        end;
+      end;
+      sentence:=sentence+tmp1;
+    end;
 end;
 
 procedure Chron(Speaker : TSpeaker);
@@ -81,15 +122,15 @@ resourcestring
 
 procedure AddSentences;
 begin
-  if AddSentence(strTimer1,'reminder',1) then
+  if AddSentence(strTimer1,'reminder',0) then
     AddAnswer('$timer($parsetime($time))$ignorelastanswer');
-  if AddSentence(strTimer2,'reminder',1) then
+  if AddSentence(strTimer2,'reminder',0) then
     AddAnswer('$showtimer$ignorelastanswer');
-  if AddSentence(strTimer3,'reminder',1) then
+  if AddSentence(strTimer3,'reminder',0) then
     AddAnswer('$stoptimer$ignorelastanswer');
-  if AddSentence(strTimer4,'reminder',1) then
+  if AddSentence(strTimer4,'reminder',0) then
     AddAnswer('$starttimer$ignorelastanswer');
-  if AddSentence(strTimer5,'reminder',1) then
+  if AddSentence(strTimer5,'reminder',0) then
     AddAnswer('$resettimer$ignorelastanswer');
 end;
 

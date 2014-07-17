@@ -84,7 +84,7 @@ begin
     AddAnswer('$parse($term)$ignorelastanswer');
   if AddSentence(strMath2,'math',0) then
     AddAnswer('$parse($term)$ignorelastanswer');
-  if AddSentence('=term','math',0) then
+  if AddSentence('=term','math',0,110) then
     AddAnswer('$parse($term)$ignorelastanswer');
 end;
 

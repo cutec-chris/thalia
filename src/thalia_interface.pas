@@ -8,7 +8,7 @@ interface
 
 uses
   uSpeaker, uPluginInterface, umath, uwikipedia, ureminder, uspokentimes, 
-  LazarusPackageIntf;
+  uIPLocation, LazarusPackageIntf;
 
 implementation
 
