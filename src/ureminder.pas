@@ -123,15 +123,15 @@ resourcestring
 procedure AddSentences;
 begin
   if AddSentence(strTimer1,'reminder',0) then
-    AddAnswer('$timer($parsetime($time))$ignorelastanswer');
+    AddAnswer('$timer($parsetime($time))$ignorelastanswer()');
   if AddSentence(strTimer2,'reminder',0) then
-    AddAnswer('$showtimer$ignorelastanswer');
+    AddAnswer('$showtimer$ignorelastanswer()');
   if AddSentence(strTimer3,'reminder',0) then
-    AddAnswer('$stoptimer$ignorelastanswer');
+    AddAnswer('$stoptimer$ignorelastanswer()');
   if AddSentence(strTimer4,'reminder',0) then
-    AddAnswer('$starttimer$ignorelastanswer');
+    AddAnswer('$starttimer$ignorelastanswer()');
   if AddSentence(strTimer5,'reminder',0) then
-    AddAnswer('$resettimer$ignorelastanswer');
+    AddAnswer('$resettimer$ignorelastanswer()');
 end;
 
 initialization
