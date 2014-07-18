@@ -52,6 +52,11 @@ type
   TRegisterSentenceEvent = procedure;
   TSpeakerEvent = procedure(Speaker : TSpeaker);
 
+  TContext = class
+  public
+
+  end;
+
   { TInterlocutor }
 
   TInterlocutor = class
@@ -67,6 +72,8 @@ type
     FProperties : TStringList;
     FSpeaker: TSpeaker;
     FUnicodeAnswer: Boolean;
+    FContexts : TList;
+    function GetContext(aIndex : Integer): TContext;
     function GetProperty(aName : string): string;
     procedure SetAnswerTo(AValue: string);
     procedure SetFocused(const AValue: Boolean);
@@ -88,6 +95,7 @@ type
     property UnicodeAnswer : Boolean read FUnicodeAnswer write FUnicodeAnswer;
     property LastAnswerFound : Boolean read FLastAnswerFound write FLastAnswerFound;
     property Speaker : TSpeaker read FSpeaker write fSpeaker;
+    property Contexts[aIndex : Integer] : TContext read GetContext;
     destructor Destroy;override;
   end;
   
@@ -1133,6 +1141,11 @@ begin
     Result := FProperties.Values[aName];
 end;
 
+function TInterlocutor.GetContext(aIndex : Integer): TContext;
+begin
+  Result := TContext(FContexts[aIndex]);
+end;
+
 procedure TInterlocutor.SetAnswerTo(AValue: string);
 begin
   if FAnswerto=AValue then Exit;
@@ -1170,6 +1183,7 @@ begin
   Fname := Name;
   FUnicodeAnswer := True;
   FLastAnswerFound := True;
+  FContexts := TList.Create;
 end;
 
 function TInterlocutor.ReplaceVariables(inp: string): string;
@@ -1184,6 +1198,7 @@ end;
 destructor TInterlocutor.Destroy;
 begin
   inherited Destroy;
+  FContexts.Free;
   FProperties.Free;
 end;
 
