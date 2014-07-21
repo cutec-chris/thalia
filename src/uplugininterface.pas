@@ -34,10 +34,10 @@ uses
 
 type
   TGetParamCallback = function(short : char;long : pchar) : pchar;stdcall;
-  TTalkToFunction = procedure(user,sentence : PChar); stdcall;
+  TTalkToFunction = procedure(user,sentence : PChar;FSentenceID : Int64); stdcall;
   TWOPFunction = procedure;stdcall;
   TProcessFunction = function : Boolean;stdcall;
-  TTalkCallback = procedure(sender : PChar;sentence : PChar;Priv : Boolean);stdcall;
+  TTalkCallback = procedure(sender : PChar;sentence : PChar;Priv : Boolean;FSentenceID : Int64);stdcall;
   TSetCallbacksFunction = procedure(CB : TTalkCallback;GP : TGetParamCallback);stdcall;
   TGetIDFunction = function : PChar;stdcall;
   TIsUserFunction = function(User : PChar) : Boolean;stdcall;
@@ -63,7 +63,7 @@ type
     destructor Destroy;override;
     procedure Connect;override;
     procedure Disconnect;override;
-    procedure Talk(user,sentence : string);override;
+    procedure Talk(user,sentence : string;AnswerTo : Int64 = -1);override;
     function Process(NeedNewMessage : Boolean = False) : Boolean;override;
     function GetID : string;override;
     function IsUser(user : string) : Boolean;override;
@@ -80,10 +80,10 @@ var
 
 { TPluginInterface }
 
-procedure FTalkCallback(Sender : pchar;Sentence: PChar;Priv : Boolean);stdcall;
+procedure FTalkCallback(Sender : pchar;Sentence: PChar;Priv : Boolean;FSentenceID : Int64);stdcall;
 begin
   if Assigned(FTalk) then
-    FTalk(Sender,Sentence,Priv);
+    FTalk(Sender,Sentence,Priv,FSentenceID);
 end;
 
 function FGetParamCallback(short: char; long: pchar): pchar;stdcall;
@@ -154,9 +154,9 @@ begin
   FDisconnect;
 end;
 
-procedure TPluginInterface.Talk(user,sentence: string);
+procedure TPluginInterface.Talk(user, sentence: string; AnswerTo: Int64);
 begin
-  FTalkTo(PChar(user),PChar(sentence));
+  FTalkTo(PChar(user),PChar(sentence),AnswerTo);
 end;
 
 function TPluginInterface.Process(NeedNewMessage: Boolean): Boolean;

@@ -43,12 +43,13 @@ type
     position : TWordPosition;
   end;
 
+  TInterlocutor = class;
   TSpeaker = class;
 
-  TTalkEvent = procedure(from,sentence : string;Priv : Boolean) of object;
+  TTalkEvent = procedure(from,sentence : string;Priv : Boolean;FSentenceID : LargeInt) of object;
   TGetParameterEvent = function(short : char;long : string) : string of object;
   TShortTalkEvent = procedure(sentence : string) of object;
-  THandleTalkEvent = function(Speaker : TSpeaker;language : string;var sentence : string;var canhandle : Boolean) : Boolean;
+  THandleTalkEvent = function(Interlocutor : TInterlocutor;language : string;var sentence : string;var canhandle : Boolean) : Boolean;
   TRegisterSentenceEvent = procedure;
   TSpeakerEvent = procedure(Speaker : TSpeaker);
 
@@ -72,8 +73,6 @@ type
     FProperties : TStringList;
     FSpeaker: TSpeaker;
     FUnicodeAnswer: Boolean;
-    FContexts : TList;
-    function GetContext(aIndex : Integer): TContext;
     function GetProperty(aName : string): string;
     procedure SetAnswerTo(AValue: string);
     procedure SetFocused(const AValue: Boolean);
@@ -95,7 +94,6 @@ type
     property UnicodeAnswer : Boolean read FUnicodeAnswer write FUnicodeAnswer;
     property LastAnswerFound : Boolean read FLastAnswerFound write FLastAnswerFound;
     property Speaker : TSpeaker read FSpeaker write fSpeaker;
-    property Contexts[aIndex : Integer] : TContext read GetContext;
     destructor Destroy;override;
   end;
   
@@ -118,7 +116,7 @@ type
   public
     procedure Connect;virtual;abstract;
     procedure Disconnect;virtual;abstract;
-    procedure Talk(user,sentence : string);virtual;abstract;
+    procedure Talk(user,sentence : string;AnswerTo : Int64 = -1);virtual;abstract;
     function Process(NeedNewMessage : Boolean = False) : boolean;virtual;abstract;
     function GetID : string;virtual;abstract;
     function IsUser(user : string) : Boolean;virtual;abstract;
@@ -134,7 +132,7 @@ type
   public
     procedure Connect;override;
     procedure Disconnect;override;
-    procedure Talk(user,sentence : string);override;
+    procedure Talk(user,sentence : string;AnswerTo : Int64 = -1);override;
     function Process(NeedNewMessage : Boolean = False) : Boolean;override;
     function GetID : string;override;
     function IsUser(user : string) : Boolean;override;
@@ -154,7 +152,7 @@ type
   { TSpeaker }
 
   TSpeaker = class
-    procedure FIntfTalk(from, sentence: string;Priv : Boolean);
+    procedure FIntfTalk(from, sentence: string;Priv : Boolean;FSentenceID : LargeInt);
   private
     FAutofocus: Boolean;
     FBeQuiet: Boolean;
@@ -177,23 +175,23 @@ type
     function GetSentenceTyp(sentence : TStringList) : TSentenceTyp;
     function WordsToSentence(sentence : TStringList) : string;
     function SentenceToStringList(sentence : string;Interlocutor : TInterlocutor = nil) : TStringList;
-    function CheckForSentence(words : TStringList;aTyp : TSentenceTyp;Interlocutor : TInterlocutor;priv,stemm : boolean;logfile : string) : Boolean;
+    function CheckForSentence(words : TStringList;aTyp : TSentenceTyp;Interlocutor : TInterlocutor;priv,stemm : boolean;logfile : string;FSentenceID : Int64) : Boolean;
     function CheckFocus(words : TStringList) : Boolean;
     function CheckTempFocus(words : TStringList) : Boolean;
     function CheckUnFocus(words : TStringList) : Boolean;
     function GetInterlocutorID(name : string) : string;
-    procedure DoAnswer(Interlocutor : TInterlocutor;answer : string;priv : boolean;logfile : string);
     procedure DoSleep(time : DWORD);
   public
     property Name : string read FName write SetName;
     property Interlocutors : TInterlocutors read FInterlocutors;
     property Intf : TSpeakerInterface read FIntf write SetIntf;
     property Data : TSpeakerData read FData write SetData;
-    function Analyze(from,sentence : string;priv : Boolean) : Boolean;
+    function Analyze(from,sentence : string;priv : Boolean;FSentenceID : Int64) : Boolean;
     function Processfunctions(Interlocutor : TInterlocutor;answer : string;priv : Boolean;logfile : string) : string;
     function RemoveStopWords(inp : string) : string;
     constructor Create(aName, Language: string; aData: TSpeakerData);
     property BeQuiet : Boolean read FBeQuiet write FBeQuiet;
+    procedure DoAnswer(Interlocutor : TInterlocutor;AnswerTo : Integer;answer : string;priv : boolean;logfile : string);
     property Autofocus : Boolean read FAutofocus write FAutofocus;
     property IgnoreUnicode : Boolean read FIgnoreunicode write FIgnoreunicode;
     function Process(NeedNewMessage : Boolean = False) : Boolean;
@@ -386,7 +384,7 @@ begin
   Result := StringReplace(Result,'ß','ss',[rfReplaceAll]);
 end;
 
-procedure TSpeaker.FIntfTalk(from, sentence: string;Priv : Boolean);
+procedure TSpeaker.FIntfTalk(from, sentence: string;Priv : Boolean;FSentenceID : LargeInt);
 var
   tmp: String;
 begin
@@ -410,7 +408,7 @@ begin
           else
             FSystemMessage('>>'+from+':'+sentence);
         end;
-      Analyze(from,sentence,Priv);
+      Analyze(from,sentence,Priv,FSentenceID);
     end;
   except
     on e : exception do
@@ -562,7 +560,9 @@ begin
     end;
 end;
 
-function TSpeaker.CheckForSentence(words: TStringList;aTyp : TSentenceTyp;Interlocutor : TInterlocutor;priv,stemm : boolean;logfile : string): Boolean;
+function TSpeaker.CheckForSentence(words: TStringList; aTyp: TSentenceTyp;
+  Interlocutor: TInterlocutor; priv, stemm: boolean; logfile: string;
+  FSentenceID: Int64): Boolean;
 var
   acheck,
   aword : String;
@@ -656,13 +656,13 @@ begin
               for i := low(TalkHandlers) to high(TalkHandlers) do
                 begin
                   tmp1 := tmp;
-                  if TalkHandlers[i](Self,Interlocutor.Properties['LANGUAGE'],tmp1,canhandle) then
+                  if TalkHandlers[i](Interlocutor,Interlocutor.Properties['LANGUAGE'],tmp1,canhandle) then
                     tmp := tmp1
                   else if canhandle then
                     Result := False;
                 end;
               if Result and (tmp<>'') then
-                DoAnswer(Interlocutor,tmp,priv,logfile);
+                DoAnswer(Interlocutor,FSentenceID,tmp,priv,logfile);
             end;
           if NextQuestion <> '' then
             begin
@@ -674,13 +674,13 @@ begin
               for i := low(TalkHandlers) to high(TalkHandlers) do
                 begin
                   tmp1 := NextQuestion;
-                  if TalkHandlers[i](Self,Interlocutor.Properties['LANGUAGE'],tmp1,canhandle) then
+                  if TalkHandlers[i](Interlocutor,Interlocutor.Properties['LANGUAGE'],tmp1,canhandle) then
                     NextQuestion := tmp1
                   else if canhandle then
                     Result := False;
                 end;
               if Result and (NextQuestion<>'') then
-                DoAnswer(Interlocutor,NextQuestion,priv,logfile);
+                DoAnswer(Interlocutor,FSentenceID,NextQuestion,priv,logfile);
             end;
           if Result then
             exit;
@@ -780,7 +780,8 @@ begin
     Result := name+'@'+FIntf.GetID;
 end;
 
-function TSpeaker.Analyze(from, sentence: string; priv: Boolean): Boolean;
+function TSpeaker.Analyze(from, sentence: string; priv: Boolean;
+  FSentenceID: Int64): Boolean;
 var
   atyp: TSentenceTyp;
   words: TStringList;
@@ -892,7 +893,7 @@ begin
           if words[0] = sentenceends[i] then
             begin
               aOK := False;
-              DoAnswer(Interlocutor,strShortQuestionAnswer,priv,filename);
+              DoAnswer(Interlocutor,FSentenceID,strShortQuestionAnswer,priv,filename);
               Interlocutor.FLastIndex:=-1;
               break;
             end;
@@ -912,12 +913,12 @@ begin
               Randomize;
               FAnswers.MoveBy(Random(FAnswers.RecordCount));
               Answer := FAnswers.FieldByName('ANSWER').AsString;
-              DoAnswer(Interlocutor,Answer,priv,filename);
+              DoAnswer(Interlocutor,-1,Answer,priv,filename);
               Interlocutor.AnswerTo:='';
               Result := True;
             end
           else
-            Result := Result or CheckForSentence(words,atyp,Interlocutor,priv,false,filename);
+            Result := Result or CheckForSentence(words,atyp,Interlocutor,priv,false,filename,FSentenceID);
           if (not Result) and (aFocus or priv) and (atyp=stQuestion) then //Say something when we are asked directly and have no answer
             begin
               if Assigned(FDebugMessage) then
@@ -927,7 +928,7 @@ begin
               Randomize;
               FAnswers.MoveBy(Random(FAnswers.RecordCount));
               Answer := FAnswers.FieldByName('ANSWER').AsString;
-              DoAnswer(Interlocutor,Answer,priv,filename);
+              DoAnswer(Interlocutor,FSentenceID,Answer,priv,filename);
             end;
         end;
     end;
@@ -938,8 +939,8 @@ begin
     Interlocutor.LastAnswerFound := Result;
 end;
 
-procedure TSpeaker.DoAnswer(Interlocutor: TInterlocutor; answer: string;
-  priv: boolean; logfile: string);
+procedure TSpeaker.DoAnswer(Interlocutor: TInterlocutor; AnswerTo: Integer;
+  answer: string; priv: boolean; logfile: string);
 var
   FLog : TextFile;
   tmpanswer: AnsiString;
@@ -997,14 +998,14 @@ begin
     end;
   if (pos('$getdescription(de)',LowerCase(answer))>0) then
     begin
-      Answer := 'Du kannst mich z.b. nach der Uhrzeit, dem Datum, Witzen o.ä Fragen.';
-      DoAnswer(Interlocutor,Answer,priv,logfile);
+      Answer := 'Du kannst mich z.b. nach der Uhrzeit, dem Datum o.ä Fragen.';
+      DoAnswer(Interlocutor,-1,Answer,priv,logfile);
       for i := low(TalkHandlers) to high(TalkHandlers) do
         begin
           answer := '$getdescription(de)';
           canhandle := False;
-          if TalkHandlers[i](Self,Interlocutor.Properties['LANGUAGE'],answer,canhandle) then
-            DoAnswer(Interlocutor,answer,priv,logfile);
+          if TalkHandlers[i](Interlocutor,Interlocutor.Properties['LANGUAGE'],answer,canhandle) then
+            DoAnswer(Interlocutor,-1,answer,priv,logfile);
         end;
       Result := '';
     end;
@@ -1079,7 +1080,7 @@ procedure TCmdLnInterface.Disconnect;
 begin
 end;
 
-procedure TCmdLnInterface.Talk(user,sentence: string);
+procedure TCmdLnInterface.Talk(user, sentence: string; AnswerTo: Int64);
 begin
   writeln(sentence);
 end;
@@ -1093,7 +1094,7 @@ begin
       write('>');
       readln(tmp);
       if Assigned(FTalk) then
-        FTalk(SystemUserName,tmp,True);
+        FTalk(SystemUserName,tmp,True,-1);
     end;
   Result := True;
 end;
@@ -1141,11 +1142,6 @@ begin
     Result := FProperties.Values[aName];
 end;
 
-function TInterlocutor.GetContext(aIndex : Integer): TContext;
-begin
-  Result := TContext(FContexts[aIndex]);
-end;
-
 procedure TInterlocutor.SetAnswerTo(AValue: string);
 begin
   if FAnswerto=AValue then Exit;
@@ -1183,7 +1179,6 @@ begin
   Fname := Name;
   FUnicodeAnswer := True;
   FLastAnswerFound := True;
-  FContexts := TList.Create;
 end;
 
 function TInterlocutor.ReplaceVariables(inp: string): string;
@@ -1198,7 +1193,6 @@ end;
 destructor TInterlocutor.Destroy;
 begin
   inherited Destroy;
-  FContexts.Free;
   FProperties.Free;
 end;
 

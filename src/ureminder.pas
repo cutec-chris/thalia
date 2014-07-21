@@ -52,7 +52,7 @@ implementation
 var
   Timer : TDateTime;
 
-function HandleTalk(Speaker : TSpeaker;language : string;var sentence : string;var canhandle : Boolean) : Boolean;
+function HandleTalk(Interlocutor : TInterlocutor;language : string;var sentence : string;var canhandle : Boolean) : Boolean;
 var
   tmp: String;
   tmp1: String;
@@ -89,7 +89,10 @@ begin
       case afunc of
       'showtimer':
         begin
+          if Interlocutor.Properties['TIMER'] <> '' then
+            begin
 
+            end;
         end;
       'starttimer':
         begin
@@ -123,15 +126,15 @@ resourcestring
 procedure AddSentences;
 begin
   if AddSentence(strTimer1,'reminder',0) then
-    AddAnswer('$timer($parsetime($time))$ignorelastanswer');
+    AddAnswer('$timer($parsetime($time))$ignorelastanswer()');
   if AddSentence(strTimer2,'reminder',0) then
-    AddAnswer('$showtimer$ignorelastanswer');
+    AddAnswer('$showtimer$ignorelastanswer()');
   if AddSentence(strTimer3,'reminder',0) then
-    AddAnswer('$stoptimer$ignorelastanswer');
+    AddAnswer('OK$stoptimer()$ignorelastanswer()');
   if AddSentence(strTimer4,'reminder',0) then
-    AddAnswer('$starttimer$ignorelastanswer');
+    AddAnswer('OK$starttimer()$ignorelastanswer()');
   if AddSentence(strTimer5,'reminder',0) then
-    AddAnswer('$resettimer$ignorelastanswer');
+    AddAnswer('OK$resettimer()$ignorelastanswer()');
 end;
 
 initialization

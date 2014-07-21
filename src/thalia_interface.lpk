@@ -8,7 +8,7 @@
         <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)-$(LCLWidgetType)"/>
       </SearchPaths>
     </CompilerOptions>
-    <Files Count="7">
+    <Files Count="8">
       <Item1>
         <Filename Value="uspeaker.pas"/>
         <UnitName Value="uSpeaker"/>
@@ -37,18 +37,25 @@
         <Filename Value="uiplocation.pas"/>
         <UnitName Value="uIPLocation"/>
       </Item7>
+      <Item8>
+        <Filename Value="uscript.pas"/>
+        <UnitName Value="uscript"/>
+      </Item8>
     </Files>
     <Type Value="RunAndDesignTime"/>
-    <RequiredPkgs Count="3">
+    <RequiredPkgs Count="4">
       <Item1>
-        <PackageName Value="laz_synapse"/>
+        <PackageName Value="pascalscriptfcl"/>
       </Item1>
       <Item2>
-        <PackageName Value="general_nogui"/>
+        <PackageName Value="laz_synapse"/>
       </Item2>
       <Item3>
-        <PackageName Value="FCL"/>
+        <PackageName Value="general_nogui"/>
       </Item3>
+      <Item4>
+        <PackageName Value="FCL"/>
+      </Item4>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)"/>

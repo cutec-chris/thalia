@@ -54,7 +54,7 @@ begin
 
 end;
 
-function HandleTalk(Speaker : TSpeaker;language : string;var sentence : string;var canhandle : Boolean) : Boolean;
+function HandleTalk(Interlocutor : TInterlocutor;language : string;var sentence : string;var canhandle : Boolean) : Boolean;
 var
   tmp,tmp1: String;
   avar: String;
@@ -164,9 +164,9 @@ retry:
       aVar := trim(aOut);
       aOut := GetArticle('de',aVar);
     end;
-  if (trim(aOut)='') and (Speaker.RemoveStopWords(aVar)<>aVar) then
+  if (trim(aOut)='') and (Interlocutor.Speaker.RemoveStopWords(aVar)<>aVar) then
     begin
-      aVar := Speaker.RemoveStopWords(aVar);
+      aVar := Interlocutor.Speaker.RemoveStopWords(aVar);
       goto retry;
     end;
   if (trim(aOut)='') and (UpperFirst(aVar)<>aVar) then
