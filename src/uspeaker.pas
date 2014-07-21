@@ -979,20 +979,20 @@ var
   canhandle: Boolean;
 begin
   Result := answer;
-  if pos('$time',lowercase(answer)) > 0 then
-    Result := copy(Result,0,pos('$time',lowercase(answer))-1)+formatdatetime('hh:mm',time)+copy(Result,pos('$time',lowercase(answer))+5,length(Result));
-  if pos('$unfocus',lowercase(answer)) > 0 then
+  if pos('$time()',lowercase(answer)) > 0 then
+    Result := copy(Result,0,pos('$time()',lowercase(answer))-1)+formatdatetime('hh:mm',time)+copy(Result,pos('$time()',lowercase(answer))+7,length(Result));
+  if pos('$unfocus()',lowercase(answer)) > 0 then
     begin
-      Result := copy(Result,0,pos('$unfocus',lowercase(answer))-1)+copy(Result,pos('$unfocus',lowercase(answer))+8,length(Result));
+      Result := copy(Result,0,pos('$unfocus()',lowercase(answer))-1)+copy(Result,pos('$unfocus()',lowercase(answer))+10,length(Result));
       Interlocutor.Focused:=False;
     end;
-  if pos('$weekday',lowercase(answer)) > 0 then
-    Result := copy(Result,0,pos('$weekday',lowercase(answer))-1)+LongDayNames[DayOfWeek(date)]+copy(Result,pos('$weekday',lowercase(answer))+5,length(Result));
-  if pos('$date',lowercase(answer)) > 0 then
-    Result := copy(Result,0,pos('$date',lowercase(answer))-1)+DateToStr(date)+copy(Result,pos('$date',lowercase(answer))+5,length(Result));
-  if pos('$ignorelastanswer',lowercase(answer)) > 0 then
+  if pos('$weekday()',lowercase(answer)) > 0 then
+    Result := copy(Result,0,pos('$weekday()',lowercase(answer))-1)+LongDayNames[DayOfWeek(date)]+copy(Result,pos('$weekday()',lowercase(answer))+10,length(Result));
+  if pos('$date()',lowercase(answer)) > 0 then
+    Result := copy(Result,0,pos('$date()',lowercase(answer))-1)+DateToStr(date)+copy(Result,pos('$date()',lowercase(answer))+7,length(Result));
+  if pos('$ignorelastanswer()',lowercase(answer)) > 0 then
     begin
-      Result := copy(Result,0,pos('$ignorelastanswer',lowercase(answer))-1)+copy(Result,pos('$ignorelastanswer',lowercase(answer))+17,length(Result));
+      Result := copy(Result,0,pos('$ignorelastanswer()',lowercase(answer))-1)+copy(Result,pos('$ignorelastanswer()',lowercase(answer))+19,length(Result));
       Interlocutor.FlastCategory:='';
       Interlocutor.FLastIndex:=-1;
     end;
