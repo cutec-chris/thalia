@@ -52,6 +52,29 @@ implementation
 var
   Timer : TDateTime;
 
+resourcestring
+  strTimer1             = '+timer+auf=time';
+  strTimer2             = '+zeig|zeige+timer';
+  strShowTimerAnswer    = 'Der Timer ist auf $timer gesetzt.$ignorelastanswer()';
+  strTimer3             = '+stoppe|halte+timer';
+  strTimer4             = '+starte|stelle+timer';
+  strTimer5             = '+setze+timer+zurück';
+  strNoTimerSet         = 'Es ist kein Timer gestellt !';
+
+procedure AddSentences;
+begin
+  if AddSentence(strTimer1,'reminder',0) then
+    AddAnswer('$timer($parsetime($time))$ignorelastanswer()');
+  if AddSentence(strTimer2,'reminder',0) then
+    AddAnswer(strShowTimerAnswer);
+  if AddSentence(strTimer3,'reminder',0) then
+    AddAnswer('OK$stoptimer()$ignorelastanswer()');
+  if AddSentence(strTimer4,'reminder',0) then
+    AddAnswer('OK$starttimer()$ignorelastanswer()');
+  if AddSentence(strTimer5,'reminder',0) then
+    AddAnswer('OK$resettimer()$ignorelastanswer()');
+end;
+
 function HandleTalk(Interlocutor : TInterlocutor;language : string;var sentence : string;var canhandle : Boolean) : Boolean;
 var
   tmp: String;
@@ -91,7 +114,13 @@ begin
         begin
           if Interlocutor.Properties['TIMER'] <> '' then
             begin
-
+              sentence := Stringreplace(sentence,'$timer',SpokenTimeRangeToStr(StrToFloat(Interlocutor.Properties['TIMER'])),[rfReplaceAll]);
+              Result := True;
+            end
+          else
+            begin
+              sentence := strNoTimerSet;
+              Result := True;
             end;
         end;
       'starttimer':
@@ -114,27 +143,6 @@ end;
 procedure Chron(Speaker : TSpeaker);
 begin
 
-end;
-
-resourcestring
-  strTimer1             = '+timer+auf=time';
-  strTimer2             = '+zeig|zeige+timer';
-  strTimer3             = '+stoppe|halte+timer';
-  strTimer4             = '+starte|stelle+timer';
-  strTimer5             = '+setze+timer+zurück';
-
-procedure AddSentences;
-begin
-  if AddSentence(strTimer1,'reminder',0) then
-    AddAnswer('$timer($parsetime($time))$ignorelastanswer()');
-  if AddSentence(strTimer2,'reminder',0) then
-    AddAnswer('$showtimer$ignorelastanswer()');
-  if AddSentence(strTimer3,'reminder',0) then
-    AddAnswer('OK$stoptimer()$ignorelastanswer()');
-  if AddSentence(strTimer4,'reminder',0) then
-    AddAnswer('OK$starttimer()$ignorelastanswer()');
-  if AddSentence(strTimer5,'reminder',0) then
-    AddAnswer('OK$resettimer()$ignorelastanswer()');
 end;
 
 initialization

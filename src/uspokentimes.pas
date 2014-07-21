@@ -30,6 +30,7 @@ uses
 //um 8
 //am 24.04. um 8:34
 function ParseTime(aTimeIn : string;aTimeOut : TDateTime;aTimeDifference : TDateTime) : Boolean;
+function SpokenTimeRangeToStr(aTime : TDateTime) : string;
 
 implementation
 
@@ -44,6 +45,12 @@ resourcestring
   strYesterday2            = 'vorvorgestern';
   strOn                    = 'am ';
   strAt                    = 'um ';
+  strIn                    = 'in ';
+  strbefore                = 'vor ';
+  strSec                   = 's';
+  strMin                   = 'min';
+  strHour                  = 'h';
+  strDay                   = 'T';
 
 function ParseTime(aTimeIn: string; aTimeOut: TDateTime;
   aTimeDifference: TDateTime): Boolean;
@@ -147,6 +154,22 @@ begin
       aTimeDifference:=0.1;
     end;
   Result := trim(aTimeIn)='';
+end;
+
+function SpokenTimeRangeToStr(aTime: TDateTime): string;
+begin
+  if Now()-aTime < 0 then
+    result := strIn+' '
+  else
+    result := strbefore+' ';
+  if Abs(Now()-aTime)<(1/MinsPerDay) then //unter einer Minute
+    Result := Result+IntToStr(round(SecsPerDay/Abs(Now()-aTime)))+' '+strSec
+  else if Abs(Now()-aTime)<(1/HoursPerDay) then //unter einer h
+    Result := Result+IntToStr(round(MinsPerDay/Abs(Now()-aTime)))+' '+strMin
+  else if Abs(Now()-aTime)<(1) then //unter einem Tag
+    Result := Result+IntToStr(round(HoursPerDay/Abs(Now()-aTime)))+' '+strHour
+  else if Abs(Now()-aTime)<(1) then //unter einem Tag
+    Result := Result+IntToStr(round(Abs(Now()-aTime)))+' '+strday;
 end;
 
 end.
