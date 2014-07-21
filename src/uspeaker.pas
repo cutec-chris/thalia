@@ -217,7 +217,7 @@ type
 
   procedure RegisterToSpeaker(aTalk : THandleTalkEvent;aAddSenences : TRegisterSentenceEvent = nil);
   procedure RegisterChron(aAddChron : TSpeakerEvent);
-  function AddSentence(aSentence,aCategory : string;aType : Integer; aPriority: integer=100) : Boolean;
+  function AddSentence(aSentence,aCategory : string;aType : TSentenceTyp; aPriority: integer=100) : Boolean;
   procedure AddAnswer(aAnswer : string);
   function GetFirstSentence(var inp : string) : string;
 implementation
@@ -252,7 +252,7 @@ begin
   ChronHandlers[length(ChronHandlers)-1] := aAddChron;
 end;
 
-function AddSentence(aSentence, aCategory: string; aType: Integer;
+function AddSentence(aSentence, aCategory: string; aType: TSentenceTyp;
   aPriority: integer): Boolean;
 var
   FSentence: TDataSet;
@@ -267,7 +267,7 @@ begin
       FSentence.FieldByName('ID').AsLargeInt:=FSentence.RecordCount+1;
       FSentence.FieldByName('WORDS').AsString:=aSentence;
       FSentence.FieldByName('CATEGORY').AsString:=aCategory;
-      FSentence.FieldByName('TYPE').AsInteger:=aType;
+      FSentence.FieldByName('TYPE').AsInteger:=Integer(aType);
       FSentence.FieldByName('PRIORITY').AsInteger:=aPriority;
       FSentence.Post;
       Result := True;

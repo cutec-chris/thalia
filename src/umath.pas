@@ -80,11 +80,11 @@ resourcestring
 
 procedure AddSentences;
 begin
-  if AddSentence(strMath1,'math',1) then
+  if AddSentence(strMath1,'math',stQuestion) then
     AddAnswer('$parse($term)$ignorelastanswer()');
-  if AddSentence(strMath2,'math',0) then
+  if AddSentence(strMath2,'math',stUnknown) then
     AddAnswer('$parse($term)$ignorelastanswer()');
-  if AddSentence('=term','math',0,110) then
+  if AddSentence('=term','math',stUnknown,110) then
     AddAnswer('$parse($term)$ignorelastanswer()');
 end;
 

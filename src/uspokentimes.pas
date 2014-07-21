@@ -24,11 +24,13 @@ unit uspokentimes;
 interface
 
 uses
-  Classes, SysUtils;
+  Classes, SysUtils, Utils;
 
 //heute,morgen,übermorgen...
 //um 8
 //am 24.04. um 8:34
+//15 min
+//in 15 min
 function ParseTime(aTimeIn : string;aTimeOut : TDateTime;aTimeDifference : TDateTime) : Boolean;
 function SpokenTimeRangeToStr(aTime : TDateTime) : string;
 
@@ -47,10 +49,17 @@ resourcestring
   strAt                    = 'um ';
   strIn                    = 'in ';
   strbefore                = 'vor ';
-  strSec                   = 's';
+  strSec                   = 'sek';
+  strSec2                  = 's';
+  strSec3                  = 'Sekunden';
   strMin                   = 'min';
-  strHour                  = 'h';
+  strMin2                  = 'm';
+  strMin3                  = 'Minuten';
+  strHour                  = 'Std';
+  strHour2                 = 'h';
+  strHour3                 = 'Stunden';
   strDay                   = 'T';
+  strDay3                  = 'Tage';
 
 function ParseTime(aTimeIn: string; aTimeOut: TDateTime;
   aTimeDifference: TDateTime): Boolean;
@@ -58,9 +67,45 @@ var
   NewDay: TDateTime;
   aTime: TDateTime;
   tmp: String;
+  aUnit: String;
+  bUnit: double = -1;
 begin
   Result := False;
+  if aTimeIn='' then exit;
   aTimeIn:=trim(LowerCase(aTimeIn));
+  aUnit := copy(aTimeIn,rpos(' ',aTimeIn)+1,length(aTimeIn));
+  if (aUnit = strSec)
+  or (aUnit = strSec2)
+  or (aUnit = strSec3)
+  then bUnit := 1/SecsPerDay;
+  if (aUnit = strMin)
+  or (aUnit = strMin2)
+  or (aUnit = strMin3)
+  then bUnit := 1/MinsPerDay;
+  if (aUnit = strHour)
+  or (aUnit = strHour2)
+  or (aUnit = strHour3)
+  then bUnit := 1/HoursPerDay;
+  if (aUnit = strDay)
+  or (aUnit = strDay3)
+  then bUnit := 1;
+  if bUnit<>-1 then
+    begin
+      aTimeDifference:=bUnit;
+      aTimeIn:=copy(aTimeIn,0,rpos(' ',aTimeIn)-1);
+      if copy(aTimeIn,0,length(strIn))=strIn then
+        begin
+          aTimeIn:=copy(aTimeIn,Length(strIn)+1,length(aTimeIn));
+          aTimeOut:=0;
+        end
+      else aTimeOut:=Now();
+      if IsNumeric(aTimeIn) then
+        begin
+          aTimeOut:=aTimeOut+(StrToInt(aTimeIn)*bUnit);
+          Result := True;
+        end;
+    end;
+
   if aTimeIn=strNow then
     begin
       aTimeOut:=Now();
@@ -134,6 +179,7 @@ begin
         aTimeOut:=Now();
       aTimeOut:=trunc(aTimeOut)+0.5; //12 Uhr
       aTimeDifference:=1;
+      Result := True;
     end;
   if copy(aTimeIn,0,length(strAt))=strAt then
     begin
@@ -152,24 +198,29 @@ begin
         aTime:=Now();
       aTimeOut:=trunc(aTimeOut)+frac(aTime);
       aTimeDifference:=0.1;
+      Result := True;
     end;
   Result := trim(aTimeIn)='';
 end;
 
 function SpokenTimeRangeToStr(aTime: TDateTime): string;
+var
+  bTime: ValReal;
 begin
-  if Now()-aTime < 0 then
+  bTime := Abs(aTime-Now());
+  if bTime = 0 then exit;
+  if Now()-aTime > 0 then
     result := strIn+' '
   else
     result := strbefore+' ';
-  if Abs(Now()-aTime)<(1/MinsPerDay) then //unter einer Minute
-    Result := Result+IntToStr(round(SecsPerDay/Abs(Now()-aTime)))+' '+strSec
-  else if Abs(Now()-aTime)<(1/HoursPerDay) then //unter einer h
-    Result := Result+IntToStr(round(MinsPerDay/Abs(Now()-aTime)))+' '+strMin
-  else if Abs(Now()-aTime)<(1) then //unter einem Tag
-    Result := Result+IntToStr(round(HoursPerDay/Abs(Now()-aTime)))+' '+strHour
-  else if Abs(Now()-aTime)<(1) then //unter einem Tag
-    Result := Result+IntToStr(round(Abs(Now()-aTime)))+' '+strday;
+  if bTime<(1/MinsPerDay) then //unter einer Minute
+    Result := Result+IntToStr(round(SecsPerDay/bTime))+' '+strSec
+  else if bTime<(1/HoursPerDay) then //unter einer h
+    Result := Result+IntToStr(round(MinsPerDay/bTime))+' '+strMin
+  else if bTime<(1) then //unter einem Tag
+    Result := Result+IntToStr(round(HoursPerDay/bTime))+' '+strHour
+  else if bTime<(1) then //unter einem Tag
+    Result := Result+IntToStr(round(bTime))+' '+strday;
 end;
 
 end.

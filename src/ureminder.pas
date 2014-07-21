@@ -55,23 +55,29 @@ var
 resourcestring
   strTimer1             = '+timer+auf=time';
   strTimer2             = '+zeig|zeige+timer';
-  strShowTimerAnswer    = 'Der Timer ist auf $timer gesetzt.$ignorelastanswer()';
+  strTimerQ2            = '+steht|macht+timer';
+  strTimerQ3            = '+timer+gesetzt';
+  strShowTimerAnswer    = 'Der Timer läuft $showtimer() ab.$ignorelastanswer()';
   strTimer3             = '+stoppe|halte+timer';
-  strTimer4             = '+starte|stelle+timer';
+  strTimer4             = '+starte+timer';
   strTimer5             = '+setze+timer+zurück';
   strNoTimerSet         = 'Es ist kein Timer gestellt !';
 
 procedure AddSentences;
 begin
-  if AddSentence(strTimer1,'reminder',0) then
-    AddAnswer('$timer($parsetime($time))$ignorelastanswer()');
-  if AddSentence(strTimer2,'reminder',0) then
+  if AddSentence(strTimer1,'reminder',stUnknown) then
+    AddAnswer('$timer($time)OK$ignorelastanswer()');
+  if AddSentence(strTimer2,'reminder',stUnknown) then
     AddAnswer(strShowTimerAnswer);
-  if AddSentence(strTimer3,'reminder',0) then
+  if AddSentence(strTimerQ2,'reminder',stQuestion) then
+    AddAnswer(strShowTimerAnswer);
+  if AddSentence(strTimerQ3,'reminder',stQuestion) then
+    AddAnswer(strShowTimerAnswer);
+  if AddSentence(strTimer3,'reminder',stUnknown) then
     AddAnswer('OK$stoptimer()$ignorelastanswer()');
-  if AddSentence(strTimer4,'reminder',0) then
+  if AddSentence(strTimer4,'reminder',stUnknown) then
     AddAnswer('OK$starttimer()$ignorelastanswer()');
-  if AddSentence(strTimer5,'reminder',0) then
+  if AddSentence(strTimer5,'reminder',stUnknown) then
     AddAnswer('OK$resettimer()$ignorelastanswer()');
 end;
 
@@ -81,6 +87,8 @@ var
   tmp1: String;
   afunc: String;
   avar: String;
+  aNewTime: TDateTime;
+  aNewTimeDiff: TDateTime;
 begin
   Result:=False;
   canhandle:=(pos('$timer(',sentence)>0)
@@ -101,9 +109,9 @@ begin
   sentence:='';
   while pos('$',tmp)>0 do
     begin
-      tmp := copy(tmp,0,pos('$',tmp)-1);
-      sentence:=sentence+tmp;
+      sentence:=sentence+copy(tmp,0,pos('$',tmp)-1);
       tmp1 :=copy(tmp,pos('$',tmp)+1,length(tmp));
+      tmp:=copy(tmp,pos(')',tmp)+1,length(tmp));
       afunc := copy(tmp1,0,pos('(',tmp1)-1);
       tmp1 :=copy(tmp,pos('(',tmp)+1,length(tmp));
       avar := copy(tmp1,0,pos(')',tmp1)-1);
@@ -114,26 +122,52 @@ begin
         begin
           if Interlocutor.Properties['TIMER'] <> '' then
             begin
-              sentence := Stringreplace(sentence,'$timer',SpokenTimeRangeToStr(StrToFloat(Interlocutor.Properties['TIMER'])),[rfReplaceAll]);
+              sentence := sentence+SpokenTimeRangeToStr(Now()+StrToFloat(Interlocutor.Properties['TIMERVAL']));
               Result := True;
             end
           else
             begin
               sentence := strNoTimerSet;
               Result := True;
+              exit;
             end;
         end;
       'starttimer':
         begin
-
+          if Interlocutor.Properties['TIMER'] <> '' then
+            begin
+              Interlocutor.Properties['TIMERVAL'] := Interlocutor.Properties['TIMER'];
+              Result := True;
+            end
+          else
+            begin
+              sentence := strNoTimerSet;
+              Result := True;
+              exit;
+            end;
         end;
-      'stoptimer':
+      'stoptimer','resettimer':
         begin
-
+          if Interlocutor.Properties['TIMER'] <> '' then
+            begin
+              Interlocutor.Properties['TIMERVAL'] := '';
+              Result := True;
+            end
+          else
+            begin
+              sentence := strNoTimerSet;
+              Result := True;
+              exit;
+            end;
         end;
-      'resettimer':
+      'timer':
         begin
-
+          if ParseTime(avar,aNewTime,aNewTimeDiff) then
+            begin
+              Interlocutor.Properties['TIMER'] := FloatToStr(aNewTime);
+              Interlocutor.Properties['TIMERVAL'] := Interlocutor.Properties['TIMER'];
+              result := True;
+            end;
         end;
       end;
       sentence:=sentence+tmp1;

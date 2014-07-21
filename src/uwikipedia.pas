@@ -211,11 +211,11 @@ resourcestring
 
 procedure AddSentences;
 begin
-  if AddSentence(strWiki1,'wiki',1) then
+  if AddSentence(strWiki1,'wiki',stQuestion) then
     AddAnswer('$dowikiquerry($wikiquerry)$ignorelastanswer()');
-  if AddSentence(strWiki2,'wiki',0) then
+  if AddSentence(strWiki2,'wiki',stUnknown) then
     AddAnswer('$dowikiquerry($wikiquerry)$ignorelastanswer()');
-  if AddSentence(strWiki2,'wiki',1) then
+  if AddSentence(strWiki2,'wiki',stQuestion) then
     AddAnswer('$dowikiquerry($wikiquerry)$ignorelastanswer()');
 end;
 
